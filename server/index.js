@@ -9,6 +9,6 @@ app.get('/', function (req, res) {
   res.sendFile( path.resolve(__dirname, '../index.html'));
 });
 
-app.listen(3010 || process.env.PORT, function () {
+app.listen(process.env.PORT || 3010, function () {
   console.log('Example app listening on port 3010!');
 });
