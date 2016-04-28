@@ -4,6 +4,7 @@ import { ROUTER_DIRECTIVES, RouteConfig } from 'angular2/router';
 import { LoginService } from '../../services/login.service'
 import LoginComponent from '../login/login.component';
 import HomeComponent from '../home/home.component';
+import AuthRouterOutlet from './auth-router-outlet';
 
 @Component({
   selector: 'main-app',
@@ -11,14 +12,17 @@ import HomeComponent from '../home/home.component';
     <h2>MJ ADMIN</h2>
     <router-outlet></router-outlet>
   `,
-  directives: [ROUTER_DIRECTIVES],
+  directives: [
+    AuthRouterOutlet,
+    
+  ],
   providers: [
     HTTP_PROVIDERS,
     LoginService
   ]
 })
 @RouteConfig([
-  { path: '/', name: 'Login', component: LoginComponent },
+  { path: '/', name: 'Home', component: HomeComponent },
   { path: '/login', name: 'Login', component: LoginComponent },
   { path: '/home', name: 'Home', component: HomeComponent }
 ])

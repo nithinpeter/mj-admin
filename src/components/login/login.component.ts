@@ -1,5 +1,5 @@
 import { Component } from 'angular2/core';
-import { RouterLink } from 'angular2/router';
+import { Router, RouterLink } from 'angular2/router';
 import { LoginService } from '../../services/login.service';
 
 @Component({
@@ -27,7 +27,7 @@ export default class LoginComponent {
     
     errorMessage;
     
-    constructor(private _loginService: LoginService) {
+    constructor(private _loginService: LoginService, private _router: Router) {
 
     } 
 
@@ -35,7 +35,8 @@ export default class LoginComponent {
         this._loginService.login({username, password })
             .subscribe(
                 response => {
-                    localStorage.setItem("token", response.id_token)
+                    localStorage.setItem("token", response.id_token);
+                    this._router.navigate( ['Home'] );
                 },
                 error => this.errorMessage = <any>error
             );
