@@ -11,7 +11,9 @@ module.exports = {
     resolve: {
         extensions: ["", ".ts", ".js"]
     },
-
+    
+    devtool: 'source-map',
+    
     module: {
         loaders: [
             { test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ }

@@ -1,7 +1,8 @@
   import { bootstrap } from 'angular2/platform/browser';
-  import { StoryComponent } from './app/app.component';
+  import { AppComponent } from './components/app/app.component';
+  import { ROUTER_PROVIDERS } from 'angular2/router';
 
-  bootstrap(StoryComponent)
+  bootstrap(AppComponent, [ROUTER_PROVIDERS])
     .then(success => console.log(`Bootstrap success`))
     .catch(error => console.log(error));
 
