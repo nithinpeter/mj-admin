@@ -1,6 +1,6 @@
 import { Component } from 'angular2/core';
 import { Router, RouterLink } from 'angular2/router';
-import { LoginService } from '../../services/login.service';
+import { LoginService } from './login.service';
 
 @Component({
     selector: 'login',
