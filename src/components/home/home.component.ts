@@ -4,7 +4,6 @@ import { HomeService } from './home.service'
 @Component({
   selector: 'home',
   template: `
-    <h5>Home</h5>
     <kendo-grid [options]='gridOptions' ></kendo-grid>
   `,
   providers: [HomeService]
@@ -23,8 +22,14 @@ export default class HomeComponent {
         sortable: true,
         selectable: true,
         columns: [
-          { field: "productName", title: "Product Name", filterable: true },
-          { field: "category", title: "Category" }
+          { field: "_id", title: "Id", filterable: true },
+          { field: "title", title: "Type", filterable: true },
+          { field: "type", title: "Type",  filterable: true},
+          { field: "language", title: "Language",  filterable: true},
+          { field: "year", title: "Type", filterable: true },
+          { field: "mjRating", title: "Rating",  filterable: true},
+          { field: "mjScore", title: "Score",  filterable: true},
+          { field: "mjVotes", title: "Votes",  filterable: true}
         ],
         pageable: {
           pageSize: 5
