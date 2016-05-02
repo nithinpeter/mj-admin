@@ -28,6 +28,7 @@ import AuthRouterOutlet from './auth-router-outlet';
   { path: '/login', name: 'Login', component: LoginComponent },
   { path: '/admin', name: 'Home', component: HomeComponent },
   { path: '/admin/add-new', name: 'AddNew', component: AddNewComponent },
+  { path: '/admin/edit/:id', name: 'Edit', component: AddNewComponent },
   // { path: '/admin/:id', name: 'Home', component: HomeComponent },
 ])
 export class AppComponent {
