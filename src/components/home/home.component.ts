@@ -25,7 +25,7 @@ export default class HomeComponent {
         sortable: true,
         selectable: true,
         columns: [
-          { field: "_id", title: "Id", filterable: true },
+          { field: "mjId", title: "Id", filterable: true },
           { field: "title", title: "Title", filterable: true },
           { field: "type", title: "Type", filterable: true },
           { field: "language", title: "Language", filterable: true },
@@ -35,14 +35,14 @@ export default class HomeComponent {
           { field: "mjVotes", title: "Votes", filterable: true }
         ],
         pageable: {
-          pageSize: 5
+          pageSize: 13
         },
         filterable: {
           messages: {
             and: "and",
             or: "or",
-            filter: "Apply filter",
-            clear: "Clear filter"
+            filter: "Apply",
+            clear: "Clear"
           }
         }
       };
@@ -52,9 +52,6 @@ export default class HomeComponent {
 
   // ngOnInit() {
   // }
-
-
-
 
 }
 

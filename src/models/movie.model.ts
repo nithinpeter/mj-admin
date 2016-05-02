@@ -1,6 +1,7 @@
 export class Movie {
     
     constructor(
+        public _id?,
         public title?,
         public year?,
         public rated?,   
