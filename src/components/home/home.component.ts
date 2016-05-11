@@ -1,12 +1,14 @@
 import { Component } from 'angular2/core';
 import { HomeService } from './home.service';
 import { RouterLink } from 'angular2/router';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'home',
   template: `
     <a [routerLink]="['AddNew']">Add New</a>
     <kendo-grid [options]='gridOptions' ></kendo-grid>
+    {{counter}}
   `,
   providers: [HomeService],
   directives: [RouterLink]
@@ -14,10 +16,14 @@ import { RouterLink } from 'angular2/router';
 export default class HomeComponent {
 
   gridOptions;
-  constructor(private _homeService: HomeService) {
-
+  counter;
+  
+  constructor(private _homeService: HomeService, private _store: Store<number>) {
+    
+    this.counter = this._store.select('counter');
+    
     this._homeService.getMovies().subscribe((response) => {
-
+      
       this.gridOptions = {
         sortable: true,
         selectable: true,
