@@ -1,7 +1,7 @@
-import { Component } from 'angular2/core';
+import { Component } from '@angular/core';
 import { HomeService } from './home.service';
-import { RouterLink } from 'angular2/router';
-import { Store } from '@ngrx/store';
+import { ROUTER_DIRECTIVES } from '@angular/router';
+// import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'home',
@@ -11,16 +11,15 @@ import { Store } from '@ngrx/store';
     {{counter}}
   `,
   providers: [HomeService],
-  directives: [RouterLink]
+  directives: [ROUTER_DIRECTIVES]
 })
 export default class HomeComponent {
 
   gridOptions;
   counter;
   
-  constructor(private _homeService: HomeService, private _store: Store<number>) {
+  constructor(private _homeService: HomeService) {
     
-    this.counter = this._store.select('counter');
     
     this._homeService.getMovies().subscribe((response) => {
       

@@ -5,12 +5,6 @@
 // Definitions by: Qubo <https://github.com/tkqubo>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-// declare var require: {
-//     <T>(path: string): T;
-//     (paths: string[], callback: (...modules: any[]) => void): void;
-//     ensure: (paths: string[], callback: (require: <T>(path: string) => T) => void) => void;
-// };
-
 
 declare module "webpack" {
     import * as UglifyJS from 'uglify-js';

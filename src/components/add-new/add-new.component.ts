@@ -1,5 +1,5 @@
-import { Component } from 'angular2/core';
-import { Router, RouterLink } from 'angular2/router';
+import { Component } from '@angular/core';
+import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 import { Movie } from '../../models/movie.model';
 import { AddNewService } from './add-new.service';
 
@@ -9,7 +9,7 @@ declare var require: any
 @Component({
     selector: 'login',
     template: require('./add-new.template.html'),
-    directives: [RouterLink],
+    directives: [ROUTER_DIRECTIVES],
     providers: [AddNewService]
 })
 export default class AddNewComponent {

@@ -9,11 +9,14 @@ export class Config {
     }
     
     static isTesting() {
-        var hostName = window.location.hostname;
         
-        if(hostName == 'localhost')
-            return true;
-        else 
-            return false;
+        return false;
+        
+        // var hostName = window.location.hostname;
+        
+        // if(hostName == 'localhost')
+        //     return true;
+        // else 
+        //     return false;
     }
 }

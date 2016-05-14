@@ -1,5 +1,5 @@
-import { Component } from 'angular2/core';
-import { Router, RouterLink } from 'angular2/router';
+import { Component } from '@angular/core';
+import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 import { LoginService } from './login.service';
 
 @Component({
@@ -21,7 +21,7 @@ import { LoginService } from './login.service';
         </nav>
     </form>
   `,
-    directives: [RouterLink]
+    directives: [ROUTER_DIRECTIVES]
 })
 export default class LoginComponent {
     
