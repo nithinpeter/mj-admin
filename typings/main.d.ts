@@ -3,6 +3,4 @@
 /// <reference path="main/ambient/jquery/index.d.ts" />
 /// <reference path="main/ambient/kendo-ui/index.d.ts" />
 /// <reference path="main/ambient/node/index.d.ts" />
-/// <reference path="main/ambient/require/index.d.ts" />
-/// <reference path="main/ambient/webpack/index.d.ts" />
 /// <reference path="main/definitions/zone.js/index.d.ts" />
