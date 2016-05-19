@@ -45023,7 +45023,7 @@
 	    function HomeComponent(_homeService, _store) {
 	        this._homeService = _homeService;
 	        this._store = _store;
-	        this._homeService.getMovies();
+	        this._homeService.getMovies()(this._store.dispatch.bind(this._store));
 	        this.moviesResponse = this._store.select("movies");
 	        this.gridOptions = {
 	            sortable: true,
@@ -45100,14 +45100,16 @@
 	    }
 	    HomeService.prototype.getMovies = function () {
 	        var _this = this;
-	        this._store.dispatch({ type: ACTION_TYPES.REQUEST_MOVIES });
-	        return this._http.get(config_1.Config.baseUrl() + 'movies', {
-	            headers: http_client_1.contentHeaders
-	        }).map(function (res) {
-	            return res.json();
-	        }).subscribe(function (response) {
-	            return _this._store.dispatch({ type: ACTION_TYPES.SUCCESS_MOVIES, response: response });
-	        });
+	        return function (dispatch) {
+	            dispatch({ type: ACTION_TYPES.REQUEST_MOVIES });
+	            return _this._http.get(config_1.Config.baseUrl() + 'movies', {
+	                headers: http_client_1.contentHeaders
+	            }).map(function (res) {
+	                return res.json();
+	            }).subscribe(function (response) {
+	                return dispatch({ type: ACTION_TYPES.SUCCESS_MOVIES, response: response });
+	            });
+	        };
 	    };
 	    HomeService = __decorate([
 	        core_1.Injectable(), 

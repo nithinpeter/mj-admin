@@ -24,7 +24,7 @@ export default class HomeComponent {
   constructor(private _homeService: HomeService, private _store: StoreService) {
     
     
-    this._homeService.getMovies();
+    this._homeService.getMovies()(this._store.dispatch.bind(this._store));
     
     this.moviesResponse = this._store.select("movies");
     

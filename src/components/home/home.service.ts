@@ -14,13 +14,15 @@ export class HomeService {
     }
     
     getMovies() {
-        this._store.dispatch({type: ACTION_TYPES.REQUEST_MOVIES});
-        return this._http.get(Config.baseUrl() + 'movies', {
-            headers: contentHeaders
-        }).map((res: Response) => {
-            return res.json();
-        }).subscribe((response)=> {
-            return this._store.dispatch({type: ACTION_TYPES.SUCCESS_MOVIES, response: response});
-        });
+        return (dispatch) => {
+            dispatch({type: ACTION_TYPES.REQUEST_MOVIES});
+            return this._http.get(Config.baseUrl() + 'movies', {
+                headers: contentHeaders
+            }).map((res: Response) => {
+                return res.json();
+            }).subscribe((response)=> {
+                return dispatch({type: ACTION_TYPES.SUCCESS_MOVIES, response: response});
+            });
+        }
     }
 }
