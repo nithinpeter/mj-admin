@@ -54,9 +54,12 @@
 	"use strict";
 	var platform_browser_dynamic_1 = __webpack_require__(2);
 	var app_component_1 = __webpack_require__(281);
-	var router_1 = __webpack_require__(341);
+	var router_1 = __webpack_require__(303);
+	var core_1 = __webpack_require__(8);
+	var common_1 = __webpack_require__(182);
 	platform_browser_dynamic_1.bootstrap(app_component_1.AppComponent, [
 	    router_1.ROUTER_PROVIDERS,
+	    core_1.provide(common_1.LocationStrategy, { useClass: common_1.HashLocationStrategy })
 	]).then(function (success) { return console.log("Bootstrap success"); })
 	    .catch(function (error) { return console.log(error); });
 
@@ -39339,37 +39342,40 @@
 	};
 	var core_1 = __webpack_require__(8);
 	var http_1 = __webpack_require__(282);
-	var router_deprecated_1 = __webpack_require__(303);
-	var login_service_1 = __webpack_require__(335);
-	var login_component_1 = __webpack_require__(340);
-	var home_component_1 = __webpack_require__(363);
-	var add_new_component_1 = __webpack_require__(365);
-	var auth_router_outlet_1 = __webpack_require__(369);
+	var router_1 = __webpack_require__(303);
+	var login_service_1 = __webpack_require__(325);
+	var login_component_1 = __webpack_require__(330);
+	var home_component_1 = __webpack_require__(331);
+	var add_new_component_1 = __webpack_require__(351);
+	var store_1 = __webpack_require__(333);
+	// import AuthRouterOutlet from './auth-router-outlet';
 	var AppComponent = (function () {
-	    function AppComponent() {
+	    function AppComponent(store) {
+	        this.counter = store.select("counter");
 	    }
 	    AppComponent = __decorate([
 	        core_1.Component({
 	            selector: 'main-app',
-	            template: "\n    <h2>MJ ADMIN</h2>\n    <router-outlet></router-outlet>\n  ",
+	            template: "\n    <h2>\n      <a [routerLink]=\"['']\">MJ ADMIN</a>\n      {{counter}}\n    </h2>\n    <nav>\n      <a [routerLink]=\"['add-new']\">Add New</a>\n    </nav>\n    <router-outlet></router-outlet>\n  ",
 	            directives: [
-	                auth_router_outlet_1.default,
-	                router_deprecated_1.RouteConfig,
+	                // AuthRouterOutlet,
+	                // RouteConfig,
+	                router_1.ROUTER_DIRECTIVES
 	            ],
 	            providers: [
+	                store_1.default,
 	                http_1.HTTP_PROVIDERS,
-	                login_service_1.LoginService,
-	                router_deprecated_1.ROUTER_DIRECTIVES
+	                login_service_1.LoginService
 	            ]
 	        }),
-	        router_deprecated_1.RouteConfig([
-	            { path: '/', name: 'Home', component: home_component_1.default },
-	            { path: '/login', name: 'Login', component: login_component_1.default },
-	            { path: '/admin', name: 'Home', component: home_component_1.default },
-	            { path: '/admin/add-new', name: 'AddNew', component: add_new_component_1.default },
-	            { path: '/admin/edit/:id', name: 'Edit', component: add_new_component_1.default },
+	        router_1.Routes([
+	            { path: '/', component: home_component_1.default },
+	            { path: '/login', component: login_component_1.default },
+	            { path: '/home', component: home_component_1.default },
+	            { path: '/add-new', component: add_new_component_1.default },
+	            { path: '/edit/:id', component: add_new_component_1.default },
 	        ]), 
-	        __metadata('design:paramtypes', [])
+	        __metadata('design:paramtypes', [store_1.default])
 	    ], AppComponent);
 	    return AppComponent;
 	}());
@@ -42050,4811 +42056,31 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	function __export(m) {
-	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-	}
-	__export(__webpack_require__(304));
-	//# sourceMappingURL=index.js.map
-
-/***/ },
-/* 304 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @module
-	 * @description
-	 * Maps application URLs into application states, to support deep-linking and navigation.
-	 */
-	"use strict";
-	function __export(m) {
-	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-	}
-	var router_1 = __webpack_require__(305);
-	exports.Router = router_1.Router;
-	var router_outlet_1 = __webpack_require__(330);
-	exports.RouterOutlet = router_outlet_1.RouterOutlet;
-	var router_link_1 = __webpack_require__(332);
-	exports.RouterLink = router_link_1.RouterLink;
-	var instruction_1 = __webpack_require__(317);
-	exports.RouteParams = instruction_1.RouteParams;
-	exports.RouteData = instruction_1.RouteData;
-	var route_registry_1 = __webpack_require__(313);
-	exports.RouteRegistry = route_registry_1.RouteRegistry;
-	exports.ROUTER_PRIMARY_COMPONENT = route_registry_1.ROUTER_PRIMARY_COMPONENT;
-	__export(__webpack_require__(326));
-	var lifecycle_annotations_1 = __webpack_require__(331);
-	exports.CanActivate = lifecycle_annotations_1.CanActivate;
-	var instruction_2 = __webpack_require__(317);
-	exports.Instruction = instruction_2.Instruction;
-	exports.ComponentInstruction = instruction_2.ComponentInstruction;
-	var core_1 = __webpack_require__(8);
-	exports.OpaqueToken = core_1.OpaqueToken;
-	var router_providers_common_1 = __webpack_require__(333);
-	exports.ROUTER_PROVIDERS_COMMON = router_providers_common_1.ROUTER_PROVIDERS_COMMON;
-	var router_providers_1 = __webpack_require__(334);
-	exports.ROUTER_PROVIDERS = router_providers_1.ROUTER_PROVIDERS;
-	exports.ROUTER_BINDINGS = router_providers_1.ROUTER_BINDINGS;
-	var router_outlet_2 = __webpack_require__(330);
-	var router_link_2 = __webpack_require__(332);
-	/**
-	 * A list of directives. To use the router directives like {@link RouterOutlet} and
-	 * {@link RouterLink}, add this to your `directives` array in the {@link View} decorator of your
-	 * component.
-	 *
-	 * ### Example ([live demo](http://plnkr.co/edit/iRUP8B5OUbxCWQ3AcIDm))
-	 *
-	 * ```
-	 * import {Component} from '@angular/core';
-	 * import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig} from '@angular/router-deprecated';
-	 *
-	 * @Component({directives: [ROUTER_DIRECTIVES]})
-	 * @RouteConfig([
-	 *  {...},
-	 * ])
-	 * class AppCmp {
-	 *    // ...
-	 * }
-	 *
-	 * bootstrap(AppCmp, [ROUTER_PROVIDERS]);
-	 * ```
-	 */
-	exports.ROUTER_DIRECTIVES = [router_outlet_2.RouterOutlet, router_link_2.RouterLink];
-	//# sourceMappingURL=router.js.map
-
-/***/ },
-/* 305 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var __param = (this && this.__param) || function (paramIndex, decorator) {
-	    return function (target, key) { decorator(target, key, paramIndex); }
-	};
-	var async_1 = __webpack_require__(306);
-	var collection_1 = __webpack_require__(309);
-	var lang_1 = __webpack_require__(307);
-	var exceptions_1 = __webpack_require__(310);
-	var common_1 = __webpack_require__(182);
-	var route_registry_1 = __webpack_require__(313);
-	var route_lifecycle_reflector_1 = __webpack_require__(328);
-	var core_1 = __webpack_require__(8);
-	var _resolveToTrue = async_1.PromiseWrapper.resolve(true);
-	var _resolveToFalse = async_1.PromiseWrapper.resolve(false);
-	/**
-	 * The `Router` is responsible for mapping URLs to components.
-	 *
-	 * You can see the state of the router by inspecting the read-only field `router.navigating`.
-	 * This may be useful for showing a spinner, for instance.
-	 *
-	 * ## Concepts
-	 *
-	 * Routers and component instances have a 1:1 correspondence.
-	 *
-	 * The router holds reference to a number of {@link RouterOutlet}.
-	 * An outlet is a placeholder that the router dynamically fills in depending on the current URL.
-	 *
-	 * When the router navigates from a URL, it must first recognize it and serialize it into an
-	 * `Instruction`.
-	 * The router uses the `RouteRegistry` to get an `Instruction`.
-	 */
-	var Router = (function () {
-	    function Router(registry, parent, hostComponent, root) {
-	        this.registry = registry;
-	        this.parent = parent;
-	        this.hostComponent = hostComponent;
-	        this.root = root;
-	        this.navigating = false;
-	        /**
-	         * The current `Instruction` for the router
-	         */
-	        this.currentInstruction = null;
-	        this._currentNavigation = _resolveToTrue;
-	        this._outlet = null;
-	        this._auxRouters = new collection_1.Map();
-	        this._subject = new async_1.EventEmitter();
-	    }
-	    /**
-	     * Constructs a child router. You probably don't need to use this unless you're writing a reusable
-	     * component.
-	     */
-	    Router.prototype.childRouter = function (hostComponent) {
-	        return this._childRouter = new ChildRouter(this, hostComponent);
-	    };
-	    /**
-	     * Constructs a child router. You probably don't need to use this unless you're writing a reusable
-	     * component.
-	     */
-	    Router.prototype.auxRouter = function (hostComponent) { return new ChildRouter(this, hostComponent); };
-	    /**
-	     * Register an outlet to be notified of primary route changes.
-	     *
-	     * You probably don't need to use this unless you're writing a reusable component.
-	     */
-	    Router.prototype.registerPrimaryOutlet = function (outlet) {
-	        if (lang_1.isPresent(outlet.name)) {
-	            throw new exceptions_1.BaseException("registerPrimaryOutlet expects to be called with an unnamed outlet.");
-	        }
-	        if (lang_1.isPresent(this._outlet)) {
-	            throw new exceptions_1.BaseException("Primary outlet is already registered.");
-	        }
-	        this._outlet = outlet;
-	        if (lang_1.isPresent(this.currentInstruction)) {
-	            return this.commit(this.currentInstruction, false);
-	        }
-	        return _resolveToTrue;
-	    };
-	    /**
-	     * Unregister an outlet (because it was destroyed, etc).
-	     *
-	     * You probably don't need to use this unless you're writing a custom outlet implementation.
-	     */
-	    Router.prototype.unregisterPrimaryOutlet = function (outlet) {
-	        if (lang_1.isPresent(outlet.name)) {
-	            throw new exceptions_1.BaseException("registerPrimaryOutlet expects to be called with an unnamed outlet.");
-	        }
-	        this._outlet = null;
-	    };
-	    /**
-	     * Register an outlet to notified of auxiliary route changes.
-	     *
-	     * You probably don't need to use this unless you're writing a reusable component.
-	     */
-	    Router.prototype.registerAuxOutlet = function (outlet) {
-	        var outletName = outlet.name;
-	        if (lang_1.isBlank(outletName)) {
-	            throw new exceptions_1.BaseException("registerAuxOutlet expects to be called with an outlet with a name.");
-	        }
-	        var router = this.auxRouter(this.hostComponent);
-	        this._auxRouters.set(outletName, router);
-	        router._outlet = outlet;
-	        var auxInstruction;
-	        if (lang_1.isPresent(this.currentInstruction) &&
-	            lang_1.isPresent(auxInstruction = this.currentInstruction.auxInstruction[outletName])) {
-	            return router.commit(auxInstruction);
-	        }
-	        return _resolveToTrue;
-	    };
-	    /**
-	     * Given an instruction, returns `true` if the instruction is currently active,
-	     * otherwise `false`.
-	     */
-	    Router.prototype.isRouteActive = function (instruction) {
-	        var _this = this;
-	        var router = this;
-	        if (lang_1.isBlank(this.currentInstruction)) {
-	            return false;
-	        }
-	        // `instruction` corresponds to the root router
-	        while (lang_1.isPresent(router.parent) && lang_1.isPresent(instruction.child)) {
-	            router = router.parent;
-	            instruction = instruction.child;
-	        }
-	        if (lang_1.isBlank(instruction.component) || lang_1.isBlank(this.currentInstruction.component) ||
-	            this.currentInstruction.component.routeName != instruction.component.routeName) {
-	            return false;
-	        }
-	        var paramEquals = true;
-	        if (lang_1.isPresent(this.currentInstruction.component.params)) {
-	            collection_1.StringMapWrapper.forEach(instruction.component.params, function (value, key) {
-	                if (_this.currentInstruction.component.params[key] !== value) {
-	                    paramEquals = false;
-	                }
-	            });
-	        }
-	        return paramEquals;
-	    };
-	    /**
-	     * Dynamically update the routing configuration and trigger a navigation.
-	     *
-	     * ### Usage
-	     *
-	     * ```
-	     * router.config([
-	     *   { 'path': '/', 'component': IndexComp },
-	     *   { 'path': '/user/:id', 'component': UserComp },
-	     * ]);
-	     * ```
-	     */
-	    Router.prototype.config = function (definitions) {
-	        var _this = this;
-	        definitions.forEach(function (routeDefinition) { _this.registry.config(_this.hostComponent, routeDefinition); });
-	        return this.renavigate();
-	    };
-	    /**
-	     * Navigate based on the provided Route Link DSL. It's preferred to navigate with this method
-	     * over `navigateByUrl`.
-	     *
-	     * ### Usage
-	     *
-	     * This method takes an array representing the Route Link DSL:
-	     * ```
-	     * ['./MyCmp', {param: 3}]
-	     * ```
-	     * See the {@link RouterLink} directive for more.
-	     */
-	    Router.prototype.navigate = function (linkParams) {
-	        var instruction = this.generate(linkParams);
-	        return this.navigateByInstruction(instruction, false);
-	    };
-	    /**
-	     * Navigate to a URL. Returns a promise that resolves when navigation is complete.
-	     * It's preferred to navigate with `navigate` instead of this method, since URLs are more brittle.
-	     *
-	     * If the given URL begins with a `/`, router will navigate absolutely.
-	     * If the given URL does not begin with `/`, the router will navigate relative to this component.
-	     */
-	    Router.prototype.navigateByUrl = function (url, _skipLocationChange) {
-	        var _this = this;
-	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
-	        return this._currentNavigation = this._currentNavigation.then(function (_) {
-	            _this.lastNavigationAttempt = url;
-	            _this._startNavigating();
-	            return _this._afterPromiseFinishNavigating(_this.recognize(url).then(function (instruction) {
-	                if (lang_1.isBlank(instruction)) {
-	                    return false;
-	                }
-	                return _this._navigate(instruction, _skipLocationChange);
-	            }));
-	        });
-	    };
-	    /**
-	     * Navigate via the provided instruction. Returns a promise that resolves when navigation is
-	     * complete.
-	     */
-	    Router.prototype.navigateByInstruction = function (instruction, _skipLocationChange) {
-	        var _this = this;
-	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
-	        if (lang_1.isBlank(instruction)) {
-	            return _resolveToFalse;
-	        }
-	        return this._currentNavigation = this._currentNavigation.then(function (_) {
-	            _this._startNavigating();
-	            return _this._afterPromiseFinishNavigating(_this._navigate(instruction, _skipLocationChange));
-	        });
-	    };
-	    /** @internal */
-	    Router.prototype._settleInstruction = function (instruction) {
-	        var _this = this;
-	        return instruction.resolveComponent().then(function (_) {
-	            var unsettledInstructions = [];
-	            if (lang_1.isPresent(instruction.component)) {
-	                instruction.component.reuse = false;
-	            }
-	            if (lang_1.isPresent(instruction.child)) {
-	                unsettledInstructions.push(_this._settleInstruction(instruction.child));
-	            }
-	            collection_1.StringMapWrapper.forEach(instruction.auxInstruction, function (instruction, _) {
-	                unsettledInstructions.push(_this._settleInstruction(instruction));
-	            });
-	            return async_1.PromiseWrapper.all(unsettledInstructions);
-	        });
-	    };
-	    /** @internal */
-	    Router.prototype._navigate = function (instruction, _skipLocationChange) {
-	        var _this = this;
-	        return this._settleInstruction(instruction)
-	            .then(function (_) { return _this._routerCanReuse(instruction); })
-	            .then(function (_) { return _this._canActivate(instruction); })
-	            .then(function (result) {
-	            if (!result) {
-	                return false;
-	            }
-	            return _this._routerCanDeactivate(instruction)
-	                .then(function (result) {
-	                if (result) {
-	                    return _this.commit(instruction, _skipLocationChange)
-	                        .then(function (_) {
-	                        _this._emitNavigationFinish(instruction.toRootUrl());
-	                        return true;
-	                    });
-	                }
-	            });
-	        });
-	    };
-	    Router.prototype._emitNavigationFinish = function (url) { async_1.ObservableWrapper.callEmit(this._subject, url); };
-	    /** @internal */
-	    Router.prototype._emitNavigationFail = function (url) { async_1.ObservableWrapper.callError(this._subject, url); };
-	    Router.prototype._afterPromiseFinishNavigating = function (promise) {
-	        var _this = this;
-	        return async_1.PromiseWrapper.catchError(promise.then(function (_) { return _this._finishNavigating(); }), function (err) {
-	            _this._finishNavigating();
-	            throw err;
-	        });
-	    };
-	    /*
-	     * Recursively set reuse flags
-	     */
-	    /** @internal */
-	    Router.prototype._routerCanReuse = function (instruction) {
-	        var _this = this;
-	        if (lang_1.isBlank(this._outlet)) {
-	            return _resolveToFalse;
-	        }
-	        if (lang_1.isBlank(instruction.component)) {
-	            return _resolveToTrue;
-	        }
-	        return this._outlet.routerCanReuse(instruction.component)
-	            .then(function (result) {
-	            instruction.component.reuse = result;
-	            if (result && lang_1.isPresent(_this._childRouter) && lang_1.isPresent(instruction.child)) {
-	                return _this._childRouter._routerCanReuse(instruction.child);
-	            }
-	        });
-	    };
-	    Router.prototype._canActivate = function (nextInstruction) {
-	        return canActivateOne(nextInstruction, this.currentInstruction);
-	    };
-	    Router.prototype._routerCanDeactivate = function (instruction) {
-	        var _this = this;
-	        if (lang_1.isBlank(this._outlet)) {
-	            return _resolveToTrue;
-	        }
-	        var next;
-	        var childInstruction = null;
-	        var reuse = false;
-	        var componentInstruction = null;
-	        if (lang_1.isPresent(instruction)) {
-	            childInstruction = instruction.child;
-	            componentInstruction = instruction.component;
-	            reuse = lang_1.isBlank(instruction.component) || instruction.component.reuse;
-	        }
-	        if (reuse) {
-	            next = _resolveToTrue;
-	        }
-	        else {
-	            next = this._outlet.routerCanDeactivate(componentInstruction);
-	        }
-	        // TODO: aux route lifecycle hooks
-	        return next.then(function (result) {
-	            if (result == false) {
-	                return false;
-	            }
-	            if (lang_1.isPresent(_this._childRouter)) {
-	                // TODO: ideally, this closure would map to async-await in Dart.
-	                // For now, casting to any to suppress an error.
-	                return _this._childRouter._routerCanDeactivate(childInstruction);
-	            }
-	            return true;
-	        });
-	    };
-	    /**
-	     * Updates this router and all descendant routers according to the given instruction
-	     */
-	    Router.prototype.commit = function (instruction, _skipLocationChange) {
-	        var _this = this;
-	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
-	        this.currentInstruction = instruction;
-	        var next = _resolveToTrue;
-	        if (lang_1.isPresent(this._outlet) && lang_1.isPresent(instruction.component)) {
-	            var componentInstruction = instruction.component;
-	            if (componentInstruction.reuse) {
-	                next = this._outlet.reuse(componentInstruction);
-	            }
-	            else {
-	                next =
-	                    this.deactivate(instruction).then(function (_) { return _this._outlet.activate(componentInstruction); });
-	            }
-	            if (lang_1.isPresent(instruction.child)) {
-	                next = next.then(function (_) {
-	                    if (lang_1.isPresent(_this._childRouter)) {
-	                        return _this._childRouter.commit(instruction.child);
-	                    }
-	                });
-	            }
-	        }
-	        var promises = [];
-	        this._auxRouters.forEach(function (router, name) {
-	            if (lang_1.isPresent(instruction.auxInstruction[name])) {
-	                promises.push(router.commit(instruction.auxInstruction[name]));
-	            }
-	        });
-	        return next.then(function (_) { return async_1.PromiseWrapper.all(promises); });
-	    };
-	    /** @internal */
-	    Router.prototype._startNavigating = function () { this.navigating = true; };
-	    /** @internal */
-	    Router.prototype._finishNavigating = function () { this.navigating = false; };
-	    /**
-	     * Subscribe to URL updates from the router
-	     */
-	    Router.prototype.subscribe = function (onNext, onError) {
-	        return async_1.ObservableWrapper.subscribe(this._subject, onNext, onError);
-	    };
-	    /**
-	     * Removes the contents of this router's outlet and all descendant outlets
-	     */
-	    Router.prototype.deactivate = function (instruction) {
-	        var _this = this;
-	        var childInstruction = null;
-	        var componentInstruction = null;
-	        if (lang_1.isPresent(instruction)) {
-	            childInstruction = instruction.child;
-	            componentInstruction = instruction.component;
-	        }
-	        var next = _resolveToTrue;
-	        if (lang_1.isPresent(this._childRouter)) {
-	            next = this._childRouter.deactivate(childInstruction);
-	        }
-	        if (lang_1.isPresent(this._outlet)) {
-	            next = next.then(function (_) { return _this._outlet.deactivate(componentInstruction); });
-	        }
-	        // TODO: handle aux routes
-	        return next;
-	    };
-	    /**
-	     * Given a URL, returns an instruction representing the component graph
-	     */
-	    Router.prototype.recognize = function (url) {
-	        var ancestorComponents = this._getAncestorInstructions();
-	        return this.registry.recognize(url, ancestorComponents);
-	    };
-	    Router.prototype._getAncestorInstructions = function () {
-	        var ancestorInstructions = [this.currentInstruction];
-	        var ancestorRouter = this;
-	        while (lang_1.isPresent(ancestorRouter = ancestorRouter.parent)) {
-	            ancestorInstructions.unshift(ancestorRouter.currentInstruction);
-	        }
-	        return ancestorInstructions;
-	    };
-	    /**
-	     * Navigates to either the last URL successfully navigated to, or the last URL requested if the
-	     * router has yet to successfully navigate.
-	     */
-	    Router.prototype.renavigate = function () {
-	        if (lang_1.isBlank(this.lastNavigationAttempt)) {
-	            return this._currentNavigation;
-	        }
-	        return this.navigateByUrl(this.lastNavigationAttempt);
-	    };
-	    /**
-	     * Generate an `Instruction` based on the provided Route Link DSL.
-	     */
-	    Router.prototype.generate = function (linkParams) {
-	        var ancestorInstructions = this._getAncestorInstructions();
-	        return this.registry.generate(linkParams, ancestorInstructions);
-	    };
-	    Router = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [route_registry_1.RouteRegistry, Router, Object, Router])
-	    ], Router);
-	    return Router;
-	}());
-	exports.Router = Router;
-	var RootRouter = (function (_super) {
-	    __extends(RootRouter, _super);
-	    function RootRouter(registry, location, primaryComponent) {
-	        var _this = this;
-	        _super.call(this, registry, null, primaryComponent);
-	        this.root = this;
-	        this._location = location;
-	        this._locationSub = this._location.subscribe(function (change) {
-	            // we call recognize ourselves
-	            _this.recognize(change['url'])
-	                .then(function (instruction) {
-	                if (lang_1.isPresent(instruction)) {
-	                    _this.navigateByInstruction(instruction, lang_1.isPresent(change['pop']))
-	                        .then(function (_) {
-	                        // this is a popstate event; no need to change the URL
-	                        if (lang_1.isPresent(change['pop']) && change['type'] != 'hashchange') {
-	                            return;
-	                        }
-	                        var emitPath = instruction.toUrlPath();
-	                        var emitQuery = instruction.toUrlQuery();
-	                        if (emitPath.length > 0 && emitPath[0] != '/') {
-	                            emitPath = '/' + emitPath;
-	                        }
-	                        // We've opted to use pushstate and popState APIs regardless of whether you
-	                        // an app uses HashLocationStrategy or PathLocationStrategy.
-	                        // However, apps that are migrating might have hash links that operate outside
-	                        // angular to which routing must respond.
-	                        // Therefore we know that all hashchange events occur outside Angular.
-	                        // To support these cases where we respond to hashchanges and redirect as a
-	                        // result, we need to replace the top item on the stack.
-	                        if (change['type'] == 'hashchange') {
-	                            if (instruction.toRootUrl() != _this._location.path()) {
-	                                _this._location.replaceState(emitPath, emitQuery);
-	                            }
-	                        }
-	                        else {
-	                            _this._location.go(emitPath, emitQuery);
-	                        }
-	                    });
-	                }
-	                else {
-	                    _this._emitNavigationFail(change['url']);
-	                }
-	            });
-	        });
-	        this.registry.configFromComponent(primaryComponent);
-	        this.navigateByUrl(location.path());
-	    }
-	    RootRouter.prototype.commit = function (instruction, _skipLocationChange) {
-	        var _this = this;
-	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
-	        var emitPath = instruction.toUrlPath();
-	        var emitQuery = instruction.toUrlQuery();
-	        if (emitPath.length > 0 && emitPath[0] != '/') {
-	            emitPath = '/' + emitPath;
-	        }
-	        var promise = _super.prototype.commit.call(this, instruction);
-	        if (!_skipLocationChange) {
-	            promise = promise.then(function (_) { _this._location.go(emitPath, emitQuery); });
-	        }
-	        return promise;
-	    };
-	    RootRouter.prototype.dispose = function () {
-	        if (lang_1.isPresent(this._locationSub)) {
-	            async_1.ObservableWrapper.dispose(this._locationSub);
-	            this._locationSub = null;
-	        }
-	    };
-	    RootRouter = __decorate([
-	        core_1.Injectable(),
-	        __param(2, core_1.Inject(route_registry_1.ROUTER_PRIMARY_COMPONENT)), 
-	        __metadata('design:paramtypes', [route_registry_1.RouteRegistry, common_1.Location, lang_1.Type])
-	    ], RootRouter);
-	    return RootRouter;
-	}(Router));
-	exports.RootRouter = RootRouter;
-	var ChildRouter = (function (_super) {
-	    __extends(ChildRouter, _super);
-	    function ChildRouter(parent, hostComponent) {
-	        _super.call(this, parent.registry, parent, hostComponent, parent.root);
-	        this.parent = parent;
-	    }
-	    ChildRouter.prototype.navigateByUrl = function (url, _skipLocationChange) {
-	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
-	        // Delegate navigation to the root router
-	        return this.parent.navigateByUrl(url, _skipLocationChange);
-	    };
-	    ChildRouter.prototype.navigateByInstruction = function (instruction, _skipLocationChange) {
-	        if (_skipLocationChange === void 0) { _skipLocationChange = false; }
-	        // Delegate navigation to the root router
-	        return this.parent.navigateByInstruction(instruction, _skipLocationChange);
-	    };
-	    return ChildRouter;
-	}(Router));
-	function canActivateOne(nextInstruction, prevInstruction) {
-	    var next = _resolveToTrue;
-	    if (lang_1.isBlank(nextInstruction.component)) {
-	        return next;
-	    }
-	    if (lang_1.isPresent(nextInstruction.child)) {
-	        next = canActivateOne(nextInstruction.child, lang_1.isPresent(prevInstruction) ? prevInstruction.child : null);
-	    }
-	    return next.then(function (result) {
-	        if (result == false) {
-	            return false;
-	        }
-	        if (nextInstruction.component.reuse) {
-	            return true;
-	        }
-	        var hook = route_lifecycle_reflector_1.getCanActivateHook(nextInstruction.component.componentType);
-	        if (lang_1.isPresent(hook)) {
-	            return hook(nextInstruction.component, lang_1.isPresent(prevInstruction) ? prevInstruction.component : null);
-	        }
-	        return true;
-	    });
-	}
-	//# sourceMappingURL=router.js.map
-
-/***/ },
-/* 306 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var lang_1 = __webpack_require__(307);
-	var promise_1 = __webpack_require__(308);
-	exports.PromiseWrapper = promise_1.PromiseWrapper;
-	exports.PromiseCompleter = promise_1.PromiseCompleter;
-	var Subject_1 = __webpack_require__(41);
-	var PromiseObservable_1 = __webpack_require__(60);
-	var toPromise_1 = __webpack_require__(61);
-	var Observable_1 = __webpack_require__(42);
-	exports.Observable = Observable_1.Observable;
-	var Subject_2 = __webpack_require__(41);
-	exports.Subject = Subject_2.Subject;
-	var TimerWrapper = (function () {
-	    function TimerWrapper() {
-	    }
-	    TimerWrapper.setTimeout = function (fn, millis) {
-	        return lang_1.global.setTimeout(fn, millis);
-	    };
-	    TimerWrapper.clearTimeout = function (id) { lang_1.global.clearTimeout(id); };
-	    TimerWrapper.setInterval = function (fn, millis) {
-	        return lang_1.global.setInterval(fn, millis);
-	    };
-	    TimerWrapper.clearInterval = function (id) { lang_1.global.clearInterval(id); };
-	    return TimerWrapper;
-	}());
-	exports.TimerWrapper = TimerWrapper;
-	var ObservableWrapper = (function () {
-	    function ObservableWrapper() {
-	    }
-	    // TODO(vsavkin): when we use rxnext, try inferring the generic type from the first arg
-	    ObservableWrapper.subscribe = function (emitter, onNext, onError, onComplete) {
-	        if (onComplete === void 0) { onComplete = function () { }; }
-	        onError = (typeof onError === "function") && onError || lang_1.noop;
-	        onComplete = (typeof onComplete === "function") && onComplete || lang_1.noop;
-	        return emitter.subscribe({ next: onNext, error: onError, complete: onComplete });
-	    };
-	    ObservableWrapper.isObservable = function (obs) { return !!obs.subscribe; };
-	    /**
-	     * Returns whether `obs` has any subscribers listening to events.
-	     */
-	    ObservableWrapper.hasSubscribers = function (obs) { return obs.observers.length > 0; };
-	    ObservableWrapper.dispose = function (subscription) { subscription.unsubscribe(); };
-	    /**
-	     * @deprecated - use callEmit() instead
-	     */
-	    ObservableWrapper.callNext = function (emitter, value) { emitter.next(value); };
-	    ObservableWrapper.callEmit = function (emitter, value) { emitter.emit(value); };
-	    ObservableWrapper.callError = function (emitter, error) { emitter.error(error); };
-	    ObservableWrapper.callComplete = function (emitter) { emitter.complete(); };
-	    ObservableWrapper.fromPromise = function (promise) {
-	        return PromiseObservable_1.PromiseObservable.create(promise);
-	    };
-	    ObservableWrapper.toPromise = function (obj) { return toPromise_1.toPromise.call(obj); };
-	    return ObservableWrapper;
-	}());
-	exports.ObservableWrapper = ObservableWrapper;
-	/**
-	 * Use by directives and components to emit custom Events.
-	 *
-	 * ### Examples
-	 *
-	 * In the following example, `Zippy` alternatively emits `open` and `close` events when its
-	 * title gets clicked:
-	 *
-	 * ```
-	 * @Component({
-	 *   selector: 'zippy',
-	 *   template: `
-	 *   <div class="zippy">
-	 *     <div (click)="toggle()">Toggle</div>
-	 *     <div [hidden]="!visible">
-	 *       <ng-content></ng-content>
-	 *     </div>
-	 *  </div>`})
-	 * export class Zippy {
-	 *   visible: boolean = true;
-	 *   @Output() open: EventEmitter<any> = new EventEmitter();
-	 *   @Output() close: EventEmitter<any> = new EventEmitter();
-	 *
-	 *   toggle() {
-	 *     this.visible = !this.visible;
-	 *     if (this.visible) {
-	 *       this.open.emit(null);
-	 *     } else {
-	 *       this.close.emit(null);
-	 *     }
-	 *   }
-	 * }
-	 * ```
-	 *
-	 * Use Rx.Observable but provides an adapter to make it work as specified here:
-	 * https://github.com/jhusain/observable-spec
-	 *
-	 * Once a reference implementation of the spec is available, switch to it.
-	 */
-	var EventEmitter = (function (_super) {
-	    __extends(EventEmitter, _super);
-	    /**
-	     * Creates an instance of [EventEmitter], which depending on [isAsync],
-	     * delivers events synchronously or asynchronously.
-	     */
-	    function EventEmitter(isAsync) {
-	        if (isAsync === void 0) { isAsync = true; }
-	        _super.call(this);
-	        this._isAsync = isAsync;
-	    }
-	    EventEmitter.prototype.emit = function (value) { _super.prototype.next.call(this, value); };
-	    /**
-	     * @deprecated - use .emit(value) instead
-	     */
-	    EventEmitter.prototype.next = function (value) { _super.prototype.next.call(this, value); };
-	    EventEmitter.prototype.subscribe = function (generatorOrNext, error, complete) {
-	        var schedulerFn;
-	        var errorFn = function (err) { return null; };
-	        var completeFn = function () { return null; };
-	        if (generatorOrNext && typeof generatorOrNext === 'object') {
-	            schedulerFn = this._isAsync ? function (value) { setTimeout(function () { return generatorOrNext.next(value); }); } :
-	                function (value) { generatorOrNext.next(value); };
-	            if (generatorOrNext.error) {
-	                errorFn = this._isAsync ? function (err) { setTimeout(function () { return generatorOrNext.error(err); }); } :
-	                    function (err) { generatorOrNext.error(err); };
-	            }
-	            if (generatorOrNext.complete) {
-	                completeFn = this._isAsync ? function () { setTimeout(function () { return generatorOrNext.complete(); }); } :
-	                    function () { generatorOrNext.complete(); };
-	            }
-	        }
-	        else {
-	            schedulerFn = this._isAsync ? function (value) { setTimeout(function () { return generatorOrNext(value); }); } :
-	                function (value) { generatorOrNext(value); };
-	            if (error) {
-	                errorFn =
-	                    this._isAsync ? function (err) { setTimeout(function () { return error(err); }); } : function (err) { error(err); };
-	            }
-	            if (complete) {
-	                completeFn =
-	                    this._isAsync ? function () { setTimeout(function () { return complete(); }); } : function () { complete(); };
-	            }
-	        }
-	        return _super.prototype.subscribe.call(this, schedulerFn, errorFn, completeFn);
-	    };
-	    return EventEmitter;
-	}(Subject_1.Subject));
-	exports.EventEmitter = EventEmitter;
-	//# sourceMappingURL=async.js.map
-
-/***/ },
-/* 307 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var globalScope;
-	if (typeof window === 'undefined') {
-	    if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
-	        // TODO: Replace any with WorkerGlobalScope from lib.webworker.d.ts #3492
-	        globalScope = self;
-	    }
-	    else {
-	        globalScope = global;
-	    }
-	}
-	else {
-	    globalScope = window;
-	}
-	function scheduleMicroTask(fn) {
-	    Zone.current.scheduleMicroTask('scheduleMicrotask', fn);
-	}
-	exports.scheduleMicroTask = scheduleMicroTask;
-	exports.IS_DART = false;
-	// Need to declare a new variable for global here since TypeScript
-	// exports the original value of the symbol.
-	var _global = globalScope;
-	exports.global = _global;
-	exports.Type = Function;
-	function getTypeNameForDebugging(type) {
-	    if (type['name']) {
-	        return type['name'];
-	    }
-	    return typeof type;
-	}
-	exports.getTypeNameForDebugging = getTypeNameForDebugging;
-	exports.Math = _global.Math;
-	exports.Date = _global.Date;
-	var _devMode = true;
-	var _modeLocked = false;
-	function lockMode() {
-	    _modeLocked = true;
-	}
-	exports.lockMode = lockMode;
-	/**
-	 * Disable Angular's development mode, which turns off assertions and other
-	 * checks within the framework.
-	 *
-	 * One important assertion this disables verifies that a change detection pass
-	 * does not result in additional changes to any bindings (also known as
-	 * unidirectional data flow).
-	 */
-	function enableProdMode() {
-	    if (_modeLocked) {
-	        // Cannot use BaseException as that ends up importing from facade/lang.
-	        throw 'Cannot enable prod mode after platform setup.';
-	    }
-	    _devMode = false;
-	}
-	exports.enableProdMode = enableProdMode;
-	function assertionsEnabled() {
-	    return _devMode;
-	}
-	exports.assertionsEnabled = assertionsEnabled;
-	// TODO: remove calls to assert in production environment
-	// Note: Can't just export this and import in in other files
-	// as `assert` is a reserved keyword in Dart
-	_global.assert = function assert(condition) {
-	    // TODO: to be fixed properly via #2830, noop for now
-	};
-	function isPresent(obj) {
-	    return obj !== undefined && obj !== null;
-	}
-	exports.isPresent = isPresent;
-	function isBlank(obj) {
-	    return obj === undefined || obj === null;
-	}
-	exports.isBlank = isBlank;
-	function isBoolean(obj) {
-	    return typeof obj === "boolean";
-	}
-	exports.isBoolean = isBoolean;
-	function isNumber(obj) {
-	    return typeof obj === "number";
-	}
-	exports.isNumber = isNumber;
-	function isString(obj) {
-	    return typeof obj === "string";
-	}
-	exports.isString = isString;
-	function isFunction(obj) {
-	    return typeof obj === "function";
-	}
-	exports.isFunction = isFunction;
-	function isType(obj) {
-	    return isFunction(obj);
-	}
-	exports.isType = isType;
-	function isStringMap(obj) {
-	    return typeof obj === 'object' && obj !== null;
-	}
-	exports.isStringMap = isStringMap;
-	var STRING_MAP_PROTO = Object.getPrototypeOf({});
-	function isStrictStringMap(obj) {
-	    return isStringMap(obj) && Object.getPrototypeOf(obj) === STRING_MAP_PROTO;
-	}
-	exports.isStrictStringMap = isStrictStringMap;
-	function isPromise(obj) {
-	    return obj instanceof _global.Promise;
-	}
-	exports.isPromise = isPromise;
-	function isArray(obj) {
-	    return Array.isArray(obj);
-	}
-	exports.isArray = isArray;
-	function isDate(obj) {
-	    return obj instanceof exports.Date && !isNaN(obj.valueOf());
-	}
-	exports.isDate = isDate;
-	function noop() { }
-	exports.noop = noop;
-	function stringify(token) {
-	    if (typeof token === 'string') {
-	        return token;
-	    }
-	    if (token === undefined || token === null) {
-	        return '' + token;
-	    }
-	    if (token.name) {
-	        return token.name;
-	    }
-	    if (token.overriddenName) {
-	        return token.overriddenName;
-	    }
-	    var res = token.toString();
-	    var newLineIndex = res.indexOf("\n");
-	    return (newLineIndex === -1) ? res : res.substring(0, newLineIndex);
-	}
-	exports.stringify = stringify;
-	// serialize / deserialize enum exist only for consistency with dart API
-	// enums in typescript don't need to be serialized
-	function serializeEnum(val) {
-	    return val;
-	}
-	exports.serializeEnum = serializeEnum;
-	function deserializeEnum(val, values) {
-	    return val;
-	}
-	exports.deserializeEnum = deserializeEnum;
-	function resolveEnumToken(enumValue, val) {
-	    return enumValue[val];
-	}
-	exports.resolveEnumToken = resolveEnumToken;
-	var StringWrapper = (function () {
-	    function StringWrapper() {
-	    }
-	    StringWrapper.fromCharCode = function (code) { return String.fromCharCode(code); };
-	    StringWrapper.charCodeAt = function (s, index) { return s.charCodeAt(index); };
-	    StringWrapper.split = function (s, regExp) { return s.split(regExp); };
-	    StringWrapper.equals = function (s, s2) { return s === s2; };
-	    StringWrapper.stripLeft = function (s, charVal) {
-	        if (s && s.length) {
-	            var pos = 0;
-	            for (var i = 0; i < s.length; i++) {
-	                if (s[i] != charVal)
-	                    break;
-	                pos++;
-	            }
-	            s = s.substring(pos);
-	        }
-	        return s;
-	    };
-	    StringWrapper.stripRight = function (s, charVal) {
-	        if (s && s.length) {
-	            var pos = s.length;
-	            for (var i = s.length - 1; i >= 0; i--) {
-	                if (s[i] != charVal)
-	                    break;
-	                pos--;
-	            }
-	            s = s.substring(0, pos);
-	        }
-	        return s;
-	    };
-	    StringWrapper.replace = function (s, from, replace) {
-	        return s.replace(from, replace);
-	    };
-	    StringWrapper.replaceAll = function (s, from, replace) {
-	        return s.replace(from, replace);
-	    };
-	    StringWrapper.slice = function (s, from, to) {
-	        if (from === void 0) { from = 0; }
-	        if (to === void 0) { to = null; }
-	        return s.slice(from, to === null ? undefined : to);
-	    };
-	    StringWrapper.replaceAllMapped = function (s, from, cb) {
-	        return s.replace(from, function () {
-	            var matches = [];
-	            for (var _i = 0; _i < arguments.length; _i++) {
-	                matches[_i - 0] = arguments[_i];
-	            }
-	            // Remove offset & string from the result array
-	            matches.splice(-2, 2);
-	            // The callback receives match, p1, ..., pn
-	            return cb(matches);
-	        });
-	    };
-	    StringWrapper.contains = function (s, substr) { return s.indexOf(substr) != -1; };
-	    StringWrapper.compare = function (a, b) {
-	        if (a < b) {
-	            return -1;
-	        }
-	        else if (a > b) {
-	            return 1;
-	        }
-	        else {
-	            return 0;
-	        }
-	    };
-	    return StringWrapper;
-	}());
-	exports.StringWrapper = StringWrapper;
-	var StringJoiner = (function () {
-	    function StringJoiner(parts) {
-	        if (parts === void 0) { parts = []; }
-	        this.parts = parts;
-	    }
-	    StringJoiner.prototype.add = function (part) { this.parts.push(part); };
-	    StringJoiner.prototype.toString = function () { return this.parts.join(""); };
-	    return StringJoiner;
-	}());
-	exports.StringJoiner = StringJoiner;
-	var NumberParseError = (function (_super) {
-	    __extends(NumberParseError, _super);
-	    function NumberParseError(message) {
-	        _super.call(this);
-	        this.message = message;
-	    }
-	    NumberParseError.prototype.toString = function () { return this.message; };
-	    return NumberParseError;
-	}(Error));
-	exports.NumberParseError = NumberParseError;
-	var NumberWrapper = (function () {
-	    function NumberWrapper() {
-	    }
-	    NumberWrapper.toFixed = function (n, fractionDigits) { return n.toFixed(fractionDigits); };
-	    NumberWrapper.equal = function (a, b) { return a === b; };
-	    NumberWrapper.parseIntAutoRadix = function (text) {
-	        var result = parseInt(text);
-	        if (isNaN(result)) {
-	            throw new NumberParseError("Invalid integer literal when parsing " + text);
-	        }
-	        return result;
-	    };
-	    NumberWrapper.parseInt = function (text, radix) {
-	        if (radix == 10) {
-	            if (/^(\-|\+)?[0-9]+$/.test(text)) {
-	                return parseInt(text, radix);
-	            }
-	        }
-	        else if (radix == 16) {
-	            if (/^(\-|\+)?[0-9ABCDEFabcdef]+$/.test(text)) {
-	                return parseInt(text, radix);
-	            }
-	        }
-	        else {
-	            var result = parseInt(text, radix);
-	            if (!isNaN(result)) {
-	                return result;
-	            }
-	        }
-	        throw new NumberParseError("Invalid integer literal when parsing " + text + " in base " +
-	            radix);
-	    };
-	    // TODO: NaN is a valid literal but is returned by parseFloat to indicate an error.
-	    NumberWrapper.parseFloat = function (text) { return parseFloat(text); };
-	    Object.defineProperty(NumberWrapper, "NaN", {
-	        get: function () { return NaN; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    NumberWrapper.isNaN = function (value) { return isNaN(value); };
-	    NumberWrapper.isInteger = function (value) { return Number.isInteger(value); };
-	    return NumberWrapper;
-	}());
-	exports.NumberWrapper = NumberWrapper;
-	exports.RegExp = _global.RegExp;
-	var RegExpWrapper = (function () {
-	    function RegExpWrapper() {
-	    }
-	    RegExpWrapper.create = function (regExpStr, flags) {
-	        if (flags === void 0) { flags = ''; }
-	        flags = flags.replace(/g/g, '');
-	        return new _global.RegExp(regExpStr, flags + 'g');
-	    };
-	    RegExpWrapper.firstMatch = function (regExp, input) {
-	        // Reset multimatch regex state
-	        regExp.lastIndex = 0;
-	        return regExp.exec(input);
-	    };
-	    RegExpWrapper.test = function (regExp, input) {
-	        regExp.lastIndex = 0;
-	        return regExp.test(input);
-	    };
-	    RegExpWrapper.matcher = function (regExp, input) {
-	        // Reset regex state for the case
-	        // someone did not loop over all matches
-	        // last time.
-	        regExp.lastIndex = 0;
-	        return { re: regExp, input: input };
-	    };
-	    RegExpWrapper.replaceAll = function (regExp, input, replace) {
-	        var c = regExp.exec(input);
-	        var res = '';
-	        regExp.lastIndex = 0;
-	        var prev = 0;
-	        while (c) {
-	            res += input.substring(prev, c.index);
-	            res += replace(c);
-	            prev = c.index + c[0].length;
-	            regExp.lastIndex = prev;
-	            c = regExp.exec(input);
-	        }
-	        res += input.substring(prev);
-	        return res;
-	    };
-	    return RegExpWrapper;
-	}());
-	exports.RegExpWrapper = RegExpWrapper;
-	var RegExpMatcherWrapper = (function () {
-	    function RegExpMatcherWrapper() {
-	    }
-	    RegExpMatcherWrapper.next = function (matcher) {
-	        return matcher.re.exec(matcher.input);
-	    };
-	    return RegExpMatcherWrapper;
-	}());
-	exports.RegExpMatcherWrapper = RegExpMatcherWrapper;
-	var FunctionWrapper = (function () {
-	    function FunctionWrapper() {
-	    }
-	    FunctionWrapper.apply = function (fn, posArgs) { return fn.apply(null, posArgs); };
-	    return FunctionWrapper;
-	}());
-	exports.FunctionWrapper = FunctionWrapper;
-	// JS has NaN !== NaN
-	function looseIdentical(a, b) {
-	    return a === b || typeof a === "number" && typeof b === "number" && isNaN(a) && isNaN(b);
-	}
-	exports.looseIdentical = looseIdentical;
-	// JS considers NaN is the same as NaN for map Key (while NaN !== NaN otherwise)
-	// see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
-	function getMapKey(value) {
-	    return value;
-	}
-	exports.getMapKey = getMapKey;
-	function normalizeBlank(obj) {
-	    return isBlank(obj) ? null : obj;
-	}
-	exports.normalizeBlank = normalizeBlank;
-	function normalizeBool(obj) {
-	    return isBlank(obj) ? false : obj;
-	}
-	exports.normalizeBool = normalizeBool;
-	function isJsObject(o) {
-	    return o !== null && (typeof o === "function" || typeof o === "object");
-	}
-	exports.isJsObject = isJsObject;
-	function print(obj) {
-	    console.log(obj);
-	}
-	exports.print = print;
-	function warn(obj) {
-	    console.warn(obj);
-	}
-	exports.warn = warn;
-	// Can't be all uppercase as our transpiler would think it is a special directive...
-	var Json = (function () {
-	    function Json() {
-	    }
-	    Json.parse = function (s) { return _global.JSON.parse(s); };
-	    Json.stringify = function (data) {
-	        // Dart doesn't take 3 arguments
-	        return _global.JSON.stringify(data, null, 2);
-	    };
-	    return Json;
-	}());
-	exports.Json = Json;
-	var DateWrapper = (function () {
-	    function DateWrapper() {
-	    }
-	    DateWrapper.create = function (year, month, day, hour, minutes, seconds, milliseconds) {
-	        if (month === void 0) { month = 1; }
-	        if (day === void 0) { day = 1; }
-	        if (hour === void 0) { hour = 0; }
-	        if (minutes === void 0) { minutes = 0; }
-	        if (seconds === void 0) { seconds = 0; }
-	        if (milliseconds === void 0) { milliseconds = 0; }
-	        return new exports.Date(year, month - 1, day, hour, minutes, seconds, milliseconds);
-	    };
-	    DateWrapper.fromISOString = function (str) { return new exports.Date(str); };
-	    DateWrapper.fromMillis = function (ms) { return new exports.Date(ms); };
-	    DateWrapper.toMillis = function (date) { return date.getTime(); };
-	    DateWrapper.now = function () { return new exports.Date(); };
-	    DateWrapper.toJson = function (date) { return date.toJSON(); };
-	    return DateWrapper;
-	}());
-	exports.DateWrapper = DateWrapper;
-	function setValueOnPath(global, path, value) {
-	    var parts = path.split('.');
-	    var obj = global;
-	    while (parts.length > 1) {
-	        var name = parts.shift();
-	        if (obj.hasOwnProperty(name) && isPresent(obj[name])) {
-	            obj = obj[name];
-	        }
-	        else {
-	            obj = obj[name] = {};
-	        }
-	    }
-	    if (obj === undefined || obj === null) {
-	        obj = {};
-	    }
-	    obj[parts.shift()] = value;
-	}
-	exports.setValueOnPath = setValueOnPath;
-	var _symbolIterator = null;
-	function getSymbolIterator() {
-	    if (isBlank(_symbolIterator)) {
-	        if (isPresent(globalScope.Symbol) && isPresent(Symbol.iterator)) {
-	            _symbolIterator = Symbol.iterator;
-	        }
-	        else {
-	            // es6-shim specific logic
-	            var keys = Object.getOwnPropertyNames(Map.prototype);
-	            for (var i = 0; i < keys.length; ++i) {
-	                var key = keys[i];
-	                if (key !== 'entries' && key !== 'size' &&
-	                    Map.prototype[key] === Map.prototype['entries']) {
-	                    _symbolIterator = key;
-	                }
-	            }
-	        }
-	    }
-	    return _symbolIterator;
-	}
-	exports.getSymbolIterator = getSymbolIterator;
-	function evalExpression(sourceUrl, expr, declarations, vars) {
-	    var fnBody = declarations + "\nreturn " + expr + "\n//# sourceURL=" + sourceUrl;
-	    var fnArgNames = [];
-	    var fnArgValues = [];
-	    for (var argName in vars) {
-	        fnArgNames.push(argName);
-	        fnArgValues.push(vars[argName]);
-	    }
-	    return new (Function.bind.apply(Function, [void 0].concat(fnArgNames.concat(fnBody))))().apply(void 0, fnArgValues);
-	}
-	exports.evalExpression = evalExpression;
-	function isPrimitive(obj) {
-	    return !isJsObject(obj);
-	}
-	exports.isPrimitive = isPrimitive;
-	function hasConstructor(value, type) {
-	    return value.constructor === type;
-	}
-	exports.hasConstructor = hasConstructor;
-	function bitWiseOr(values) {
-	    return values.reduce(function (a, b) { return a | b; });
-	}
-	exports.bitWiseOr = bitWiseOr;
-	function bitWiseAnd(values) {
-	    return values.reduce(function (a, b) { return a & b; });
-	}
-	exports.bitWiseAnd = bitWiseAnd;
-	function escape(s) {
-	    return _global.encodeURI(s);
-	}
-	exports.escape = escape;
-	//# sourceMappingURL=lang.js.map
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 308 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var PromiseCompleter = (function () {
-	    function PromiseCompleter() {
-	        var _this = this;
-	        this.promise = new Promise(function (res, rej) {
-	            _this.resolve = res;
-	            _this.reject = rej;
-	        });
-	    }
-	    return PromiseCompleter;
-	}());
-	exports.PromiseCompleter = PromiseCompleter;
-	var PromiseWrapper = (function () {
-	    function PromiseWrapper() {
-	    }
-	    PromiseWrapper.resolve = function (obj) { return Promise.resolve(obj); };
-	    PromiseWrapper.reject = function (obj, _) { return Promise.reject(obj); };
-	    // Note: We can't rename this method into `catch`, as this is not a valid
-	    // method name in Dart.
-	    PromiseWrapper.catchError = function (promise, onError) {
-	        return promise.catch(onError);
-	    };
-	    PromiseWrapper.all = function (promises) {
-	        if (promises.length == 0)
-	            return Promise.resolve([]);
-	        return Promise.all(promises);
-	    };
-	    PromiseWrapper.then = function (promise, success, rejection) {
-	        return promise.then(success, rejection);
-	    };
-	    PromiseWrapper.wrap = function (computation) {
-	        return new Promise(function (res, rej) {
-	            try {
-	                res(computation());
-	            }
-	            catch (e) {
-	                rej(e);
-	            }
-	        });
-	    };
-	    PromiseWrapper.scheduleMicrotask = function (computation) {
-	        PromiseWrapper.then(PromiseWrapper.resolve(null), computation, function (_) { });
-	    };
-	    PromiseWrapper.isPromise = function (obj) { return obj instanceof Promise; };
-	    PromiseWrapper.completer = function () { return new PromiseCompleter(); };
-	    return PromiseWrapper;
-	}());
-	exports.PromiseWrapper = PromiseWrapper;
-	//# sourceMappingURL=promise.js.map
-
-/***/ },
-/* 309 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var lang_1 = __webpack_require__(307);
-	exports.Map = lang_1.global.Map;
-	exports.Set = lang_1.global.Set;
-	// Safari and Internet Explorer do not support the iterable parameter to the
-	// Map constructor.  We work around that by manually adding the items.
-	var createMapFromPairs = (function () {
-	    try {
-	        if (new exports.Map([[1, 2]]).size === 1) {
-	            return function createMapFromPairs(pairs) { return new exports.Map(pairs); };
-	        }
-	    }
-	    catch (e) {
-	    }
-	    return function createMapAndPopulateFromPairs(pairs) {
-	        var map = new exports.Map();
-	        for (var i = 0; i < pairs.length; i++) {
-	            var pair = pairs[i];
-	            map.set(pair[0], pair[1]);
-	        }
-	        return map;
-	    };
-	})();
-	var createMapFromMap = (function () {
-	    try {
-	        if (new exports.Map(new exports.Map())) {
-	            return function createMapFromMap(m) { return new exports.Map(m); };
-	        }
-	    }
-	    catch (e) {
-	    }
-	    return function createMapAndPopulateFromMap(m) {
-	        var map = new exports.Map();
-	        m.forEach(function (v, k) { map.set(k, v); });
-	        return map;
-	    };
-	})();
-	var _clearValues = (function () {
-	    if ((new exports.Map()).keys().next) {
-	        return function _clearValues(m) {
-	            var keyIterator = m.keys();
-	            var k;
-	            while (!((k = keyIterator.next()).done)) {
-	                m.set(k.value, null);
-	            }
-	        };
-	    }
-	    else {
-	        return function _clearValuesWithForeEach(m) {
-	            m.forEach(function (v, k) { m.set(k, null); });
-	        };
-	    }
-	})();
-	// Safari doesn't implement MapIterator.next(), which is used is Traceur's polyfill of Array.from
-	// TODO(mlaval): remove the work around once we have a working polyfill of Array.from
-	var _arrayFromMap = (function () {
-	    try {
-	        if ((new exports.Map()).values().next) {
-	            return function createArrayFromMap(m, getValues) {
-	                return getValues ? Array.from(m.values()) : Array.from(m.keys());
-	            };
-	        }
-	    }
-	    catch (e) {
-	    }
-	    return function createArrayFromMapWithForeach(m, getValues) {
-	        var res = ListWrapper.createFixedSize(m.size), i = 0;
-	        m.forEach(function (v, k) {
-	            res[i] = getValues ? v : k;
-	            i++;
-	        });
-	        return res;
-	    };
-	})();
-	var MapWrapper = (function () {
-	    function MapWrapper() {
-	    }
-	    MapWrapper.clone = function (m) { return createMapFromMap(m); };
-	    MapWrapper.createFromStringMap = function (stringMap) {
-	        var result = new exports.Map();
-	        for (var prop in stringMap) {
-	            result.set(prop, stringMap[prop]);
-	        }
-	        return result;
-	    };
-	    MapWrapper.toStringMap = function (m) {
-	        var r = {};
-	        m.forEach(function (v, k) { return r[k] = v; });
-	        return r;
-	    };
-	    MapWrapper.createFromPairs = function (pairs) { return createMapFromPairs(pairs); };
-	    MapWrapper.clearValues = function (m) { _clearValues(m); };
-	    MapWrapper.iterable = function (m) { return m; };
-	    MapWrapper.keys = function (m) { return _arrayFromMap(m, false); };
-	    MapWrapper.values = function (m) { return _arrayFromMap(m, true); };
-	    return MapWrapper;
-	}());
-	exports.MapWrapper = MapWrapper;
-	/**
-	 * Wraps Javascript Objects
-	 */
-	var StringMapWrapper = (function () {
-	    function StringMapWrapper() {
-	    }
-	    StringMapWrapper.create = function () {
-	        // Note: We are not using Object.create(null) here due to
-	        // performance!
-	        // http://jsperf.com/ng2-object-create-null
-	        return {};
-	    };
-	    StringMapWrapper.contains = function (map, key) {
-	        return map.hasOwnProperty(key);
-	    };
-	    StringMapWrapper.get = function (map, key) {
-	        return map.hasOwnProperty(key) ? map[key] : undefined;
-	    };
-	    StringMapWrapper.set = function (map, key, value) { map[key] = value; };
-	    StringMapWrapper.keys = function (map) { return Object.keys(map); };
-	    StringMapWrapper.values = function (map) {
-	        return Object.keys(map).reduce(function (r, a) {
-	            r.push(map[a]);
-	            return r;
-	        }, []);
-	    };
-	    StringMapWrapper.isEmpty = function (map) {
-	        for (var prop in map) {
-	            return false;
-	        }
-	        return true;
-	    };
-	    StringMapWrapper.delete = function (map, key) { delete map[key]; };
-	    StringMapWrapper.forEach = function (map, callback) {
-	        for (var prop in map) {
-	            if (map.hasOwnProperty(prop)) {
-	                callback(map[prop], prop);
-	            }
-	        }
-	    };
-	    StringMapWrapper.merge = function (m1, m2) {
-	        var m = {};
-	        for (var attr in m1) {
-	            if (m1.hasOwnProperty(attr)) {
-	                m[attr] = m1[attr];
-	            }
-	        }
-	        for (var attr in m2) {
-	            if (m2.hasOwnProperty(attr)) {
-	                m[attr] = m2[attr];
-	            }
-	        }
-	        return m;
-	    };
-	    StringMapWrapper.equals = function (m1, m2) {
-	        var k1 = Object.keys(m1);
-	        var k2 = Object.keys(m2);
-	        if (k1.length != k2.length) {
-	            return false;
-	        }
-	        var key;
-	        for (var i = 0; i < k1.length; i++) {
-	            key = k1[i];
-	            if (m1[key] !== m2[key]) {
-	                return false;
-	            }
-	        }
-	        return true;
-	    };
-	    return StringMapWrapper;
-	}());
-	exports.StringMapWrapper = StringMapWrapper;
-	var ListWrapper = (function () {
-	    function ListWrapper() {
-	    }
-	    // JS has no way to express a statically fixed size list, but dart does so we
-	    // keep both methods.
-	    ListWrapper.createFixedSize = function (size) { return new Array(size); };
-	    ListWrapper.createGrowableSize = function (size) { return new Array(size); };
-	    ListWrapper.clone = function (array) { return array.slice(0); };
-	    ListWrapper.forEachWithIndex = function (array, fn) {
-	        for (var i = 0; i < array.length; i++) {
-	            fn(array[i], i);
-	        }
-	    };
-	    ListWrapper.first = function (array) {
-	        if (!array)
-	            return null;
-	        return array[0];
-	    };
-	    ListWrapper.last = function (array) {
-	        if (!array || array.length == 0)
-	            return null;
-	        return array[array.length - 1];
-	    };
-	    ListWrapper.indexOf = function (array, value, startIndex) {
-	        if (startIndex === void 0) { startIndex = 0; }
-	        return array.indexOf(value, startIndex);
-	    };
-	    ListWrapper.contains = function (list, el) { return list.indexOf(el) !== -1; };
-	    ListWrapper.reversed = function (array) {
-	        var a = ListWrapper.clone(array);
-	        return a.reverse();
-	    };
-	    ListWrapper.concat = function (a, b) { return a.concat(b); };
-	    ListWrapper.insert = function (list, index, value) { list.splice(index, 0, value); };
-	    ListWrapper.removeAt = function (list, index) {
-	        var res = list[index];
-	        list.splice(index, 1);
-	        return res;
-	    };
-	    ListWrapper.removeAll = function (list, items) {
-	        for (var i = 0; i < items.length; ++i) {
-	            var index = list.indexOf(items[i]);
-	            list.splice(index, 1);
-	        }
-	    };
-	    ListWrapper.remove = function (list, el) {
-	        var index = list.indexOf(el);
-	        if (index > -1) {
-	            list.splice(index, 1);
-	            return true;
-	        }
-	        return false;
-	    };
-	    ListWrapper.clear = function (list) { list.length = 0; };
-	    ListWrapper.isEmpty = function (list) { return list.length == 0; };
-	    ListWrapper.fill = function (list, value, start, end) {
-	        if (start === void 0) { start = 0; }
-	        if (end === void 0) { end = null; }
-	        list.fill(value, start, end === null ? list.length : end);
-	    };
-	    ListWrapper.equals = function (a, b) {
-	        if (a.length != b.length)
-	            return false;
-	        for (var i = 0; i < a.length; ++i) {
-	            if (a[i] !== b[i])
-	                return false;
-	        }
-	        return true;
-	    };
-	    ListWrapper.slice = function (l, from, to) {
-	        if (from === void 0) { from = 0; }
-	        if (to === void 0) { to = null; }
-	        return l.slice(from, to === null ? undefined : to);
-	    };
-	    ListWrapper.splice = function (l, from, length) { return l.splice(from, length); };
-	    ListWrapper.sort = function (l, compareFn) {
-	        if (lang_1.isPresent(compareFn)) {
-	            l.sort(compareFn);
-	        }
-	        else {
-	            l.sort();
-	        }
-	    };
-	    ListWrapper.toString = function (l) { return l.toString(); };
-	    ListWrapper.toJSON = function (l) { return JSON.stringify(l); };
-	    ListWrapper.maximum = function (list, predicate) {
-	        if (list.length == 0) {
-	            return null;
-	        }
-	        var solution = null;
-	        var maxValue = -Infinity;
-	        for (var index = 0; index < list.length; index++) {
-	            var candidate = list[index];
-	            if (lang_1.isBlank(candidate)) {
-	                continue;
-	            }
-	            var candidateValue = predicate(candidate);
-	            if (candidateValue > maxValue) {
-	                solution = candidate;
-	                maxValue = candidateValue;
-	            }
-	        }
-	        return solution;
-	    };
-	    ListWrapper.flatten = function (list) {
-	        var target = [];
-	        _flattenArray(list, target);
-	        return target;
-	    };
-	    ListWrapper.addAll = function (list, source) {
-	        for (var i = 0; i < source.length; i++) {
-	            list.push(source[i]);
-	        }
-	    };
-	    return ListWrapper;
-	}());
-	exports.ListWrapper = ListWrapper;
-	function _flattenArray(source, target) {
-	    if (lang_1.isPresent(source)) {
-	        for (var i = 0; i < source.length; i++) {
-	            var item = source[i];
-	            if (lang_1.isArray(item)) {
-	                _flattenArray(item, target);
-	            }
-	            else {
-	                target.push(item);
-	            }
-	        }
-	    }
-	    return target;
-	}
-	function isListLikeIterable(obj) {
-	    if (!lang_1.isJsObject(obj))
-	        return false;
-	    return lang_1.isArray(obj) ||
-	        (!(obj instanceof exports.Map) &&
-	            lang_1.getSymbolIterator() in obj); // JS Iterable have a Symbol.iterator prop
-	}
-	exports.isListLikeIterable = isListLikeIterable;
-	function areIterablesEqual(a, b, comparator) {
-	    var iterator1 = a[lang_1.getSymbolIterator()]();
-	    var iterator2 = b[lang_1.getSymbolIterator()]();
-	    while (true) {
-	        var item1 = iterator1.next();
-	        var item2 = iterator2.next();
-	        if (item1.done && item2.done)
-	            return true;
-	        if (item1.done || item2.done)
-	            return false;
-	        if (!comparator(item1.value, item2.value))
-	            return false;
-	    }
-	}
-	exports.areIterablesEqual = areIterablesEqual;
-	function iterateListLike(obj, fn) {
-	    if (lang_1.isArray(obj)) {
-	        for (var i = 0; i < obj.length; i++) {
-	            fn(obj[i]);
-	        }
-	    }
-	    else {
-	        var iterator = obj[lang_1.getSymbolIterator()]();
-	        var item;
-	        while (!((item = iterator.next()).done)) {
-	            fn(item.value);
-	        }
-	    }
-	}
-	exports.iterateListLike = iterateListLike;
-	// Safari and Internet Explorer do not support the iterable parameter to the
-	// Set constructor.  We work around that by manually adding the items.
-	var createSetFromList = (function () {
-	    var test = new exports.Set([1, 2, 3]);
-	    if (test.size === 3) {
-	        return function createSetFromList(lst) { return new exports.Set(lst); };
-	    }
-	    else {
-	        return function createSetAndPopulateFromList(lst) {
-	            var res = new exports.Set(lst);
-	            if (res.size !== lst.length) {
-	                for (var i = 0; i < lst.length; i++) {
-	                    res.add(lst[i]);
-	                }
-	            }
-	            return res;
-	        };
-	    }
-	})();
-	var SetWrapper = (function () {
-	    function SetWrapper() {
-	    }
-	    SetWrapper.createFromList = function (lst) { return createSetFromList(lst); };
-	    SetWrapper.has = function (s, key) { return s.has(key); };
-	    SetWrapper.delete = function (m, k) { m.delete(k); };
-	    return SetWrapper;
-	}());
-	exports.SetWrapper = SetWrapper;
-	//# sourceMappingURL=collection.js.map
-
-/***/ },
-/* 310 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var base_wrapped_exception_1 = __webpack_require__(311);
-	var exception_handler_1 = __webpack_require__(312);
-	var exception_handler_2 = __webpack_require__(312);
-	exports.ExceptionHandler = exception_handler_2.ExceptionHandler;
-	var BaseException = (function (_super) {
-	    __extends(BaseException, _super);
-	    function BaseException(message) {
-	        if (message === void 0) { message = "--"; }
-	        _super.call(this, message);
-	        this.message = message;
-	        this.stack = (new Error(message)).stack;
-	    }
-	    BaseException.prototype.toString = function () { return this.message; };
-	    return BaseException;
-	}(Error));
-	exports.BaseException = BaseException;
-	/**
-	 * Wraps an exception and provides additional context or information.
-	 */
-	var WrappedException = (function (_super) {
-	    __extends(WrappedException, _super);
-	    function WrappedException(_wrapperMessage, _originalException, _originalStack, _context) {
-	        _super.call(this, _wrapperMessage);
-	        this._wrapperMessage = _wrapperMessage;
-	        this._originalException = _originalException;
-	        this._originalStack = _originalStack;
-	        this._context = _context;
-	        this._wrapperStack = (new Error(_wrapperMessage)).stack;
-	    }
-	    Object.defineProperty(WrappedException.prototype, "wrapperMessage", {
-	        get: function () { return this._wrapperMessage; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(WrappedException.prototype, "wrapperStack", {
-	        get: function () { return this._wrapperStack; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(WrappedException.prototype, "originalException", {
-	        get: function () { return this._originalException; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(WrappedException.prototype, "originalStack", {
-	        get: function () { return this._originalStack; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(WrappedException.prototype, "context", {
-	        get: function () { return this._context; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(WrappedException.prototype, "message", {
-	        get: function () { return exception_handler_1.ExceptionHandler.exceptionToString(this); },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    WrappedException.prototype.toString = function () { return this.message; };
-	    return WrappedException;
-	}(base_wrapped_exception_1.BaseWrappedException));
-	exports.WrappedException = WrappedException;
-	function makeTypeError(message) {
-	    return new TypeError(message);
-	}
-	exports.makeTypeError = makeTypeError;
-	function unimplemented() {
-	    throw new BaseException('unimplemented');
-	}
-	exports.unimplemented = unimplemented;
-	//# sourceMappingURL=exceptions.js.map
-
-/***/ },
-/* 311 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	/**
-	 * A base class for the WrappedException that can be used to identify
-	 * a WrappedException from ExceptionHandler without adding circular
-	 * dependency.
-	 */
-	var BaseWrappedException = (function (_super) {
-	    __extends(BaseWrappedException, _super);
-	    function BaseWrappedException(message) {
-	        _super.call(this, message);
-	    }
-	    Object.defineProperty(BaseWrappedException.prototype, "wrapperMessage", {
-	        get: function () { return ''; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(BaseWrappedException.prototype, "wrapperStack", {
-	        get: function () { return null; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(BaseWrappedException.prototype, "originalException", {
-	        get: function () { return null; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(BaseWrappedException.prototype, "originalStack", {
-	        get: function () { return null; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(BaseWrappedException.prototype, "context", {
-	        get: function () { return null; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(BaseWrappedException.prototype, "message", {
-	        get: function () { return ''; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    return BaseWrappedException;
-	}(Error));
-	exports.BaseWrappedException = BaseWrappedException;
-	//# sourceMappingURL=base_wrapped_exception.js.map
-
-/***/ },
-/* 312 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var lang_1 = __webpack_require__(307);
-	var base_wrapped_exception_1 = __webpack_require__(311);
-	var collection_1 = __webpack_require__(309);
-	var _ArrayLogger = (function () {
-	    function _ArrayLogger() {
-	        this.res = [];
-	    }
-	    _ArrayLogger.prototype.log = function (s) { this.res.push(s); };
-	    _ArrayLogger.prototype.logError = function (s) { this.res.push(s); };
-	    _ArrayLogger.prototype.logGroup = function (s) { this.res.push(s); };
-	    _ArrayLogger.prototype.logGroupEnd = function () { };
-	    ;
-	    return _ArrayLogger;
-	}());
-	/**
-	 * Provides a hook for centralized exception handling.
-	 *
-	 * The default implementation of `ExceptionHandler` prints error messages to the `Console`. To
-	 * intercept error handling,
-	 * write a custom exception handler that replaces this default as appropriate for your app.
-	 *
-	 * ### Example
-	 *
-	 * ```javascript
-	 *
-	 * class MyExceptionHandler implements ExceptionHandler {
-	 *   call(error, stackTrace = null, reason = null) {
-	 *     // do something with the exception
-	 *   }
-	 * }
-	 *
-	 * bootstrap(MyApp, [provide(ExceptionHandler, {useClass: MyExceptionHandler})])
-	 *
-	 * ```
-	 */
-	var ExceptionHandler = (function () {
-	    function ExceptionHandler(_logger, _rethrowException) {
-	        if (_rethrowException === void 0) { _rethrowException = true; }
-	        this._logger = _logger;
-	        this._rethrowException = _rethrowException;
-	    }
-	    ExceptionHandler.exceptionToString = function (exception, stackTrace, reason) {
-	        if (stackTrace === void 0) { stackTrace = null; }
-	        if (reason === void 0) { reason = null; }
-	        var l = new _ArrayLogger();
-	        var e = new ExceptionHandler(l, false);
-	        e.call(exception, stackTrace, reason);
-	        return l.res.join("\n");
-	    };
-	    ExceptionHandler.prototype.call = function (exception, stackTrace, reason) {
-	        if (stackTrace === void 0) { stackTrace = null; }
-	        if (reason === void 0) { reason = null; }
-	        var originalException = this._findOriginalException(exception);
-	        var originalStack = this._findOriginalStack(exception);
-	        var context = this._findContext(exception);
-	        this._logger.logGroup("EXCEPTION: " + this._extractMessage(exception));
-	        if (lang_1.isPresent(stackTrace) && lang_1.isBlank(originalStack)) {
-	            this._logger.logError("STACKTRACE:");
-	            this._logger.logError(this._longStackTrace(stackTrace));
-	        }
-	        if (lang_1.isPresent(reason)) {
-	            this._logger.logError("REASON: " + reason);
-	        }
-	        if (lang_1.isPresent(originalException)) {
-	            this._logger.logError("ORIGINAL EXCEPTION: " + this._extractMessage(originalException));
-	        }
-	        if (lang_1.isPresent(originalStack)) {
-	            this._logger.logError("ORIGINAL STACKTRACE:");
-	            this._logger.logError(this._longStackTrace(originalStack));
-	        }
-	        if (lang_1.isPresent(context)) {
-	            this._logger.logError("ERROR CONTEXT:");
-	            this._logger.logError(context);
-	        }
-	        this._logger.logGroupEnd();
-	        // We rethrow exceptions, so operations like 'bootstrap' will result in an error
-	        // when an exception happens. If we do not rethrow, bootstrap will always succeed.
-	        if (this._rethrowException)
-	            throw exception;
-	    };
-	    /** @internal */
-	    ExceptionHandler.prototype._extractMessage = function (exception) {
-	        return exception instanceof base_wrapped_exception_1.BaseWrappedException ? exception.wrapperMessage :
-	            exception.toString();
-	    };
-	    /** @internal */
-	    ExceptionHandler.prototype._longStackTrace = function (stackTrace) {
-	        return collection_1.isListLikeIterable(stackTrace) ? stackTrace.join("\n\n-----async gap-----\n") :
-	            stackTrace.toString();
-	    };
-	    /** @internal */
-	    ExceptionHandler.prototype._findContext = function (exception) {
-	        try {
-	            if (!(exception instanceof base_wrapped_exception_1.BaseWrappedException))
-	                return null;
-	            return lang_1.isPresent(exception.context) ? exception.context :
-	                this._findContext(exception.originalException);
-	        }
-	        catch (e) {
-	            // exception.context can throw an exception. if it happens, we ignore the context.
-	            return null;
-	        }
-	    };
-	    /** @internal */
-	    ExceptionHandler.prototype._findOriginalException = function (exception) {
-	        if (!(exception instanceof base_wrapped_exception_1.BaseWrappedException))
-	            return null;
-	        var e = exception.originalException;
-	        while (e instanceof base_wrapped_exception_1.BaseWrappedException && lang_1.isPresent(e.originalException)) {
-	            e = e.originalException;
-	        }
-	        return e;
-	    };
-	    /** @internal */
-	    ExceptionHandler.prototype._findOriginalStack = function (exception) {
-	        if (!(exception instanceof base_wrapped_exception_1.BaseWrappedException))
-	            return null;
-	        var e = exception;
-	        var stack = exception.originalStack;
-	        while (e instanceof base_wrapped_exception_1.BaseWrappedException && lang_1.isPresent(e.originalException)) {
-	            e = e.originalException;
-	            if (e instanceof base_wrapped_exception_1.BaseWrappedException && lang_1.isPresent(e.originalException)) {
-	                stack = e.originalStack;
-	            }
-	        }
-	        return stack;
-	    };
-	    return ExceptionHandler;
-	}());
-	exports.ExceptionHandler = ExceptionHandler;
-	//# sourceMappingURL=exception_handler.js.map
-
-/***/ },
-/* 313 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var __param = (this && this.__param) || function (paramIndex, decorator) {
-	    return function (target, key) { decorator(target, key, paramIndex); }
-	};
-	var collection_1 = __webpack_require__(309);
-	var async_1 = __webpack_require__(306);
-	var lang_1 = __webpack_require__(307);
-	var exceptions_1 = __webpack_require__(310);
-	var core_1 = __webpack_require__(8);
-	var route_config_impl_1 = __webpack_require__(314);
-	var rules_1 = __webpack_require__(315);
-	var rule_set_1 = __webpack_require__(318);
-	var instruction_1 = __webpack_require__(317);
-	var route_config_normalizer_1 = __webpack_require__(325);
-	var url_parser_1 = __webpack_require__(316);
-	var _resolveToNull = async_1.PromiseWrapper.resolve(null);
-	// A LinkItemArray is an array, which describes a set of routes
-	// The items in the array are found in groups:
-	// - the first item is the name of the route
-	// - the next items are:
-	//   - an object containing parameters
-	//   - or an array describing an aux route
-	// export type LinkRouteItem = string | Object;
-	// export type LinkItem = LinkRouteItem | Array<LinkRouteItem>;
-	// export type LinkItemArray = Array<LinkItem>;
-	/**
-	 * Token used to bind the component with the top-level {@link RouteConfig}s for the
-	 * application.
-	 *
-	 * ### Example ([live demo](http://plnkr.co/edit/iRUP8B5OUbxCWQ3AcIDm))
-	 *
-	 * ```
-	 * import {Component} from '@angular/core';
-	 * import {
-	 *   ROUTER_DIRECTIVES,
-	 *   ROUTER_PROVIDERS,
-	 *   RouteConfig
-	 * } from '@angular/router-deprecated';
-	 *
-	 * @Component({directives: [ROUTER_DIRECTIVES]})
-	 * @RouteConfig([
-	 *  {...},
-	 * ])
-	 * class AppCmp {
-	 *   // ...
-	 * }
-	 *
-	 * bootstrap(AppCmp, [ROUTER_PROVIDERS]);
-	 * ```
-	 */
-	exports.ROUTER_PRIMARY_COMPONENT = 
-	/*@ts2dart_const*/ new core_1.OpaqueToken('RouterPrimaryComponent');
-	/**
-	 * The RouteRegistry holds route configurations for each component in an Angular app.
-	 * It is responsible for creating Instructions from URLs, and generating URLs based on route and
-	 * parameters.
-	 */
-	var RouteRegistry = (function () {
-	    function RouteRegistry(_rootComponent) {
-	        this._rootComponent = _rootComponent;
-	        this._rules = new collection_1.Map();
-	    }
-	    /**
-	     * Given a component and a configuration object, add the route to this registry
-	     */
-	    RouteRegistry.prototype.config = function (parentComponent, config) {
-	        config = route_config_normalizer_1.normalizeRouteConfig(config, this);
-	        // this is here because Dart type guard reasons
-	        if (config instanceof route_config_impl_1.Route) {
-	            route_config_normalizer_1.assertComponentExists(config.component, config.path);
-	        }
-	        else if (config instanceof route_config_impl_1.AuxRoute) {
-	            route_config_normalizer_1.assertComponentExists(config.component, config.path);
-	        }
-	        var rules = this._rules.get(parentComponent);
-	        if (lang_1.isBlank(rules)) {
-	            rules = new rule_set_1.RuleSet();
-	            this._rules.set(parentComponent, rules);
-	        }
-	        var terminal = rules.config(config);
-	        if (config instanceof route_config_impl_1.Route) {
-	            if (terminal) {
-	                assertTerminalComponent(config.component, config.path);
-	            }
-	            else {
-	                this.configFromComponent(config.component);
-	            }
-	        }
-	    };
-	    /**
-	     * Reads the annotations of a component and configures the registry based on them
-	     */
-	    RouteRegistry.prototype.configFromComponent = function (component) {
-	        var _this = this;
-	        if (!lang_1.isType(component)) {
-	            return;
-	        }
-	        // Don't read the annotations from a type more than once –
-	        // this prevents an infinite loop if a component routes recursively.
-	        if (this._rules.has(component)) {
-	            return;
-	        }
-	        var annotations = core_1.reflector.annotations(component);
-	        if (lang_1.isPresent(annotations)) {
-	            for (var i = 0; i < annotations.length; i++) {
-	                var annotation = annotations[i];
-	                if (annotation instanceof route_config_impl_1.RouteConfig) {
-	                    var routeCfgs = annotation.configs;
-	                    routeCfgs.forEach(function (config) { return _this.config(component, config); });
-	                }
-	            }
-	        }
-	    };
-	    /**
-	     * Given a URL and a parent component, return the most specific instruction for navigating
-	     * the application into the state specified by the url
-	     */
-	    RouteRegistry.prototype.recognize = function (url, ancestorInstructions) {
-	        var parsedUrl = url_parser_1.parser.parse(url);
-	        return this._recognize(parsedUrl, []);
-	    };
-	    /**
-	     * Recognizes all parent-child routes, but creates unresolved auxiliary routes
-	     */
-	    RouteRegistry.prototype._recognize = function (parsedUrl, ancestorInstructions, _aux) {
-	        var _this = this;
-	        if (_aux === void 0) { _aux = false; }
-	        var parentInstruction = collection_1.ListWrapper.last(ancestorInstructions);
-	        var parentComponent = lang_1.isPresent(parentInstruction) ? parentInstruction.component.componentType :
-	            this._rootComponent;
-	        var rules = this._rules.get(parentComponent);
-	        if (lang_1.isBlank(rules)) {
-	            return _resolveToNull;
-	        }
-	        // Matches some beginning part of the given URL
-	        var possibleMatches = _aux ? rules.recognizeAuxiliary(parsedUrl) : rules.recognize(parsedUrl);
-	        var matchPromises = possibleMatches.map(function (candidate) { return candidate.then(function (candidate) {
-	            if (candidate instanceof rules_1.PathMatch) {
-	                var auxParentInstructions = ancestorInstructions.length > 0 ? [collection_1.ListWrapper.last(ancestorInstructions)] : [];
-	                var auxInstructions = _this._auxRoutesToUnresolved(candidate.remainingAux, auxParentInstructions);
-	                var instruction = new instruction_1.ResolvedInstruction(candidate.instruction, null, auxInstructions);
-	                if (lang_1.isBlank(candidate.instruction) || candidate.instruction.terminal) {
-	                    return instruction;
-	                }
-	                var newAncestorInstructions = ancestorInstructions.concat([instruction]);
-	                return _this._recognize(candidate.remaining, newAncestorInstructions)
-	                    .then(function (childInstruction) {
-	                    if (lang_1.isBlank(childInstruction)) {
-	                        return null;
-	                    }
-	                    // redirect instructions are already absolute
-	                    if (childInstruction instanceof instruction_1.RedirectInstruction) {
-	                        return childInstruction;
-	                    }
-	                    instruction.child = childInstruction;
-	                    return instruction;
-	                });
-	            }
-	            if (candidate instanceof rules_1.RedirectMatch) {
-	                var instruction = _this.generate(candidate.redirectTo, ancestorInstructions.concat([null]));
-	                return new instruction_1.RedirectInstruction(instruction.component, instruction.child, instruction.auxInstruction, candidate.specificity);
-	            }
-	        }); });
-	        if ((lang_1.isBlank(parsedUrl) || parsedUrl.path == '') && possibleMatches.length == 0) {
-	            return async_1.PromiseWrapper.resolve(this.generateDefault(parentComponent));
-	        }
-	        return async_1.PromiseWrapper.all(matchPromises).then(mostSpecific);
-	    };
-	    RouteRegistry.prototype._auxRoutesToUnresolved = function (auxRoutes, parentInstructions) {
-	        var _this = this;
-	        var unresolvedAuxInstructions = {};
-	        auxRoutes.forEach(function (auxUrl) {
-	            unresolvedAuxInstructions[auxUrl.path] = new instruction_1.UnresolvedInstruction(function () { return _this._recognize(auxUrl, parentInstructions, true); });
-	        });
-	        return unresolvedAuxInstructions;
-	    };
-	    /**
-	     * Given a normalized list with component names and params like: `['user', {id: 3 }]`
-	     * generates a url with a leading slash relative to the provided `parentComponent`.
-	     *
-	     * If the optional param `_aux` is `true`, then we generate starting at an auxiliary
-	     * route boundary.
-	     */
-	    RouteRegistry.prototype.generate = function (linkParams, ancestorInstructions, _aux) {
-	        if (_aux === void 0) { _aux = false; }
-	        var params = splitAndFlattenLinkParams(linkParams);
-	        var prevInstruction;
-	        // The first segment should be either '.' (generate from parent) or '' (generate from root).
-	        // When we normalize above, we strip all the slashes, './' becomes '.' and '/' becomes ''.
-	        if (collection_1.ListWrapper.first(params) == '') {
-	            params.shift();
-	            prevInstruction = collection_1.ListWrapper.first(ancestorInstructions);
-	            ancestorInstructions = [];
-	        }
-	        else {
-	            prevInstruction = ancestorInstructions.length > 0 ? ancestorInstructions.pop() : null;
-	            if (collection_1.ListWrapper.first(params) == '.') {
-	                params.shift();
-	            }
-	            else if (collection_1.ListWrapper.first(params) == '..') {
-	                while (collection_1.ListWrapper.first(params) == '..') {
-	                    if (ancestorInstructions.length <= 0) {
-	                        throw new exceptions_1.BaseException("Link \"" + collection_1.ListWrapper.toJSON(linkParams) + "\" has too many \"../\" segments.");
-	                    }
-	                    prevInstruction = ancestorInstructions.pop();
-	                    params = collection_1.ListWrapper.slice(params, 1);
-	                }
-	            }
-	            else {
-	                // we must only peak at the link param, and not consume it
-	                var routeName = collection_1.ListWrapper.first(params);
-	                var parentComponentType = this._rootComponent;
-	                var grandparentComponentType = null;
-	                if (ancestorInstructions.length > 1) {
-	                    var parentComponentInstruction = ancestorInstructions[ancestorInstructions.length - 1];
-	                    var grandComponentInstruction = ancestorInstructions[ancestorInstructions.length - 2];
-	                    parentComponentType = parentComponentInstruction.component.componentType;
-	                    grandparentComponentType = grandComponentInstruction.component.componentType;
-	                }
-	                else if (ancestorInstructions.length == 1) {
-	                    parentComponentType = ancestorInstructions[0].component.componentType;
-	                    grandparentComponentType = this._rootComponent;
-	                }
-	                // For a link with no leading `./`, `/`, or `../`, we look for a sibling and child.
-	                // If both exist, we throw. Otherwise, we prefer whichever exists.
-	                var childRouteExists = this.hasRoute(routeName, parentComponentType);
-	                var parentRouteExists = lang_1.isPresent(grandparentComponentType) &&
-	                    this.hasRoute(routeName, grandparentComponentType);
-	                if (parentRouteExists && childRouteExists) {
-	                    var msg = "Link \"" + collection_1.ListWrapper.toJSON(linkParams) + "\" is ambiguous, use \"./\" or \"../\" to disambiguate.";
-	                    throw new exceptions_1.BaseException(msg);
-	                }
-	                if (parentRouteExists) {
-	                    prevInstruction = ancestorInstructions.pop();
-	                }
-	            }
-	        }
-	        if (params[params.length - 1] == '') {
-	            params.pop();
-	        }
-	        if (params.length > 0 && params[0] == '') {
-	            params.shift();
-	        }
-	        if (params.length < 1) {
-	            var msg = "Link \"" + collection_1.ListWrapper.toJSON(linkParams) + "\" must include a route name.";
-	            throw new exceptions_1.BaseException(msg);
-	        }
-	        var generatedInstruction = this._generate(params, ancestorInstructions, prevInstruction, _aux, linkParams);
-	        // we don't clone the first (root) element
-	        for (var i = ancestorInstructions.length - 1; i >= 0; i--) {
-	            var ancestorInstruction = ancestorInstructions[i];
-	            if (lang_1.isBlank(ancestorInstruction)) {
-	                break;
-	            }
-	            generatedInstruction = ancestorInstruction.replaceChild(generatedInstruction);
-	        }
-	        return generatedInstruction;
-	    };
-	    /*
-	     * Internal helper that does not make any assertions about the beginning of the link DSL.
-	     * `ancestorInstructions` are parents that will be cloned.
-	     * `prevInstruction` is the existing instruction that would be replaced, but which might have
-	     * aux routes that need to be cloned.
-	     */
-	    RouteRegistry.prototype._generate = function (linkParams, ancestorInstructions, prevInstruction, _aux, _originalLink) {
-	        var _this = this;
-	        if (_aux === void 0) { _aux = false; }
-	        var parentComponentType = this._rootComponent;
-	        var componentInstruction = null;
-	        var auxInstructions = {};
-	        var parentInstruction = collection_1.ListWrapper.last(ancestorInstructions);
-	        if (lang_1.isPresent(parentInstruction) && lang_1.isPresent(parentInstruction.component)) {
-	            parentComponentType = parentInstruction.component.componentType;
-	        }
-	        if (linkParams.length == 0) {
-	            var defaultInstruction = this.generateDefault(parentComponentType);
-	            if (lang_1.isBlank(defaultInstruction)) {
-	                throw new exceptions_1.BaseException("Link \"" + collection_1.ListWrapper.toJSON(_originalLink) + "\" does not resolve to a terminal instruction.");
-	            }
-	            return defaultInstruction;
-	        }
-	        // for non-aux routes, we want to reuse the predecessor's existing primary and aux routes
-	        // and only override routes for which the given link DSL provides
-	        if (lang_1.isPresent(prevInstruction) && !_aux) {
-	            auxInstructions = collection_1.StringMapWrapper.merge(prevInstruction.auxInstruction, auxInstructions);
-	            componentInstruction = prevInstruction.component;
-	        }
-	        var rules = this._rules.get(parentComponentType);
-	        if (lang_1.isBlank(rules)) {
-	            throw new exceptions_1.BaseException("Component \"" + lang_1.getTypeNameForDebugging(parentComponentType) + "\" has no route config.");
-	        }
-	        var linkParamIndex = 0;
-	        var routeParams = {};
-	        // first, recognize the primary route if one is provided
-	        if (linkParamIndex < linkParams.length && lang_1.isString(linkParams[linkParamIndex])) {
-	            var routeName = linkParams[linkParamIndex];
-	            if (routeName == '' || routeName == '.' || routeName == '..') {
-	                throw new exceptions_1.BaseException("\"" + routeName + "/\" is only allowed at the beginning of a link DSL.");
-	            }
-	            linkParamIndex += 1;
-	            if (linkParamIndex < linkParams.length) {
-	                var linkParam = linkParams[linkParamIndex];
-	                if (lang_1.isStringMap(linkParam) && !lang_1.isArray(linkParam)) {
-	                    routeParams = linkParam;
-	                    linkParamIndex += 1;
-	                }
-	            }
-	            var routeRecognizer = (_aux ? rules.auxRulesByName : rules.rulesByName).get(routeName);
-	            if (lang_1.isBlank(routeRecognizer)) {
-	                throw new exceptions_1.BaseException("Component \"" + lang_1.getTypeNameForDebugging(parentComponentType) + "\" has no route named \"" + routeName + "\".");
-	            }
-	            // Create an "unresolved instruction" for async routes
-	            // we'll figure out the rest of the route when we resolve the instruction and
-	            // perform a navigation
-	            if (lang_1.isBlank(routeRecognizer.handler.componentType)) {
-	                var generatedUrl = routeRecognizer.generateComponentPathValues(routeParams);
-	                return new instruction_1.UnresolvedInstruction(function () {
-	                    return routeRecognizer.handler.resolveComponentType().then(function (_) {
-	                        return _this._generate(linkParams, ancestorInstructions, prevInstruction, _aux, _originalLink);
-	                    });
-	                }, generatedUrl.urlPath, url_parser_1.convertUrlParamsToArray(generatedUrl.urlParams));
-	            }
-	            componentInstruction = _aux ? rules.generateAuxiliary(routeName, routeParams) :
-	                rules.generate(routeName, routeParams);
-	        }
-	        // Next, recognize auxiliary instructions.
-	        // If we have an ancestor instruction, we preserve whatever aux routes are active from it.
-	        while (linkParamIndex < linkParams.length && lang_1.isArray(linkParams[linkParamIndex])) {
-	            var auxParentInstruction = [parentInstruction];
-	            var auxInstruction = this._generate(linkParams[linkParamIndex], auxParentInstruction, null, true, _originalLink);
-	            // TODO: this will not work for aux routes with parameters or multiple segments
-	            auxInstructions[auxInstruction.component.urlPath] = auxInstruction;
-	            linkParamIndex += 1;
-	        }
-	        var instruction = new instruction_1.ResolvedInstruction(componentInstruction, null, auxInstructions);
-	        // If the component is sync, we can generate resolved child route instructions
-	        // If not, we'll resolve the instructions at navigation time
-	        if (lang_1.isPresent(componentInstruction) && lang_1.isPresent(componentInstruction.componentType)) {
-	            var childInstruction = null;
-	            if (componentInstruction.terminal) {
-	                if (linkParamIndex >= linkParams.length) {
-	                }
-	            }
-	            else {
-	                var childAncestorComponents = ancestorInstructions.concat([instruction]);
-	                var remainingLinkParams = linkParams.slice(linkParamIndex);
-	                childInstruction = this._generate(remainingLinkParams, childAncestorComponents, null, false, _originalLink);
-	            }
-	            instruction.child = childInstruction;
-	        }
-	        return instruction;
-	    };
-	    RouteRegistry.prototype.hasRoute = function (name, parentComponent) {
-	        var rules = this._rules.get(parentComponent);
-	        if (lang_1.isBlank(rules)) {
-	            return false;
-	        }
-	        return rules.hasRoute(name);
-	    };
-	    RouteRegistry.prototype.generateDefault = function (componentCursor) {
-	        var _this = this;
-	        if (lang_1.isBlank(componentCursor)) {
-	            return null;
-	        }
-	        var rules = this._rules.get(componentCursor);
-	        if (lang_1.isBlank(rules) || lang_1.isBlank(rules.defaultRule)) {
-	            return null;
-	        }
-	        var defaultChild = null;
-	        if (lang_1.isPresent(rules.defaultRule.handler.componentType)) {
-	            var componentInstruction = rules.defaultRule.generate({});
-	            if (!rules.defaultRule.terminal) {
-	                defaultChild = this.generateDefault(rules.defaultRule.handler.componentType);
-	            }
-	            return new instruction_1.DefaultInstruction(componentInstruction, defaultChild);
-	        }
-	        return new instruction_1.UnresolvedInstruction(function () {
-	            return rules.defaultRule.handler.resolveComponentType().then(function (_) { return _this.generateDefault(componentCursor); });
-	        });
-	    };
-	    RouteRegistry = __decorate([
-	        core_1.Injectable(),
-	        __param(0, core_1.Inject(exports.ROUTER_PRIMARY_COMPONENT)), 
-	        __metadata('design:paramtypes', [lang_1.Type])
-	    ], RouteRegistry);
-	    return RouteRegistry;
-	}());
-	exports.RouteRegistry = RouteRegistry;
-	/*
-	 * Given: ['/a/b', {c: 2}]
-	 * Returns: ['', 'a', 'b', {c: 2}]
-	 */
-	function splitAndFlattenLinkParams(linkParams) {
-	    var accumulation = [];
-	    linkParams.forEach(function (item) {
-	        if (lang_1.isString(item)) {
-	            var strItem = item;
-	            accumulation = accumulation.concat(strItem.split('/'));
-	        }
-	        else {
-	            accumulation.push(item);
-	        }
-	    });
-	    return accumulation;
-	}
-	/*
-	 * Given a list of instructions, returns the most specific instruction
-	 */
-	function mostSpecific(instructions) {
-	    instructions = instructions.filter(function (instruction) { return lang_1.isPresent(instruction); });
-	    if (instructions.length == 0) {
-	        return null;
-	    }
-	    if (instructions.length == 1) {
-	        return instructions[0];
-	    }
-	    var first = instructions[0];
-	    var rest = instructions.slice(1);
-	    return rest.reduce(function (instruction, contender) {
-	        if (compareSpecificityStrings(contender.specificity, instruction.specificity) == -1) {
-	            return contender;
-	        }
-	        return instruction;
-	    }, first);
-	}
-	/*
-	 * Expects strings to be in the form of "[0-2]+"
-	 * Returns -1 if string A should be sorted above string B, 1 if it should be sorted after,
-	 * or 0 if they are the same.
-	 */
-	function compareSpecificityStrings(a, b) {
-	    var l = lang_1.Math.min(a.length, b.length);
-	    for (var i = 0; i < l; i += 1) {
-	        var ai = lang_1.StringWrapper.charCodeAt(a, i);
-	        var bi = lang_1.StringWrapper.charCodeAt(b, i);
-	        var difference = bi - ai;
-	        if (difference != 0) {
-	            return difference;
-	        }
-	    }
-	    return a.length - b.length;
-	}
-	function assertTerminalComponent(component, path) {
-	    if (!lang_1.isType(component)) {
-	        return;
-	    }
-	    var annotations = core_1.reflector.annotations(component);
-	    if (lang_1.isPresent(annotations)) {
-	        for (var i = 0; i < annotations.length; i++) {
-	            var annotation = annotations[i];
-	            if (annotation instanceof route_config_impl_1.RouteConfig) {
-	                throw new exceptions_1.BaseException("Child routes are not allowed for \"" + path + "\". Use \"...\" on the parent's route path.");
-	            }
-	        }
-	    }
-	}
-	//# sourceMappingURL=route_registry.js.map
-
-/***/ },
-/* 314 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var __make_dart_analyzer_happy = null;
-	/**
-	 * The `RouteConfig` decorator defines routes for a given component.
-	 *
-	 * It takes an array of {@link RouteDefinition}s.
-	 * @ts2dart_const
-	 */
-	var RouteConfig = (function () {
-	    function RouteConfig(configs) {
-	        this.configs = configs;
-	    }
-	    return RouteConfig;
-	}());
-	exports.RouteConfig = RouteConfig;
-	/* @ts2dart_const */
-	var AbstractRoute = (function () {
-	    function AbstractRoute(_a) {
-	        var name = _a.name, useAsDefault = _a.useAsDefault, path = _a.path, regex = _a.regex, serializer = _a.serializer, data = _a.data;
-	        this.name = name;
-	        this.useAsDefault = useAsDefault;
-	        this.path = path;
-	        this.regex = regex;
-	        this.serializer = serializer;
-	        this.data = data;
-	    }
-	    return AbstractRoute;
-	}());
-	exports.AbstractRoute = AbstractRoute;
-	/**
-	 * `Route` is a type of {@link RouteDefinition} used to route a path to a component.
-	 *
-	 * It has the following properties:
-	 * - `path` is a string that uses the route matcher DSL.
-	 * - `component` a component type.
-	 * - `name` is an optional `CamelCase` string representing the name of the route.
-	 * - `data` is an optional property of any type representing arbitrary route metadata for the given
-	 * route. It is injectable via {@link RouteData}.
-	 * - `useAsDefault` is a boolean value. If `true`, the child route will be navigated to if no child
-	 * route is specified during the navigation.
-	 *
-	 * ### Example
-	 * ```
-	 * import {RouteConfig, Route} from '@angular/router-deprecated';
-	 *
-	 * @RouteConfig([
-	 *   new Route({path: '/home', component: HomeCmp, name: 'HomeCmp' })
-	 * ])
-	 * class MyApp {}
-	 * ```
-	 * @ts2dart_const
-	 */
-	var Route = (function (_super) {
-	    __extends(Route, _super);
-	    function Route(_a) {
-	        var name = _a.name, useAsDefault = _a.useAsDefault, path = _a.path, regex = _a.regex, serializer = _a.serializer, data = _a.data, component = _a.component;
-	        _super.call(this, {
-	            name: name,
-	            useAsDefault: useAsDefault,
-	            path: path,
-	            regex: regex,
-	            serializer: serializer,
-	            data: data
-	        });
-	        this.aux = null;
-	        this.component = component;
-	    }
-	    return Route;
-	}(AbstractRoute));
-	exports.Route = Route;
-	/**
-	 * `AuxRoute` is a type of {@link RouteDefinition} used to define an auxiliary route.
-	 *
-	 * It takes an object with the following properties:
-	 * - `path` is a string that uses the route matcher DSL.
-	 * - `component` a component type.
-	 * - `name` is an optional `CamelCase` string representing the name of the route.
-	 * - `data` is an optional property of any type representing arbitrary route metadata for the given
-	 * route. It is injectable via {@link RouteData}.
-	 *
-	 * ### Example
-	 * ```
-	 * import {RouteConfig, AuxRoute} from '@angular/router-deprecated';
-	 *
-	 * @RouteConfig([
-	 *   new AuxRoute({path: '/home', component: HomeCmp})
-	 * ])
-	 * class MyApp {}
-	 * ```
-	 * @ts2dart_const
-	 */
-	var AuxRoute = (function (_super) {
-	    __extends(AuxRoute, _super);
-	    function AuxRoute(_a) {
-	        var name = _a.name, useAsDefault = _a.useAsDefault, path = _a.path, regex = _a.regex, serializer = _a.serializer, data = _a.data, component = _a.component;
-	        _super.call(this, {
-	            name: name,
-	            useAsDefault: useAsDefault,
-	            path: path,
-	            regex: regex,
-	            serializer: serializer,
-	            data: data
-	        });
-	        this.component = component;
-	    }
-	    return AuxRoute;
-	}(AbstractRoute));
-	exports.AuxRoute = AuxRoute;
-	/**
-	 * `AsyncRoute` is a type of {@link RouteDefinition} used to route a path to an asynchronously
-	 * loaded component.
-	 *
-	 * It has the following properties:
-	 * - `path` is a string that uses the route matcher DSL.
-	 * - `loader` is a function that returns a promise that resolves to a component.
-	 * - `name` is an optional `CamelCase` string representing the name of the route.
-	 * - `data` is an optional property of any type representing arbitrary route metadata for the given
-	 * route. It is injectable via {@link RouteData}.
-	 * - `useAsDefault` is a boolean value. If `true`, the child route will be navigated to if no child
-	 * route is specified during the navigation.
-	 *
-	 * ### Example
-	 * ```
-	 * import {RouteConfig, AsyncRoute} from '@angular/router-deprecated';
-	 *
-	 * @RouteConfig([
-	 *   new AsyncRoute({path: '/home', loader: () => Promise.resolve(MyLoadedCmp), name:
-	 * 'MyLoadedCmp'})
-	 * ])
-	 * class MyApp {}
-	 * ```
-	 * @ts2dart_const
-	 */
-	var AsyncRoute = (function (_super) {
-	    __extends(AsyncRoute, _super);
-	    function AsyncRoute(_a) {
-	        var name = _a.name, useAsDefault = _a.useAsDefault, path = _a.path, regex = _a.regex, serializer = _a.serializer, data = _a.data, loader = _a.loader;
-	        _super.call(this, {
-	            name: name,
-	            useAsDefault: useAsDefault,
-	            path: path,
-	            regex: regex,
-	            serializer: serializer,
-	            data: data
-	        });
-	        this.aux = null;
-	        this.loader = loader;
-	    }
-	    return AsyncRoute;
-	}(AbstractRoute));
-	exports.AsyncRoute = AsyncRoute;
-	/**
-	 * `Redirect` is a type of {@link RouteDefinition} used to route a path to a canonical route.
-	 *
-	 * It has the following properties:
-	 * - `path` is a string that uses the route matcher DSL.
-	 * - `redirectTo` is an array representing the link DSL.
-	 *
-	 * Note that redirects **do not** affect how links are generated. For that, see the `useAsDefault`
-	 * option.
-	 *
-	 * ### Example
-	 * ```
-	 * import {RouteConfig, Route, Redirect} from '@angular/router-deprecated';
-	 *
-	 * @RouteConfig([
-	 *   new Redirect({path: '/', redirectTo: ['/Home'] }),
-	 *   new Route({path: '/home', component: HomeCmp, name: 'Home'})
-	 * ])
-	 * class MyApp {}
-	 * ```
-	 * @ts2dart_const
-	 */
-	var Redirect = (function (_super) {
-	    __extends(Redirect, _super);
-	    function Redirect(_a) {
-	        var name = _a.name, useAsDefault = _a.useAsDefault, path = _a.path, regex = _a.regex, serializer = _a.serializer, data = _a.data, redirectTo = _a.redirectTo;
-	        _super.call(this, {
-	            name: name,
-	            useAsDefault: useAsDefault,
-	            path: path,
-	            regex: regex,
-	            serializer: serializer,
-	            data: data
-	        });
-	        this.redirectTo = redirectTo;
-	    }
-	    return Redirect;
-	}(AbstractRoute));
-	exports.Redirect = Redirect;
-	//# sourceMappingURL=route_config_impl.js.map
-
-/***/ },
-/* 315 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var lang_1 = __webpack_require__(307);
-	var exceptions_1 = __webpack_require__(310);
-	var promise_1 = __webpack_require__(308);
-	var collection_1 = __webpack_require__(309);
-	var url_parser_1 = __webpack_require__(316);
-	var instruction_1 = __webpack_require__(317);
-	// RouteMatch objects hold information about a match between a rule and a URL
-	var RouteMatch = (function () {
-	    function RouteMatch() {
-	    }
-	    return RouteMatch;
-	}());
-	exports.RouteMatch = RouteMatch;
-	var PathMatch = (function (_super) {
-	    __extends(PathMatch, _super);
-	    function PathMatch(instruction, remaining, remainingAux) {
-	        _super.call(this);
-	        this.instruction = instruction;
-	        this.remaining = remaining;
-	        this.remainingAux = remainingAux;
-	    }
-	    return PathMatch;
-	}(RouteMatch));
-	exports.PathMatch = PathMatch;
-	var RedirectMatch = (function (_super) {
-	    __extends(RedirectMatch, _super);
-	    function RedirectMatch(redirectTo, specificity) {
-	        _super.call(this);
-	        this.redirectTo = redirectTo;
-	        this.specificity = specificity;
-	    }
-	    return RedirectMatch;
-	}(RouteMatch));
-	exports.RedirectMatch = RedirectMatch;
-	var RedirectRule = (function () {
-	    function RedirectRule(_pathRecognizer, redirectTo) {
-	        this._pathRecognizer = _pathRecognizer;
-	        this.redirectTo = redirectTo;
-	        this.hash = this._pathRecognizer.hash;
-	    }
-	    Object.defineProperty(RedirectRule.prototype, "path", {
-	        get: function () { return this._pathRecognizer.toString(); },
-	        set: function (val) { throw new exceptions_1.BaseException('you cannot set the path of a RedirectRule directly'); },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    /**
-	     * Returns `null` or a `ParsedUrl` representing the new path to match
-	     */
-	    RedirectRule.prototype.recognize = function (beginningSegment) {
-	        var match = null;
-	        if (lang_1.isPresent(this._pathRecognizer.matchUrl(beginningSegment))) {
-	            match = new RedirectMatch(this.redirectTo, this._pathRecognizer.specificity);
-	        }
-	        return promise_1.PromiseWrapper.resolve(match);
-	    };
-	    RedirectRule.prototype.generate = function (params) {
-	        throw new exceptions_1.BaseException("Tried to generate a redirect.");
-	    };
-	    return RedirectRule;
-	}());
-	exports.RedirectRule = RedirectRule;
-	// represents something like '/foo/:bar'
-	var RouteRule = (function () {
-	    // TODO: cache component instruction instances by params and by ParsedUrl instance
-	    function RouteRule(_routePath, handler, _routeName) {
-	        this._routePath = _routePath;
-	        this.handler = handler;
-	        this._routeName = _routeName;
-	        this._cache = new collection_1.Map();
-	        this.specificity = this._routePath.specificity;
-	        this.hash = this._routePath.hash;
-	        this.terminal = this._routePath.terminal;
-	    }
-	    Object.defineProperty(RouteRule.prototype, "path", {
-	        get: function () { return this._routePath.toString(); },
-	        set: function (val) { throw new exceptions_1.BaseException('you cannot set the path of a RouteRule directly'); },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    RouteRule.prototype.recognize = function (beginningSegment) {
-	        var _this = this;
-	        var res = this._routePath.matchUrl(beginningSegment);
-	        if (lang_1.isBlank(res)) {
-	            return null;
-	        }
-	        return this.handler.resolveComponentType().then(function (_) {
-	            var componentInstruction = _this._getInstruction(res.urlPath, res.urlParams, res.allParams);
-	            return new PathMatch(componentInstruction, res.rest, res.auxiliary);
-	        });
-	    };
-	    RouteRule.prototype.generate = function (params) {
-	        var generated = this._routePath.generateUrl(params);
-	        var urlPath = generated.urlPath;
-	        var urlParams = generated.urlParams;
-	        return this._getInstruction(urlPath, url_parser_1.convertUrlParamsToArray(urlParams), params);
-	    };
-	    RouteRule.prototype.generateComponentPathValues = function (params) {
-	        return this._routePath.generateUrl(params);
-	    };
-	    RouteRule.prototype._getInstruction = function (urlPath, urlParams, params) {
-	        if (lang_1.isBlank(this.handler.componentType)) {
-	            throw new exceptions_1.BaseException("Tried to get instruction before the type was loaded.");
-	        }
-	        var hashKey = urlPath + '?' + urlParams.join('&');
-	        if (this._cache.has(hashKey)) {
-	            return this._cache.get(hashKey);
-	        }
-	        var instruction = new instruction_1.ComponentInstruction(urlPath, urlParams, this.handler.data, this.handler.componentType, this.terminal, this.specificity, params, this._routeName);
-	        this._cache.set(hashKey, instruction);
-	        return instruction;
-	    };
-	    return RouteRule;
-	}());
-	exports.RouteRule = RouteRule;
-	//# sourceMappingURL=rules.js.map
-
-/***/ },
-/* 316 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var collection_1 = __webpack_require__(309);
-	var lang_1 = __webpack_require__(307);
-	var exceptions_1 = __webpack_require__(310);
-	function convertUrlParamsToArray(urlParams) {
-	    var paramsArray = [];
-	    if (lang_1.isBlank(urlParams)) {
-	        return [];
-	    }
-	    collection_1.StringMapWrapper.forEach(urlParams, function (value, key) { paramsArray.push((value === true) ? key : key + '=' + value); });
-	    return paramsArray;
-	}
-	exports.convertUrlParamsToArray = convertUrlParamsToArray;
-	// Convert an object of url parameters into a string that can be used in an URL
-	function serializeParams(urlParams, joiner) {
-	    if (joiner === void 0) { joiner = '&'; }
-	    return convertUrlParamsToArray(urlParams).join(joiner);
-	}
-	exports.serializeParams = serializeParams;
-	/**
-	 * This class represents a parsed URL
-	 */
-	var Url = (function () {
-	    function Url(path, child, auxiliary, params) {
-	        if (child === void 0) { child = null; }
-	        if (auxiliary === void 0) { auxiliary = []; }
-	        if (params === void 0) { params = {}; }
-	        this.path = path;
-	        this.child = child;
-	        this.auxiliary = auxiliary;
-	        this.params = params;
-	    }
-	    Url.prototype.toString = function () {
-	        return this.path + this._matrixParamsToString() + this._auxToString() + this._childString();
-	    };
-	    Url.prototype.segmentToString = function () { return this.path + this._matrixParamsToString(); };
-	    /** @internal */
-	    Url.prototype._auxToString = function () {
-	        return this.auxiliary.length > 0 ?
-	            ('(' + this.auxiliary.map(function (sibling) { return sibling.toString(); }).join('//') + ')') :
-	            '';
-	    };
-	    Url.prototype._matrixParamsToString = function () {
-	        var paramString = serializeParams(this.params, ';');
-	        if (paramString.length > 0) {
-	            return ';' + paramString;
-	        }
-	        return '';
-	    };
-	    /** @internal */
-	    Url.prototype._childString = function () { return lang_1.isPresent(this.child) ? ('/' + this.child.toString()) : ''; };
-	    return Url;
-	}());
-	exports.Url = Url;
-	var RootUrl = (function (_super) {
-	    __extends(RootUrl, _super);
-	    function RootUrl(path, child, auxiliary, params) {
-	        if (child === void 0) { child = null; }
-	        if (auxiliary === void 0) { auxiliary = []; }
-	        if (params === void 0) { params = null; }
-	        _super.call(this, path, child, auxiliary, params);
-	    }
-	    RootUrl.prototype.toString = function () {
-	        return this.path + this._auxToString() + this._childString() + this._queryParamsToString();
-	    };
-	    RootUrl.prototype.segmentToString = function () { return this.path + this._queryParamsToString(); };
-	    RootUrl.prototype._queryParamsToString = function () {
-	        if (lang_1.isBlank(this.params)) {
-	            return '';
-	        }
-	        return '?' + serializeParams(this.params);
-	    };
-	    return RootUrl;
-	}(Url));
-	exports.RootUrl = RootUrl;
-	function pathSegmentsToUrl(pathSegments) {
-	    var url = new Url(pathSegments[pathSegments.length - 1]);
-	    for (var i = pathSegments.length - 2; i >= 0; i -= 1) {
-	        url = new Url(pathSegments[i], url);
-	    }
-	    return url;
-	}
-	exports.pathSegmentsToUrl = pathSegmentsToUrl;
-	var SEGMENT_RE = lang_1.RegExpWrapper.create('^[^\\/\\(\\)\\?;=&#]+');
-	function matchUrlSegment(str) {
-	    var match = lang_1.RegExpWrapper.firstMatch(SEGMENT_RE, str);
-	    return lang_1.isPresent(match) ? match[0] : '';
-	}
-	var QUERY_PARAM_VALUE_RE = lang_1.RegExpWrapper.create('^[^\\(\\)\\?;&#]+');
-	function matchUrlQueryParamValue(str) {
-	    var match = lang_1.RegExpWrapper.firstMatch(QUERY_PARAM_VALUE_RE, str);
-	    return lang_1.isPresent(match) ? match[0] : '';
-	}
-	var UrlParser = (function () {
-	    function UrlParser() {
-	    }
-	    UrlParser.prototype.peekStartsWith = function (str) { return this._remaining.startsWith(str); };
-	    UrlParser.prototype.capture = function (str) {
-	        if (!this._remaining.startsWith(str)) {
-	            throw new exceptions_1.BaseException("Expected \"" + str + "\".");
-	        }
-	        this._remaining = this._remaining.substring(str.length);
-	    };
-	    UrlParser.prototype.parse = function (url) {
-	        this._remaining = url;
-	        if (url == '' || url == '/') {
-	            return new Url('');
-	        }
-	        return this.parseRoot();
-	    };
-	    // segment + (aux segments) + (query params)
-	    UrlParser.prototype.parseRoot = function () {
-	        if (this.peekStartsWith('/')) {
-	            this.capture('/');
-	        }
-	        var path = matchUrlSegment(this._remaining);
-	        this.capture(path);
-	        var aux = [];
-	        if (this.peekStartsWith('(')) {
-	            aux = this.parseAuxiliaryRoutes();
-	        }
-	        if (this.peekStartsWith(';')) {
-	            // TODO: should these params just be dropped?
-	            this.parseMatrixParams();
-	        }
-	        var child = null;
-	        if (this.peekStartsWith('/') && !this.peekStartsWith('//')) {
-	            this.capture('/');
-	            child = this.parseSegment();
-	        }
-	        var queryParams = null;
-	        if (this.peekStartsWith('?')) {
-	            queryParams = this.parseQueryParams();
-	        }
-	        return new RootUrl(path, child, aux, queryParams);
-	    };
-	    // segment + (matrix params) + (aux segments)
-	    UrlParser.prototype.parseSegment = function () {
-	        if (this._remaining.length == 0) {
-	            return null;
-	        }
-	        if (this.peekStartsWith('/')) {
-	            this.capture('/');
-	        }
-	        var path = matchUrlSegment(this._remaining);
-	        this.capture(path);
-	        var matrixParams = null;
-	        if (this.peekStartsWith(';')) {
-	            matrixParams = this.parseMatrixParams();
-	        }
-	        var aux = [];
-	        if (this.peekStartsWith('(')) {
-	            aux = this.parseAuxiliaryRoutes();
-	        }
-	        var child = null;
-	        if (this.peekStartsWith('/') && !this.peekStartsWith('//')) {
-	            this.capture('/');
-	            child = this.parseSegment();
-	        }
-	        return new Url(path, child, aux, matrixParams);
-	    };
-	    UrlParser.prototype.parseQueryParams = function () {
-	        var params = {};
-	        this.capture('?');
-	        this.parseQueryParam(params);
-	        while (this._remaining.length > 0 && this.peekStartsWith('&')) {
-	            this.capture('&');
-	            this.parseQueryParam(params);
-	        }
-	        return params;
-	    };
-	    UrlParser.prototype.parseMatrixParams = function () {
-	        var params = {};
-	        while (this._remaining.length > 0 && this.peekStartsWith(';')) {
-	            this.capture(';');
-	            this.parseParam(params);
-	        }
-	        return params;
-	    };
-	    UrlParser.prototype.parseParam = function (params) {
-	        var key = matchUrlSegment(this._remaining);
-	        if (lang_1.isBlank(key)) {
-	            return;
-	        }
-	        this.capture(key);
-	        var value = true;
-	        if (this.peekStartsWith('=')) {
-	            this.capture('=');
-	            var valueMatch = matchUrlSegment(this._remaining);
-	            if (lang_1.isPresent(valueMatch)) {
-	                value = valueMatch;
-	                this.capture(value);
-	            }
-	        }
-	        params[key] = value;
-	    };
-	    UrlParser.prototype.parseQueryParam = function (params) {
-	        var key = matchUrlSegment(this._remaining);
-	        if (lang_1.isBlank(key)) {
-	            return;
-	        }
-	        this.capture(key);
-	        var value = true;
-	        if (this.peekStartsWith('=')) {
-	            this.capture('=');
-	            var valueMatch = matchUrlQueryParamValue(this._remaining);
-	            if (lang_1.isPresent(valueMatch)) {
-	                value = valueMatch;
-	                this.capture(value);
-	            }
-	        }
-	        params[key] = value;
-	    };
-	    UrlParser.prototype.parseAuxiliaryRoutes = function () {
-	        var routes = [];
-	        this.capture('(');
-	        while (!this.peekStartsWith(')') && this._remaining.length > 0) {
-	            routes.push(this.parseSegment());
-	            if (this.peekStartsWith('//')) {
-	                this.capture('//');
-	            }
-	        }
-	        this.capture(')');
-	        return routes;
-	    };
-	    return UrlParser;
-	}());
-	exports.UrlParser = UrlParser;
-	exports.parser = new UrlParser();
-	//# sourceMappingURL=url_parser.js.map
-
-/***/ },
-/* 317 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var collection_1 = __webpack_require__(309);
-	var lang_1 = __webpack_require__(307);
-	var async_1 = __webpack_require__(306);
-	/**
-	 * `RouteParams` is an immutable map of parameters for the given route
-	 * based on the url matcher and optional parameters for that route.
-	 *
-	 * You can inject `RouteParams` into the constructor of a component to use it.
-	 *
-	 * ### Example
-	 *
-	 * ```
-	 * import {Component} from '@angular/core';
-	 * import {bootstrap} from '@angular/platform-browser/browser';
-	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteParams} from
-	 * 'angular2/router';
-	 *
-	 * @Component({directives: [ROUTER_DIRECTIVES]})
-	 * @RouteConfig([
-	 *  {path: '/user/:id', component: UserCmp, name: 'UserCmp'},
-	 * ])
-	 * class AppCmp {}
-	 *
-	 * @Component({ template: 'user: {{id}}' })
-	 * class UserCmp {
-	 *   id: string;
-	 *   constructor(params: RouteParams) {
-	 *     this.id = params.get('id');
-	 *   }
-	 * }
-	 *
-	 * bootstrap(AppCmp, ROUTER_PROVIDERS);
-	 * ```
-	 */
-	var RouteParams = (function () {
-	    function RouteParams(params) {
-	        this.params = params;
-	    }
-	    RouteParams.prototype.get = function (param) { return lang_1.normalizeBlank(collection_1.StringMapWrapper.get(this.params, param)); };
-	    return RouteParams;
-	}());
-	exports.RouteParams = RouteParams;
-	/**
-	 * `RouteData` is an immutable map of additional data you can configure in your {@link Route}.
-	 *
-	 * You can inject `RouteData` into the constructor of a component to use it.
-	 *
-	 * ### Example
-	 *
-	 * ```
-	 * import {Component} from '@angular/core';
-	 * import {bootstrap} from '@angular/platform-browser/browser';
-	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, RouteData} from
-	 * 'angular2/router';
-	 *
-	 * @Component({directives: [ROUTER_DIRECTIVES]})
-	 * @RouteConfig([
-	 *  {path: '/user/:id', component: UserCmp, name: 'UserCmp', data: {isAdmin: true}},
-	 * ])
-	 * class AppCmp {}
-	 *
-	 * @Component({
-	 *   ...,
-	 *   template: 'user: {{isAdmin}}'
-	 * })
-	 * class UserCmp {
-	 *   string: isAdmin;
-	 *   constructor(data: RouteData) {
-	 *     this.isAdmin = data.get('isAdmin');
-	 *   }
-	 * }
-	 *
-	 * bootstrap(AppCmp, ROUTER_PROVIDERS);
-	 * ```
-	 */
-	var RouteData = (function () {
-	    function RouteData(data) {
-	        if (data === void 0) { data = {}; }
-	        this.data = data;
-	    }
-	    RouteData.prototype.get = function (key) { return lang_1.normalizeBlank(collection_1.StringMapWrapper.get(this.data, key)); };
-	    return RouteData;
-	}());
-	exports.RouteData = RouteData;
-	exports.BLANK_ROUTE_DATA = new RouteData();
-	/**
-	 * `Instruction` is a tree of {@link ComponentInstruction}s with all the information needed
-	 * to transition each component in the app to a given route, including all auxiliary routes.
-	 *
-	 * `Instruction`s can be created using {@link Router#generate}, and can be used to
-	 * perform route changes with {@link Router#navigateByInstruction}.
-	 *
-	 * ### Example
-	 *
-	 * ```
-	 * import {Component} from '@angular/core';
-	 * import {bootstrap} from '@angular/platform-browser/browser';
-	 * import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig} from
-	 * '@angular/router-deprecated';
-	 *
-	 * @Component({directives: [ROUTER_DIRECTIVES]})
-	 * @RouteConfig([
-	 *  {...},
-	 * ])
-	 * class AppCmp {
-	 *   constructor(router: Router) {
-	 *     var instruction = router.generate(['/MyRoute']);
-	 *     router.navigateByInstruction(instruction);
-	 *   }
-	 * }
-	 *
-	 * bootstrap(AppCmp, ROUTER_PROVIDERS);
-	 * ```
-	 */
-	var Instruction = (function () {
-	    function Instruction(component, child, auxInstruction) {
-	        this.component = component;
-	        this.child = child;
-	        this.auxInstruction = auxInstruction;
-	    }
-	    Object.defineProperty(Instruction.prototype, "urlPath", {
-	        get: function () { return lang_1.isPresent(this.component) ? this.component.urlPath : ''; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(Instruction.prototype, "urlParams", {
-	        get: function () { return lang_1.isPresent(this.component) ? this.component.urlParams : []; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(Instruction.prototype, "specificity", {
-	        get: function () {
-	            var total = '';
-	            if (lang_1.isPresent(this.component)) {
-	                total += this.component.specificity;
-	            }
-	            if (lang_1.isPresent(this.child)) {
-	                total += this.child.specificity;
-	            }
-	            return total;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    /**
-	     * converts the instruction into a URL string
-	     */
-	    Instruction.prototype.toRootUrl = function () { return this.toUrlPath() + this.toUrlQuery(); };
-	    /** @internal */
-	    Instruction.prototype._toNonRootUrl = function () {
-	        return this._stringifyPathMatrixAuxPrefixed() +
-	            (lang_1.isPresent(this.child) ? this.child._toNonRootUrl() : '');
-	    };
-	    Instruction.prototype.toUrlQuery = function () { return this.urlParams.length > 0 ? ('?' + this.urlParams.join('&')) : ''; };
-	    /**
-	     * Returns a new instruction that shares the state of the existing instruction, but with
-	     * the given child {@link Instruction} replacing the existing child.
-	     */
-	    Instruction.prototype.replaceChild = function (child) {
-	        return new ResolvedInstruction(this.component, child, this.auxInstruction);
-	    };
-	    /**
-	     * If the final URL for the instruction is ``
-	     */
-	    Instruction.prototype.toUrlPath = function () {
-	        return this.urlPath + this._stringifyAux() +
-	            (lang_1.isPresent(this.child) ? this.child._toNonRootUrl() : '');
-	    };
-	    // default instructions override these
-	    Instruction.prototype.toLinkUrl = function () {
-	        return this.urlPath + this._stringifyAux() +
-	            (lang_1.isPresent(this.child) ? this.child._toLinkUrl() : '') + this.toUrlQuery();
-	    };
-	    // this is the non-root version (called recursively)
-	    /** @internal */
-	    Instruction.prototype._toLinkUrl = function () {
-	        return this._stringifyPathMatrixAuxPrefixed() +
-	            (lang_1.isPresent(this.child) ? this.child._toLinkUrl() : '');
-	    };
-	    /** @internal */
-	    Instruction.prototype._stringifyPathMatrixAuxPrefixed = function () {
-	        var primary = this._stringifyPathMatrixAux();
-	        if (primary.length > 0) {
-	            primary = '/' + primary;
-	        }
-	        return primary;
-	    };
-	    /** @internal */
-	    Instruction.prototype._stringifyMatrixParams = function () {
-	        return this.urlParams.length > 0 ? (';' + this.urlParams.join(';')) : '';
-	    };
-	    /** @internal */
-	    Instruction.prototype._stringifyPathMatrixAux = function () {
-	        if (lang_1.isBlank(this.component)) {
-	            return '';
-	        }
-	        return this.urlPath + this._stringifyMatrixParams() + this._stringifyAux();
-	    };
-	    /** @internal */
-	    Instruction.prototype._stringifyAux = function () {
-	        var routes = [];
-	        collection_1.StringMapWrapper.forEach(this.auxInstruction, function (auxInstruction, _) {
-	            routes.push(auxInstruction._stringifyPathMatrixAux());
-	        });
-	        if (routes.length > 0) {
-	            return '(' + routes.join('//') + ')';
-	        }
-	        return '';
-	    };
-	    return Instruction;
-	}());
-	exports.Instruction = Instruction;
-	/**
-	 * a resolved instruction has an outlet instruction for itself, but maybe not for...
-	 */
-	var ResolvedInstruction = (function (_super) {
-	    __extends(ResolvedInstruction, _super);
-	    function ResolvedInstruction(component, child, auxInstruction) {
-	        _super.call(this, component, child, auxInstruction);
-	    }
-	    ResolvedInstruction.prototype.resolveComponent = function () {
-	        return async_1.PromiseWrapper.resolve(this.component);
-	    };
-	    return ResolvedInstruction;
-	}(Instruction));
-	exports.ResolvedInstruction = ResolvedInstruction;
-	/**
-	 * Represents a resolved default route
-	 */
-	var DefaultInstruction = (function (_super) {
-	    __extends(DefaultInstruction, _super);
-	    function DefaultInstruction(component, child) {
-	        _super.call(this, component, child, {});
-	    }
-	    DefaultInstruction.prototype.toLinkUrl = function () { return ''; };
-	    /** @internal */
-	    DefaultInstruction.prototype._toLinkUrl = function () { return ''; };
-	    return DefaultInstruction;
-	}(ResolvedInstruction));
-	exports.DefaultInstruction = DefaultInstruction;
-	/**
-	 * Represents a component that may need to do some redirection or lazy loading at a later time.
-	 */
-	var UnresolvedInstruction = (function (_super) {
-	    __extends(UnresolvedInstruction, _super);
-	    function UnresolvedInstruction(_resolver, _urlPath, _urlParams) {
-	        if (_urlPath === void 0) { _urlPath = ''; }
-	        if (_urlParams === void 0) { _urlParams = []; }
-	        _super.call(this, null, null, {});
-	        this._resolver = _resolver;
-	        this._urlPath = _urlPath;
-	        this._urlParams = _urlParams;
-	    }
-	    Object.defineProperty(UnresolvedInstruction.prototype, "urlPath", {
-	        get: function () {
-	            if (lang_1.isPresent(this.component)) {
-	                return this.component.urlPath;
-	            }
-	            if (lang_1.isPresent(this._urlPath)) {
-	                return this._urlPath;
-	            }
-	            return '';
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(UnresolvedInstruction.prototype, "urlParams", {
-	        get: function () {
-	            if (lang_1.isPresent(this.component)) {
-	                return this.component.urlParams;
-	            }
-	            if (lang_1.isPresent(this._urlParams)) {
-	                return this._urlParams;
-	            }
-	            return [];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    UnresolvedInstruction.prototype.resolveComponent = function () {
-	        var _this = this;
-	        if (lang_1.isPresent(this.component)) {
-	            return async_1.PromiseWrapper.resolve(this.component);
-	        }
-	        return this._resolver().then(function (instruction) {
-	            _this.child = lang_1.isPresent(instruction) ? instruction.child : null;
-	            return _this.component = lang_1.isPresent(instruction) ? instruction.component : null;
-	        });
-	    };
-	    return UnresolvedInstruction;
-	}(Instruction));
-	exports.UnresolvedInstruction = UnresolvedInstruction;
-	var RedirectInstruction = (function (_super) {
-	    __extends(RedirectInstruction, _super);
-	    function RedirectInstruction(component, child, auxInstruction, _specificity) {
-	        _super.call(this, component, child, auxInstruction);
-	        this._specificity = _specificity;
-	    }
-	    Object.defineProperty(RedirectInstruction.prototype, "specificity", {
-	        get: function () { return this._specificity; },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    return RedirectInstruction;
-	}(ResolvedInstruction));
-	exports.RedirectInstruction = RedirectInstruction;
-	/**
-	 * A `ComponentInstruction` represents the route state for a single component.
-	 *
-	 * `ComponentInstructions` is a public API. Instances of `ComponentInstruction` are passed
-	 * to route lifecycle hooks, like {@link CanActivate}.
-	 *
-	 * `ComponentInstruction`s are [hash consed](https://en.wikipedia.org/wiki/Hash_consing). You should
-	 * never construct one yourself with "new." Instead, rely on router's internal recognizer to
-	 * construct `ComponentInstruction`s.
-	 *
-	 * You should not modify this object. It should be treated as immutable.
-	 */
-	var ComponentInstruction = (function () {
-	    /**
-	     * @internal
-	     */
-	    function ComponentInstruction(urlPath, urlParams, data, componentType, terminal, specificity, params, routeName) {
-	        if (params === void 0) { params = null; }
-	        this.urlPath = urlPath;
-	        this.urlParams = urlParams;
-	        this.componentType = componentType;
-	        this.terminal = terminal;
-	        this.specificity = specificity;
-	        this.params = params;
-	        this.routeName = routeName;
-	        this.reuse = false;
-	        this.routeData = lang_1.isPresent(data) ? data : exports.BLANK_ROUTE_DATA;
-	    }
-	    return ComponentInstruction;
-	}());
-	exports.ComponentInstruction = ComponentInstruction;
-	//# sourceMappingURL=instruction.js.map
-
-/***/ },
-/* 318 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var lang_1 = __webpack_require__(307);
-	var exceptions_1 = __webpack_require__(310);
-	var collection_1 = __webpack_require__(309);
-	var async_1 = __webpack_require__(306);
-	var rules_1 = __webpack_require__(315);
-	var route_config_impl_1 = __webpack_require__(314);
-	var async_route_handler_1 = __webpack_require__(319);
-	var sync_route_handler_1 = __webpack_require__(320);
-	var param_route_path_1 = __webpack_require__(321);
-	var regex_route_path_1 = __webpack_require__(324);
-	/**
-	 * A `RuleSet` is responsible for recognizing routes for a particular component.
-	 * It is consumed by `RouteRegistry`, which knows how to recognize an entire hierarchy of
-	 * components.
-	 */
-	var RuleSet = (function () {
-	    function RuleSet() {
-	        this.rulesByName = new collection_1.Map();
-	        // map from name to rule
-	        this.auxRulesByName = new collection_1.Map();
-	        // map from starting path to rule
-	        this.auxRulesByPath = new collection_1.Map();
-	        // TODO: optimize this into a trie
-	        this.rules = [];
-	        // the rule to use automatically when recognizing or generating from this rule set
-	        this.defaultRule = null;
-	    }
-	    /**
-	     * Configure additional rules in this rule set from a route definition
-	     * @returns {boolean} true if the config is terminal
-	     */
-	    RuleSet.prototype.config = function (config) {
-	        var handler;
-	        if (lang_1.isPresent(config.name) && config.name[0].toUpperCase() != config.name[0]) {
-	            var suggestedName = config.name[0].toUpperCase() + config.name.substring(1);
-	            throw new exceptions_1.BaseException("Route \"" + config.path + "\" with name \"" + config.name + "\" does not begin with an uppercase letter. Route names should be CamelCase like \"" + suggestedName + "\".");
-	        }
-	        if (config instanceof route_config_impl_1.AuxRoute) {
-	            handler = new sync_route_handler_1.SyncRouteHandler(config.component, config.data);
-	            var routePath_1 = this._getRoutePath(config);
-	            var auxRule = new rules_1.RouteRule(routePath_1, handler, config.name);
-	            this.auxRulesByPath.set(routePath_1.toString(), auxRule);
-	            if (lang_1.isPresent(config.name)) {
-	                this.auxRulesByName.set(config.name, auxRule);
-	            }
-	            return auxRule.terminal;
-	        }
-	        var useAsDefault = false;
-	        if (config instanceof route_config_impl_1.Redirect) {
-	            var routePath_2 = this._getRoutePath(config);
-	            var redirector = new rules_1.RedirectRule(routePath_2, config.redirectTo);
-	            this._assertNoHashCollision(redirector.hash, config.path);
-	            this.rules.push(redirector);
-	            return true;
-	        }
-	        if (config instanceof route_config_impl_1.Route) {
-	            handler = new sync_route_handler_1.SyncRouteHandler(config.component, config.data);
-	            useAsDefault = lang_1.isPresent(config.useAsDefault) && config.useAsDefault;
-	        }
-	        else if (config instanceof route_config_impl_1.AsyncRoute) {
-	            handler = new async_route_handler_1.AsyncRouteHandler(config.loader, config.data);
-	            useAsDefault = lang_1.isPresent(config.useAsDefault) && config.useAsDefault;
-	        }
-	        var routePath = this._getRoutePath(config);
-	        var newRule = new rules_1.RouteRule(routePath, handler, config.name);
-	        this._assertNoHashCollision(newRule.hash, config.path);
-	        if (useAsDefault) {
-	            if (lang_1.isPresent(this.defaultRule)) {
-	                throw new exceptions_1.BaseException("Only one route can be default");
-	            }
-	            this.defaultRule = newRule;
-	        }
-	        this.rules.push(newRule);
-	        if (lang_1.isPresent(config.name)) {
-	            this.rulesByName.set(config.name, newRule);
-	        }
-	        return newRule.terminal;
-	    };
-	    /**
-	     * Given a URL, returns a list of `RouteMatch`es, which are partial recognitions for some route.
-	     */
-	    RuleSet.prototype.recognize = function (urlParse) {
-	        var solutions = [];
-	        this.rules.forEach(function (routeRecognizer) {
-	            var pathMatch = routeRecognizer.recognize(urlParse);
-	            if (lang_1.isPresent(pathMatch)) {
-	                solutions.push(pathMatch);
-	            }
-	        });
-	        // handle cases where we are routing just to an aux route
-	        if (solutions.length == 0 && lang_1.isPresent(urlParse) && urlParse.auxiliary.length > 0) {
-	            return [async_1.PromiseWrapper.resolve(new rules_1.PathMatch(null, null, urlParse.auxiliary))];
-	        }
-	        return solutions;
-	    };
-	    RuleSet.prototype.recognizeAuxiliary = function (urlParse) {
-	        var routeRecognizer = this.auxRulesByPath.get(urlParse.path);
-	        if (lang_1.isPresent(routeRecognizer)) {
-	            return [routeRecognizer.recognize(urlParse)];
-	        }
-	        return [async_1.PromiseWrapper.resolve(null)];
-	    };
-	    RuleSet.prototype.hasRoute = function (name) { return this.rulesByName.has(name); };
-	    RuleSet.prototype.componentLoaded = function (name) {
-	        return this.hasRoute(name) && lang_1.isPresent(this.rulesByName.get(name).handler.componentType);
-	    };
-	    RuleSet.prototype.loadComponent = function (name) {
-	        return this.rulesByName.get(name).handler.resolveComponentType();
-	    };
-	    RuleSet.prototype.generate = function (name, params) {
-	        var rule = this.rulesByName.get(name);
-	        if (lang_1.isBlank(rule)) {
-	            return null;
-	        }
-	        return rule.generate(params);
-	    };
-	    RuleSet.prototype.generateAuxiliary = function (name, params) {
-	        var rule = this.auxRulesByName.get(name);
-	        if (lang_1.isBlank(rule)) {
-	            return null;
-	        }
-	        return rule.generate(params);
-	    };
-	    RuleSet.prototype._assertNoHashCollision = function (hash, path) {
-	        this.rules.forEach(function (rule) {
-	            if (hash == rule.hash) {
-	                throw new exceptions_1.BaseException("Configuration '" + path + "' conflicts with existing route '" + rule.path + "'");
-	            }
-	        });
-	    };
-	    RuleSet.prototype._getRoutePath = function (config) {
-	        if (lang_1.isPresent(config.regex)) {
-	            if (lang_1.isFunction(config.serializer)) {
-	                return new regex_route_path_1.RegexRoutePath(config.regex, config.serializer);
-	            }
-	            else {
-	                throw new exceptions_1.BaseException("Route provides a regex property, '" + config.regex + "', but no serializer property");
-	            }
-	        }
-	        if (lang_1.isPresent(config.path)) {
-	            // Auxiliary routes do not have a slash at the start
-	            var path = (config instanceof route_config_impl_1.AuxRoute && config.path.startsWith('/')) ?
-	                config.path.substring(1) :
-	                config.path;
-	            return new param_route_path_1.ParamRoutePath(path);
-	        }
-	        throw new exceptions_1.BaseException('Route must provide either a path or regex property');
-	    };
-	    return RuleSet;
-	}());
-	exports.RuleSet = RuleSet;
-	//# sourceMappingURL=rule_set.js.map
-
-/***/ },
-/* 319 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var lang_1 = __webpack_require__(307);
-	var instruction_1 = __webpack_require__(317);
-	var AsyncRouteHandler = (function () {
-	    function AsyncRouteHandler(_loader, data) {
-	        if (data === void 0) { data = null; }
-	        this._loader = _loader;
-	        /** @internal */
-	        this._resolvedComponent = null;
-	        this.data = lang_1.isPresent(data) ? new instruction_1.RouteData(data) : instruction_1.BLANK_ROUTE_DATA;
-	    }
-	    AsyncRouteHandler.prototype.resolveComponentType = function () {
-	        var _this = this;
-	        if (lang_1.isPresent(this._resolvedComponent)) {
-	            return this._resolvedComponent;
-	        }
-	        return this._resolvedComponent = this._loader().then(function (componentType) {
-	            _this.componentType = componentType;
-	            return componentType;
-	        });
-	    };
-	    return AsyncRouteHandler;
-	}());
-	exports.AsyncRouteHandler = AsyncRouteHandler;
-	//# sourceMappingURL=async_route_handler.js.map
-
-/***/ },
-/* 320 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var async_1 = __webpack_require__(306);
-	var lang_1 = __webpack_require__(307);
-	var instruction_1 = __webpack_require__(317);
-	var SyncRouteHandler = (function () {
-	    function SyncRouteHandler(componentType, data) {
-	        this.componentType = componentType;
-	        /** @internal */
-	        this._resolvedComponent = null;
-	        this._resolvedComponent = async_1.PromiseWrapper.resolve(componentType);
-	        this.data = lang_1.isPresent(data) ? new instruction_1.RouteData(data) : instruction_1.BLANK_ROUTE_DATA;
-	    }
-	    SyncRouteHandler.prototype.resolveComponentType = function () { return this._resolvedComponent; };
-	    return SyncRouteHandler;
-	}());
-	exports.SyncRouteHandler = SyncRouteHandler;
-	//# sourceMappingURL=sync_route_handler.js.map
-
-/***/ },
-/* 321 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var lang_1 = __webpack_require__(307);
-	var exceptions_1 = __webpack_require__(310);
-	var collection_1 = __webpack_require__(309);
-	var utils_1 = __webpack_require__(322);
-	var url_parser_1 = __webpack_require__(316);
-	var route_path_1 = __webpack_require__(323);
-	/**
-	 * Identified by a `...` URL segment. This indicates that the
-	 * Route will continue to be matched by child `Router`s.
-	 */
-	var ContinuationPathSegment = (function () {
-	    function ContinuationPathSegment() {
-	        this.name = '';
-	        this.specificity = '';
-	        this.hash = '...';
-	    }
-	    ContinuationPathSegment.prototype.generate = function (params) { return ''; };
-	    ContinuationPathSegment.prototype.match = function (path) { return true; };
-	    return ContinuationPathSegment;
-	}());
-	/**
-	 * Identified by a string not starting with a `:` or `*`.
-	 * Only matches the URL segments that equal the segment path
-	 */
-	var StaticPathSegment = (function () {
-	    function StaticPathSegment(path) {
-	        this.path = path;
-	        this.name = '';
-	        this.specificity = '2';
-	        this.hash = path;
-	    }
-	    StaticPathSegment.prototype.match = function (path) { return path == this.path; };
-	    StaticPathSegment.prototype.generate = function (params) { return this.path; };
-	    return StaticPathSegment;
-	}());
-	/**
-	 * Identified by a string starting with `:`. Indicates a segment
-	 * that can contain a value that will be extracted and provided to
-	 * a matching `Instruction`.
-	 */
-	var DynamicPathSegment = (function () {
-	    function DynamicPathSegment(name) {
-	        this.name = name;
-	        this.specificity = '1';
-	        this.hash = ':';
-	    }
-	    DynamicPathSegment.prototype.match = function (path) { return path.length > 0; };
-	    DynamicPathSegment.prototype.generate = function (params) {
-	        if (!collection_1.StringMapWrapper.contains(params.map, this.name)) {
-	            throw new exceptions_1.BaseException("Route generator for '" + this.name + "' was not included in parameters passed.");
-	        }
-	        return encodeDynamicSegment(utils_1.normalizeString(params.get(this.name)));
-	    };
-	    DynamicPathSegment.paramMatcher = /^:([^\/]+)$/g;
-	    return DynamicPathSegment;
-	}());
-	/**
-	 * Identified by a string starting with `*` Indicates that all the following
-	 * segments match this route and that the value of these segments should
-	 * be provided to a matching `Instruction`.
-	 */
-	var StarPathSegment = (function () {
-	    function StarPathSegment(name) {
-	        this.name = name;
-	        this.specificity = '0';
-	        this.hash = '*';
-	    }
-	    StarPathSegment.prototype.match = function (path) { return true; };
-	    StarPathSegment.prototype.generate = function (params) { return utils_1.normalizeString(params.get(this.name)); };
-	    StarPathSegment.wildcardMatcher = /^\*([^\/]+)$/g;
-	    return StarPathSegment;
-	}());
-	/**
-	 * Parses a URL string using a given matcher DSL, and generates URLs from param maps
-	 */
-	var ParamRoutePath = (function () {
-	    /**
-	     * Takes a string representing the matcher DSL
-	     */
-	    function ParamRoutePath(routePath) {
-	        this.routePath = routePath;
-	        this.terminal = true;
-	        this._assertValidPath(routePath);
-	        this._parsePathString(routePath);
-	        this.specificity = this._calculateSpecificity();
-	        this.hash = this._calculateHash();
-	        var lastSegment = this._segments[this._segments.length - 1];
-	        this.terminal = !(lastSegment instanceof ContinuationPathSegment);
-	    }
-	    ParamRoutePath.prototype.matchUrl = function (url) {
-	        var nextUrlSegment = url;
-	        var currentUrlSegment;
-	        var positionalParams = {};
-	        var captured = [];
-	        for (var i = 0; i < this._segments.length; i += 1) {
-	            var pathSegment = this._segments[i];
-	            currentUrlSegment = nextUrlSegment;
-	            if (pathSegment instanceof ContinuationPathSegment) {
-	                break;
-	            }
-	            if (lang_1.isPresent(currentUrlSegment)) {
-	                // the star segment consumes all of the remaining URL, including matrix params
-	                if (pathSegment instanceof StarPathSegment) {
-	                    positionalParams[pathSegment.name] = currentUrlSegment.toString();
-	                    captured.push(currentUrlSegment.toString());
-	                    nextUrlSegment = null;
-	                    break;
-	                }
-	                captured.push(currentUrlSegment.path);
-	                if (pathSegment instanceof DynamicPathSegment) {
-	                    positionalParams[pathSegment.name] = decodeDynamicSegment(currentUrlSegment.path);
-	                }
-	                else if (!pathSegment.match(currentUrlSegment.path)) {
-	                    return null;
-	                }
-	                nextUrlSegment = currentUrlSegment.child;
-	            }
-	            else if (!pathSegment.match('')) {
-	                return null;
-	            }
-	        }
-	        if (this.terminal && lang_1.isPresent(nextUrlSegment)) {
-	            return null;
-	        }
-	        var urlPath = captured.join('/');
-	        var auxiliary = [];
-	        var urlParams = [];
-	        var allParams = positionalParams;
-	        if (lang_1.isPresent(currentUrlSegment)) {
-	            // If this is the root component, read query params. Otherwise, read matrix params.
-	            var paramsSegment = url instanceof url_parser_1.RootUrl ? url : currentUrlSegment;
-	            if (lang_1.isPresent(paramsSegment.params)) {
-	                allParams = collection_1.StringMapWrapper.merge(paramsSegment.params, positionalParams);
-	                urlParams = url_parser_1.convertUrlParamsToArray(paramsSegment.params);
-	            }
-	            else {
-	                allParams = positionalParams;
-	            }
-	            auxiliary = currentUrlSegment.auxiliary;
-	        }
-	        return new route_path_1.MatchedUrl(urlPath, urlParams, allParams, auxiliary, nextUrlSegment);
-	    };
-	    ParamRoutePath.prototype.generateUrl = function (params) {
-	        var paramTokens = new utils_1.TouchMap(params);
-	        var path = [];
-	        for (var i = 0; i < this._segments.length; i++) {
-	            var segment = this._segments[i];
-	            if (!(segment instanceof ContinuationPathSegment)) {
-	                path.push(segment.generate(paramTokens));
-	            }
-	        }
-	        var urlPath = path.join('/');
-	        var nonPositionalParams = paramTokens.getUnused();
-	        var urlParams = nonPositionalParams;
-	        return new route_path_1.GeneratedUrl(urlPath, urlParams);
-	    };
-	    ParamRoutePath.prototype.toString = function () { return this.routePath; };
-	    ParamRoutePath.prototype._parsePathString = function (routePath) {
-	        // normalize route as not starting with a "/". Recognition will
-	        // also normalize.
-	        if (routePath.startsWith("/")) {
-	            routePath = routePath.substring(1);
-	        }
-	        var segmentStrings = routePath.split('/');
-	        this._segments = [];
-	        var limit = segmentStrings.length - 1;
-	        for (var i = 0; i <= limit; i++) {
-	            var segment = segmentStrings[i], match;
-	            if (lang_1.isPresent(match = lang_1.RegExpWrapper.firstMatch(DynamicPathSegment.paramMatcher, segment))) {
-	                this._segments.push(new DynamicPathSegment(match[1]));
-	            }
-	            else if (lang_1.isPresent(match = lang_1.RegExpWrapper.firstMatch(StarPathSegment.wildcardMatcher, segment))) {
-	                this._segments.push(new StarPathSegment(match[1]));
-	            }
-	            else if (segment == '...') {
-	                if (i < limit) {
-	                    throw new exceptions_1.BaseException("Unexpected \"...\" before the end of the path for \"" + routePath + "\".");
-	                }
-	                this._segments.push(new ContinuationPathSegment());
-	            }
-	            else {
-	                this._segments.push(new StaticPathSegment(segment));
-	            }
-	        }
-	    };
-	    ParamRoutePath.prototype._calculateSpecificity = function () {
-	        // The "specificity" of a path is used to determine which route is used when multiple routes
-	        // match
-	        // a URL. Static segments (like "/foo") are the most specific, followed by dynamic segments
-	        // (like
-	        // "/:id"). Star segments add no specificity. Segments at the start of the path are more
-	        // specific
-	        // than proceeding ones.
-	        //
-	        // The code below uses place values to combine the different types of segments into a single
-	        // string that we can sort later. Each static segment is marked as a specificity of "2," each
-	        // dynamic segment is worth "1" specificity, and stars are worth "0" specificity.
-	        var i, length = this._segments.length, specificity;
-	        if (length == 0) {
-	            // a single slash (or "empty segment" is as specific as a static segment
-	            specificity += '2';
-	        }
-	        else {
-	            specificity = '';
-	            for (i = 0; i < length; i++) {
-	                specificity += this._segments[i].specificity;
-	            }
-	        }
-	        return specificity;
-	    };
-	    ParamRoutePath.prototype._calculateHash = function () {
-	        // this function is used to determine whether a route config path like `/foo/:id` collides with
-	        // `/foo/:name`
-	        var i, length = this._segments.length;
-	        var hashParts = [];
-	        for (i = 0; i < length; i++) {
-	            hashParts.push(this._segments[i].hash);
-	        }
-	        return hashParts.join('/');
-	    };
-	    ParamRoutePath.prototype._assertValidPath = function (path) {
-	        if (lang_1.StringWrapper.contains(path, '#')) {
-	            throw new exceptions_1.BaseException("Path \"" + path + "\" should not include \"#\". Use \"HashLocationStrategy\" instead.");
-	        }
-	        var illegalCharacter = lang_1.RegExpWrapper.firstMatch(ParamRoutePath.RESERVED_CHARS, path);
-	        if (lang_1.isPresent(illegalCharacter)) {
-	            throw new exceptions_1.BaseException("Path \"" + path + "\" contains \"" + illegalCharacter[0] + "\" which is not allowed in a route config.");
-	        }
-	    };
-	    ParamRoutePath.RESERVED_CHARS = lang_1.RegExpWrapper.create('//|\\(|\\)|;|\\?|=');
-	    return ParamRoutePath;
-	}());
-	exports.ParamRoutePath = ParamRoutePath;
-	var REGEXP_PERCENT = /%/g;
-	var REGEXP_SLASH = /\//g;
-	var REGEXP_OPEN_PARENT = /\(/g;
-	var REGEXP_CLOSE_PARENT = /\)/g;
-	var REGEXP_SEMICOLON = /;/g;
-	function encodeDynamicSegment(value) {
-	    if (lang_1.isBlank(value)) {
-	        return null;
-	    }
-	    value = lang_1.StringWrapper.replaceAll(value, REGEXP_PERCENT, '%25');
-	    value = lang_1.StringWrapper.replaceAll(value, REGEXP_SLASH, '%2F');
-	    value = lang_1.StringWrapper.replaceAll(value, REGEXP_OPEN_PARENT, '%28');
-	    value = lang_1.StringWrapper.replaceAll(value, REGEXP_CLOSE_PARENT, '%29');
-	    value = lang_1.StringWrapper.replaceAll(value, REGEXP_SEMICOLON, '%3B');
-	    return value;
-	}
-	var REGEXP_ENC_SEMICOLON = /%3B/ig;
-	var REGEXP_ENC_CLOSE_PARENT = /%29/ig;
-	var REGEXP_ENC_OPEN_PARENT = /%28/ig;
-	var REGEXP_ENC_SLASH = /%2F/ig;
-	var REGEXP_ENC_PERCENT = /%25/ig;
-	function decodeDynamicSegment(value) {
-	    if (lang_1.isBlank(value)) {
-	        return null;
-	    }
-	    value = lang_1.StringWrapper.replaceAll(value, REGEXP_ENC_SEMICOLON, ';');
-	    value = lang_1.StringWrapper.replaceAll(value, REGEXP_ENC_CLOSE_PARENT, ')');
-	    value = lang_1.StringWrapper.replaceAll(value, REGEXP_ENC_OPEN_PARENT, '(');
-	    value = lang_1.StringWrapper.replaceAll(value, REGEXP_ENC_SLASH, '/');
-	    value = lang_1.StringWrapper.replaceAll(value, REGEXP_ENC_PERCENT, '%');
-	    return value;
-	}
-	//# sourceMappingURL=param_route_path.js.map
-
-/***/ },
-/* 322 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var lang_1 = __webpack_require__(307);
-	var collection_1 = __webpack_require__(309);
-	var TouchMap = (function () {
-	    function TouchMap(map) {
-	        var _this = this;
-	        this.map = {};
-	        this.keys = {};
-	        if (lang_1.isPresent(map)) {
-	            collection_1.StringMapWrapper.forEach(map, function (value, key) {
-	                _this.map[key] = lang_1.isPresent(value) ? value.toString() : null;
-	                _this.keys[key] = true;
-	            });
-	        }
-	    }
-	    TouchMap.prototype.get = function (key) {
-	        collection_1.StringMapWrapper.delete(this.keys, key);
-	        return this.map[key];
-	    };
-	    TouchMap.prototype.getUnused = function () {
-	        var _this = this;
-	        var unused = {};
-	        var keys = collection_1.StringMapWrapper.keys(this.keys);
-	        keys.forEach(function (key) { return unused[key] = collection_1.StringMapWrapper.get(_this.map, key); });
-	        return unused;
-	    };
-	    return TouchMap;
-	}());
-	exports.TouchMap = TouchMap;
-	function normalizeString(obj) {
-	    if (lang_1.isBlank(obj)) {
-	        return null;
-	    }
-	    else {
-	        return obj.toString();
-	    }
-	}
-	exports.normalizeString = normalizeString;
-	//# sourceMappingURL=utils.js.map
-
-/***/ },
-/* 323 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var MatchedUrl = (function () {
-	    function MatchedUrl(urlPath, urlParams, allParams, auxiliary, rest) {
-	        this.urlPath = urlPath;
-	        this.urlParams = urlParams;
-	        this.allParams = allParams;
-	        this.auxiliary = auxiliary;
-	        this.rest = rest;
-	    }
-	    return MatchedUrl;
-	}());
-	exports.MatchedUrl = MatchedUrl;
-	var GeneratedUrl = (function () {
-	    function GeneratedUrl(urlPath, urlParams) {
-	        this.urlPath = urlPath;
-	        this.urlParams = urlParams;
-	    }
-	    return GeneratedUrl;
-	}());
-	exports.GeneratedUrl = GeneratedUrl;
-	//# sourceMappingURL=route_path.js.map
-
-/***/ },
-/* 324 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var lang_1 = __webpack_require__(307);
-	var route_path_1 = __webpack_require__(323);
-	var RegexRoutePath = (function () {
-	    function RegexRoutePath(_reString, _serializer) {
-	        this._reString = _reString;
-	        this._serializer = _serializer;
-	        this.terminal = true;
-	        this.specificity = '2';
-	        this.hash = this._reString;
-	        this._regex = lang_1.RegExpWrapper.create(this._reString);
-	    }
-	    RegexRoutePath.prototype.matchUrl = function (url) {
-	        var urlPath = url.toString();
-	        var params = {};
-	        var matcher = lang_1.RegExpWrapper.matcher(this._regex, urlPath);
-	        var match = lang_1.RegExpMatcherWrapper.next(matcher);
-	        if (lang_1.isBlank(match)) {
-	            return null;
-	        }
-	        for (var i = 0; i < match.length; i += 1) {
-	            params[i.toString()] = match[i];
-	        }
-	        return new route_path_1.MatchedUrl(urlPath, [], params, [], null);
-	    };
-	    RegexRoutePath.prototype.generateUrl = function (params) { return this._serializer(params); };
-	    RegexRoutePath.prototype.toString = function () { return this._reString; };
-	    return RegexRoutePath;
-	}());
-	exports.RegexRoutePath = RegexRoutePath;
-	//# sourceMappingURL=regex_route_path.js.map
-
-/***/ },
-/* 325 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var route_config_decorator_1 = __webpack_require__(326);
-	var lang_1 = __webpack_require__(307);
-	var exceptions_1 = __webpack_require__(310);
-	/**
-	 * Given a JS Object that represents a route config, returns a corresponding Route, AsyncRoute,
-	 * AuxRoute or Redirect object.
-	 *
-	 * Also wraps an AsyncRoute's loader function to add the loaded component's route config to the
-	 * `RouteRegistry`.
-	 */
-	function normalizeRouteConfig(config, registry) {
-	    if (config instanceof route_config_decorator_1.AsyncRoute) {
-	        var wrappedLoader = wrapLoaderToReconfigureRegistry(config.loader, registry);
-	        return new route_config_decorator_1.AsyncRoute({
-	            path: config.path,
-	            loader: wrappedLoader,
-	            name: config.name,
-	            data: config.data,
-	            useAsDefault: config.useAsDefault
-	        });
-	    }
-	    if (config instanceof route_config_decorator_1.Route || config instanceof route_config_decorator_1.Redirect || config instanceof route_config_decorator_1.AuxRoute) {
-	        return config;
-	    }
-	    if ((+!!config.component) + (+!!config.redirectTo) + (+!!config.loader) != 1) {
-	        throw new exceptions_1.BaseException("Route config should contain exactly one \"component\", \"loader\", or \"redirectTo\" property.");
-	    }
-	    if (config.as && config.name) {
-	        throw new exceptions_1.BaseException("Route config should contain exactly one \"as\" or \"name\" property.");
-	    }
-	    if (config.as) {
-	        config.name = config.as;
-	    }
-	    if (config.loader) {
-	        var wrappedLoader = wrapLoaderToReconfigureRegistry(config.loader, registry);
-	        return new route_config_decorator_1.AsyncRoute({
-	            path: config.path,
-	            loader: wrappedLoader,
-	            name: config.name,
-	            data: config.data,
-	            useAsDefault: config.useAsDefault
-	        });
-	    }
-	    if (config.aux) {
-	        return new route_config_decorator_1.AuxRoute({ path: config.aux, component: config.component, name: config.name });
-	    }
-	    if (config.component) {
-	        if (typeof config.component == 'object') {
-	            var componentDefinitionObject = config.component;
-	            if (componentDefinitionObject.type == 'constructor') {
-	                return new route_config_decorator_1.Route({
-	                    path: config.path,
-	                    component: componentDefinitionObject.constructor,
-	                    name: config.name,
-	                    data: config.data,
-	                    useAsDefault: config.useAsDefault
-	                });
-	            }
-	            else if (componentDefinitionObject.type == 'loader') {
-	                return new route_config_decorator_1.AsyncRoute({
-	                    path: config.path,
-	                    loader: componentDefinitionObject.loader,
-	                    name: config.name,
-	                    data: config.data,
-	                    useAsDefault: config.useAsDefault
-	                });
-	            }
-	            else {
-	                throw new exceptions_1.BaseException("Invalid component type \"" + componentDefinitionObject.type + "\". Valid types are \"constructor\" and \"loader\".");
-	            }
-	        }
-	        return new route_config_decorator_1.Route(config);
-	    }
-	    if (config.redirectTo) {
-	        return new route_config_decorator_1.Redirect({ path: config.path, redirectTo: config.redirectTo });
-	    }
-	    return config;
-	}
-	exports.normalizeRouteConfig = normalizeRouteConfig;
-	function wrapLoaderToReconfigureRegistry(loader, registry) {
-	    return function () {
-	        return loader().then(function (componentType) {
-	            registry.configFromComponent(componentType);
-	            return componentType;
-	        });
-	    };
-	}
-	function assertComponentExists(component, path) {
-	    if (!lang_1.isType(component)) {
-	        throw new exceptions_1.BaseException("Component for route \"" + path + "\" is not defined, or is not a class.");
-	    }
-	}
-	exports.assertComponentExists = assertComponentExists;
-	//# sourceMappingURL=route_config_normalizer.js.map
-
-/***/ },
-/* 326 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var route_config_impl_1 = __webpack_require__(314);
-	var core_private_1 = __webpack_require__(327);
-	var route_config_impl_2 = __webpack_require__(314);
-	exports.Route = route_config_impl_2.Route;
-	exports.Redirect = route_config_impl_2.Redirect;
-	exports.AuxRoute = route_config_impl_2.AuxRoute;
-	exports.AsyncRoute = route_config_impl_2.AsyncRoute;
-	// Copied from RouteConfig in route_config_impl.
-	/**
-	 * The `RouteConfig` decorator defines routes for a given component.
-	 *
-	 * It takes an array of {@link RouteDefinition}s.
-	 */
-	exports.RouteConfig = core_private_1.makeDecorator(route_config_impl_1.RouteConfig);
-	//# sourceMappingURL=route_config_decorator.js.map
-
-/***/ },
-/* 327 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var core_1 = __webpack_require__(8);
-	exports.makeDecorator = core_1.__core_private__.makeDecorator;
-	//# sourceMappingURL=core_private.js.map
-
-/***/ },
-/* 328 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var core_1 = __webpack_require__(8);
-	var lifecycle_annotations_impl_1 = __webpack_require__(329);
-	var core_2 = __webpack_require__(8);
-	function hasLifecycleHook(e, type) {
-	    if (!(type instanceof core_1.Type))
-	        return false;
-	    return e.name in type.prototype;
-	}
-	exports.hasLifecycleHook = hasLifecycleHook;
-	function getCanActivateHook(type) {
-	    var annotations = core_2.reflector.annotations(type);
-	    for (var i = 0; i < annotations.length; i += 1) {
-	        var annotation = annotations[i];
-	        if (annotation instanceof lifecycle_annotations_impl_1.CanActivate) {
-	            return annotation.fn;
-	        }
-	    }
-	    return null;
-	}
-	exports.getCanActivateHook = getCanActivateHook;
-	//# sourceMappingURL=route_lifecycle_reflector.js.map
-
-/***/ },
-/* 329 */
-/***/ function(module, exports) {
-
-	"use strict";
-	/* @ts2dart_const */
-	var RouteLifecycleHook = (function () {
-	    function RouteLifecycleHook(name) {
-	        this.name = name;
-	    }
-	    return RouteLifecycleHook;
-	}());
-	exports.RouteLifecycleHook = RouteLifecycleHook;
-	/* @ts2dart_const */
-	var CanActivate = (function () {
-	    function CanActivate(fn) {
-	        this.fn = fn;
-	    }
-	    return CanActivate;
-	}());
-	exports.CanActivate = CanActivate;
-	exports.routerCanReuse = 
-	/*@ts2dart_const*/ new RouteLifecycleHook("routerCanReuse");
-	exports.routerCanDeactivate = 
-	/*@ts2dart_const*/ new RouteLifecycleHook("routerCanDeactivate");
-	exports.routerOnActivate = 
-	/*@ts2dart_const*/ new RouteLifecycleHook("routerOnActivate");
-	exports.routerOnReuse = 
-	/*@ts2dart_const*/ new RouteLifecycleHook("routerOnReuse");
-	exports.routerOnDeactivate = 
-	/*@ts2dart_const*/ new RouteLifecycleHook("routerOnDeactivate");
-	//# sourceMappingURL=lifecycle_annotations_impl.js.map
-
-/***/ },
-/* 330 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var __param = (this && this.__param) || function (paramIndex, decorator) {
-	    return function (target, key) { decorator(target, key, paramIndex); }
-	};
-	var async_1 = __webpack_require__(306);
-	var collection_1 = __webpack_require__(309);
-	var lang_1 = __webpack_require__(307);
-	var core_1 = __webpack_require__(8);
-	var routerMod = __webpack_require__(305);
-	var instruction_1 = __webpack_require__(317);
-	var hookMod = __webpack_require__(331);
-	var route_lifecycle_reflector_1 = __webpack_require__(328);
-	var _resolveToTrue = async_1.PromiseWrapper.resolve(true);
-	/**
-	 * A router outlet is a placeholder that Angular dynamically fills based on the application's route.
-	 *
-	 * ## Use
-	 *
-	 * ```
-	 * <router-outlet></router-outlet>
-	 * ```
-	 */
-	var RouterOutlet = (function () {
-	    function RouterOutlet(_viewContainerRef, _loader, _parentRouter, nameAttr) {
-	        this._viewContainerRef = _viewContainerRef;
-	        this._loader = _loader;
-	        this._parentRouter = _parentRouter;
-	        this.name = null;
-	        this._componentRef = null;
-	        this._currentInstruction = null;
-	        this.activateEvents = new async_1.EventEmitter();
-	        if (lang_1.isPresent(nameAttr)) {
-	            this.name = nameAttr;
-	            this._parentRouter.registerAuxOutlet(this);
-	        }
-	        else {
-	            this._parentRouter.registerPrimaryOutlet(this);
-	        }
-	    }
-	    /**
-	     * Called by the Router to instantiate a new component during the commit phase of a navigation.
-	     * This method in turn is responsible for calling the `routerOnActivate` hook of its child.
-	     */
-	    RouterOutlet.prototype.activate = function (nextInstruction) {
-	        var _this = this;
-	        var previousInstruction = this._currentInstruction;
-	        this._currentInstruction = nextInstruction;
-	        var componentType = nextInstruction.componentType;
-	        var childRouter = this._parentRouter.childRouter(componentType);
-	        var providers = core_1.ReflectiveInjector.resolve([
-	            core_1.provide(instruction_1.RouteData, { useValue: nextInstruction.routeData }),
-	            core_1.provide(instruction_1.RouteParams, { useValue: new instruction_1.RouteParams(nextInstruction.params) }),
-	            core_1.provide(routerMod.Router, { useValue: childRouter })
-	        ]);
-	        this._componentRef =
-	            this._loader.loadNextToLocation(componentType, this._viewContainerRef, providers);
-	        return this._componentRef.then(function (componentRef) {
-	            _this.activateEvents.emit(componentRef.instance);
-	            if (route_lifecycle_reflector_1.hasLifecycleHook(hookMod.routerOnActivate, componentType)) {
-	                return _this._componentRef.then(function (ref) {
-	                    return ref.instance.routerOnActivate(nextInstruction, previousInstruction);
-	                });
-	            }
-	            else {
-	                return componentRef;
-	            }
-	        });
-	    };
-	    /**
-	     * Called by the {@link Router} during the commit phase of a navigation when an outlet
-	     * reuses a component between different routes.
-	     * This method in turn is responsible for calling the `routerOnReuse` hook of its child.
-	     */
-	    RouterOutlet.prototype.reuse = function (nextInstruction) {
-	        var previousInstruction = this._currentInstruction;
-	        this._currentInstruction = nextInstruction;
-	        // it's possible the component is removed before it can be reactivated (if nested withing
-	        // another dynamically loaded component, for instance). In that case, we simply activate
-	        // a new one.
-	        if (lang_1.isBlank(this._componentRef)) {
-	            return this.activate(nextInstruction);
-	        }
-	        else {
-	            return async_1.PromiseWrapper.resolve(route_lifecycle_reflector_1.hasLifecycleHook(hookMod.routerOnReuse, this._currentInstruction.componentType) ?
-	                this._componentRef.then(function (ref) {
-	                    return ref.instance.routerOnReuse(nextInstruction, previousInstruction);
-	                }) :
-	                true);
-	        }
-	    };
-	    /**
-	     * Called by the {@link Router} when an outlet disposes of a component's contents.
-	     * This method in turn is responsible for calling the `routerOnDeactivate` hook of its child.
-	     */
-	    RouterOutlet.prototype.deactivate = function (nextInstruction) {
-	        var _this = this;
-	        var next = _resolveToTrue;
-	        if (lang_1.isPresent(this._componentRef) && lang_1.isPresent(this._currentInstruction) &&
-	            route_lifecycle_reflector_1.hasLifecycleHook(hookMod.routerOnDeactivate, this._currentInstruction.componentType)) {
-	            next = this._componentRef.then(function (ref) {
-	                return ref.instance
-	                    .routerOnDeactivate(nextInstruction, _this._currentInstruction);
-	            });
-	        }
-	        return next.then(function (_) {
-	            if (lang_1.isPresent(_this._componentRef)) {
-	                var onDispose = _this._componentRef.then(function (ref) { return ref.destroy(); });
-	                _this._componentRef = null;
-	                return onDispose;
-	            }
-	        });
-	    };
-	    /**
-	     * Called by the {@link Router} during recognition phase of a navigation.
-	     *
-	     * If this resolves to `false`, the given navigation is cancelled.
-	     *
-	     * This method delegates to the child component's `routerCanDeactivate` hook if it exists,
-	     * and otherwise resolves to true.
-	     */
-	    RouterOutlet.prototype.routerCanDeactivate = function (nextInstruction) {
-	        var _this = this;
-	        if (lang_1.isBlank(this._currentInstruction)) {
-	            return _resolveToTrue;
-	        }
-	        if (route_lifecycle_reflector_1.hasLifecycleHook(hookMod.routerCanDeactivate, this._currentInstruction.componentType)) {
-	            return this._componentRef.then(function (ref) {
-	                return ref.instance
-	                    .routerCanDeactivate(nextInstruction, _this._currentInstruction);
-	            });
-	        }
-	        else {
-	            return _resolveToTrue;
-	        }
-	    };
-	    /**
-	     * Called by the {@link Router} during recognition phase of a navigation.
-	     *
-	     * If the new child component has a different Type than the existing child component,
-	     * this will resolve to `false`. You can't reuse an old component when the new component
-	     * is of a different Type.
-	     *
-	     * Otherwise, this method delegates to the child component's `routerCanReuse` hook if it exists,
-	     * or resolves to true if the hook is not present.
-	     */
-	    RouterOutlet.prototype.routerCanReuse = function (nextInstruction) {
-	        var _this = this;
-	        var result;
-	        if (lang_1.isBlank(this._currentInstruction) ||
-	            this._currentInstruction.componentType != nextInstruction.componentType) {
-	            result = false;
-	        }
-	        else if (route_lifecycle_reflector_1.hasLifecycleHook(hookMod.routerCanReuse, this._currentInstruction.componentType)) {
-	            result = this._componentRef.then(function (ref) {
-	                return ref.instance.routerCanReuse(nextInstruction, _this._currentInstruction);
-	            });
-	        }
-	        else {
-	            result = nextInstruction == this._currentInstruction ||
-	                (lang_1.isPresent(nextInstruction.params) && lang_1.isPresent(this._currentInstruction.params) &&
-	                    collection_1.StringMapWrapper.equals(nextInstruction.params, this._currentInstruction.params));
-	        }
-	        return async_1.PromiseWrapper.resolve(result);
-	    };
-	    RouterOutlet.prototype.ngOnDestroy = function () { this._parentRouter.unregisterPrimaryOutlet(this); };
-	    __decorate([
-	        core_1.Output('activate'), 
-	        __metadata('design:type', Object)
-	    ], RouterOutlet.prototype, "activateEvents", void 0);
-	    RouterOutlet = __decorate([
-	        core_1.Directive({ selector: 'router-outlet' }),
-	        __param(3, core_1.Attribute('name')), 
-	        __metadata('design:paramtypes', [core_1.ViewContainerRef, core_1.DynamicComponentLoader, routerMod.Router, String])
-	    ], RouterOutlet);
-	    return RouterOutlet;
-	}());
-	exports.RouterOutlet = RouterOutlet;
-	//# sourceMappingURL=router_outlet.js.map
-
-/***/ },
-/* 331 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * This indirection is needed to free up Component, etc symbols in the public API
-	 * to be used by the decorator versions of these annotations.
-	 */
-	"use strict";
-	var core_private_1 = __webpack_require__(327);
-	var lifecycle_annotations_impl_1 = __webpack_require__(329);
-	var lifecycle_annotations_impl_2 = __webpack_require__(329);
-	exports.routerCanReuse = lifecycle_annotations_impl_2.routerCanReuse;
-	exports.routerCanDeactivate = lifecycle_annotations_impl_2.routerCanDeactivate;
-	exports.routerOnActivate = lifecycle_annotations_impl_2.routerOnActivate;
-	exports.routerOnReuse = lifecycle_annotations_impl_2.routerOnReuse;
-	exports.routerOnDeactivate = lifecycle_annotations_impl_2.routerOnDeactivate;
-	/**
-	 * Defines route lifecycle hook `CanActivate`, which is called by the router to determine
-	 * if a component can be instantiated as part of a navigation.
-	 *
-	 * <aside class="is-right">
-	 * Note that unlike other lifecycle hooks, this one uses an annotation rather than an interface.
-	 * This is because the `CanActivate` function is called before the component is instantiated.
-	 * </aside>
-	 *
-	 * The `CanActivate` hook is called with two {@link ComponentInstruction}s as parameters, the first
-	 * representing the current route being navigated to, and the second parameter representing the
-	 * previous route or `null`.
-	 *
-	 * ```typescript
-	 * @CanActivate((next, prev) => boolean | Promise<boolean>)
-	 * ```
-	 *
-	 * If `CanActivate` returns or resolves to `false`, the navigation is cancelled.
-	 * If `CanActivate` throws or rejects, the navigation is also cancelled.
-	 * If `CanActivate` returns or resolves to `true`, navigation continues, the component is
-	 * instantiated, and the {@link OnActivate} hook of that component is called if implemented.
-	 *
-	 * ### Example
-	 *
-	 * {@example router/ts/can_activate/can_activate_example.ts region='canActivate' }
-	 */
-	exports.CanActivate = core_private_1.makeDecorator(lifecycle_annotations_impl_1.CanActivate);
-	//# sourceMappingURL=lifecycle_annotations.js.map
-
-/***/ },
-/* 332 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(8);
-	var common_1 = __webpack_require__(182);
-	var lang_1 = __webpack_require__(307);
-	var router_1 = __webpack_require__(305);
-	/**
-	 * The RouterLink directive lets you link to specific parts of your app.
-	 *
-	 * Consider the following route configuration:
-	
-	 * ```
-	 * @RouteConfig([
-	 *   { path: '/user', component: UserCmp, as: 'User' }
-	 * ]);
-	 * class MyComp {}
-	 * ```
-	 *
-	 * When linking to this `User` route, you can write:
-	 *
-	 * ```
-	 * <a [routerLink]="['./User']">link to user component</a>
-	 * ```
-	 *
-	 * RouterLink expects the value to be an array of route names, followed by the params
-	 * for that level of routing. For instance `['/Team', {teamId: 1}, 'User', {userId: 2}]`
-	 * means that we want to generate a link for the `Team` route with params `{teamId: 1}`,
-	 * and with a child route `User` with params `{userId: 2}`.
-	 *
-	 * The first route name should be prepended with `/`, `./`, or `../`.
-	 * If the route begins with `/`, the router will look up the route from the root of the app.
-	 * If the route begins with `./`, the router will instead look in the current component's
-	 * children for the route. And if the route begins with `../`, the router will look at the
-	 * current component's parent.
-	 */
-	var RouterLink = (function () {
-	    function RouterLink(_router, _location) {
-	        var _this = this;
-	        this._router = _router;
-	        this._location = _location;
-	        // we need to update the link whenever a route changes to account for aux routes
-	        this._router.subscribe(function (_) { return _this._updateLink(); });
-	    }
-	    // because auxiliary links take existing primary and auxiliary routes into account,
-	    // we need to update the link whenever params or other routes change.
-	    RouterLink.prototype._updateLink = function () {
-	        this._navigationInstruction = this._router.generate(this._routeParams);
-	        var navigationHref = this._navigationInstruction.toLinkUrl();
-	        this.visibleHref = this._location.prepareExternalUrl(navigationHref);
-	    };
-	    Object.defineProperty(RouterLink.prototype, "isRouteActive", {
-	        get: function () { return this._router.isRouteActive(this._navigationInstruction); },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(RouterLink.prototype, "routeParams", {
-	        set: function (changes) {
-	            this._routeParams = changes;
-	            this._updateLink();
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    RouterLink.prototype.onClick = function () {
-	        // If no target, or if target is _self, prevent default browser behavior
-	        if (!lang_1.isString(this.target) || this.target == '_self') {
-	            this._router.navigateByInstruction(this._navigationInstruction);
-	            return false;
-	        }
-	        return true;
-	    };
-	    RouterLink = __decorate([
-	        core_1.Directive({
-	            selector: '[routerLink]',
-	            inputs: ['routeParams: routerLink', 'target: target'],
-	            host: {
-	                '(click)': 'onClick()',
-	                '[attr.href]': 'visibleHref',
-	                '[class.router-link-active]': 'isRouteActive'
-	            }
-	        }), 
-	        __metadata('design:paramtypes', [router_1.Router, common_1.Location])
-	    ], RouterLink);
-	    return RouterLink;
-	}());
-	exports.RouterLink = RouterLink;
-	//# sourceMappingURL=router_link.js.map
-
-/***/ },
-/* 333 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var core_1 = __webpack_require__(8);
-	var common_1 = __webpack_require__(182);
-	var router_1 = __webpack_require__(305);
-	var route_registry_1 = __webpack_require__(313);
-	var exceptions_1 = __webpack_require__(310);
-	/**
-	 * The Platform agnostic ROUTER PROVIDERS
-	 */
-	exports.ROUTER_PROVIDERS_COMMON = [
-	    route_registry_1.RouteRegistry,
-	    /* @ts2dart_Provider */ { provide: common_1.LocationStrategy, useClass: common_1.PathLocationStrategy },
-	    common_1.Location,
-	    {
-	        provide: router_1.Router,
-	        useFactory: routerFactory,
-	        deps: [route_registry_1.RouteRegistry, common_1.Location, route_registry_1.ROUTER_PRIMARY_COMPONENT, core_1.ApplicationRef]
-	    },
-	    {
-	        provide: route_registry_1.ROUTER_PRIMARY_COMPONENT,
-	        useFactory: routerPrimaryComponentFactory,
-	        deps: /*@ts2dart_const*/ ([core_1.ApplicationRef])
-	    }
-	];
-	function routerFactory(registry, location, primaryComponent, appRef) {
-	    var rootRouter = new router_1.RootRouter(registry, location, primaryComponent);
-	    appRef.registerDisposeListener(function () { return rootRouter.dispose(); });
-	    return rootRouter;
-	}
-	function routerPrimaryComponentFactory(app) {
-	    if (app.componentTypes.length == 0) {
-	        throw new exceptions_1.BaseException("Bootstrap at least one component before injecting Router.");
-	    }
-	    return app.componentTypes[0];
-	}
-	//# sourceMappingURL=router_providers_common.js.map
-
-/***/ },
-/* 334 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var router_providers_common_1 = __webpack_require__(333);
-	var platform_browser_1 = __webpack_require__(177);
-	var common_1 = __webpack_require__(182);
-	/**
-	 * A list of {@link Provider}s. To use the router, you must add this to your application.
-	 *
-	 * ### Example ([live demo](http://plnkr.co/edit/iRUP8B5OUbxCWQ3AcIDm))
-	 *
-	 * ```
-	 * import {Component} from '@angular/core';
-	 * import {
-	 *   ROUTER_DIRECTIVES,
-	 *   ROUTER_PROVIDERS,
-	 *   RouteConfig
-	 * } from '@angular/router-deprecated';
-	 *
-	 * @Component({directives: [ROUTER_DIRECTIVES]})
-	 * @RouteConfig([
-	 *  {...},
-	 * ])
-	 * class AppCmp {
-	 *   // ...
-	 * }
-	 *
-	 * bootstrap(AppCmp, [ROUTER_PROVIDERS]);
-	 * ```
-	 */
-	exports.ROUTER_PROVIDERS = [
-	    router_providers_common_1.ROUTER_PROVIDERS_COMMON,
-	    /*@ts2dart_const*/ (
-	    /* @ts2dart_Provider */ { provide: common_1.PlatformLocation, useClass: platform_browser_1.BrowserPlatformLocation }),
-	];
-	/**
-	 * Use {@link ROUTER_PROVIDERS} instead.
-	 *
-	 * @deprecated
-	 */
-	exports.ROUTER_BINDINGS = exports.ROUTER_PROVIDERS;
-	//# sourceMappingURL=router_providers.js.map
-
-/***/ },
-/* 335 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(8);
-	var http_1 = __webpack_require__(282);
-	var config_1 = __webpack_require__(336);
-	var http_client_1 = __webpack_require__(337);
-	__webpack_require__(338);
-	var LoginService = (function () {
-	    function LoginService(_http) {
-	        this._http = _http;
-	    }
-	    LoginService.prototype.login = function (body) {
-	        return this._http.post(config_1.Config.baseUrl() + 'session/login', JSON.stringify(body), {
-	            headers: http_client_1.contentHeaders
-	        }).map(function (res) { return res.json(); });
-	    };
-	    LoginService = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [http_1.Http])
-	    ], LoginService);
-	    return LoginService;
-	}());
-	exports.LoginService = LoginService;
-
-
-/***/ },
-/* 336 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Config = (function () {
-	    function Config() {
-	    }
-	    Config.baseUrl = function () {
-	        if (Config.isTesting()) {
-	            return 'http://localhost:3100/api/';
-	        }
-	        else {
-	            return 'http://api.mallujunkies.com/api/';
-	        }
-	    };
-	    Config.isTesting = function () {
-	        return false;
-	        // var hostName = window.location.hostname;
-	        // if(hostName == 'localhost')
-	        //     return true;
-	        // else 
-	        //     return false;
-	    };
-	    return Config;
-	}());
-	exports.Config = Config;
-
-
-/***/ },
-/* 337 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var http_1 = __webpack_require__(282);
-	exports.contentHeaders = new http_1.Headers();
-	exports.contentHeaders.append('Accept', 'application/json');
-	exports.contentHeaders.append('Content-Type', 'application/json');
-
-
-/***/ },
-/* 338 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var Observable_1 = __webpack_require__(42);
-	var map_1 = __webpack_require__(339);
-	Observable_1.Observable.prototype.map = map_1.map;
-	//# sourceMappingURL=map.js.map
-
-/***/ },
-/* 339 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var Subscriber_1 = __webpack_require__(47);
-	/**
-	 * Applies a given `project` function to each value emitted by the source
-	 * Observable, and emits the resulting values as an Observable.
-	 *
-	 * <span class="informal">Like [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map),
-	 * it passes each source value through a transformation function to get
-	 * corresponding output values.</span>
-	 *
-	 * <img src="./img/map.png" width="100%">
-	 *
-	 * Similar to the well known `Array.prototype.map` function, this operator
-	 * applies a projection to each value and emits that projection in the output
-	 * Observable.
-	 *
-	 * @example <caption>Map every every click to the clientX position of that click</caption>
-	 * var clicks = Rx.Observable.fromEvent(document, 'click');
-	 * var positions = clicks.map(ev => ev.clientX);
-	 * positions.subscribe(x => console.log(x));
-	 *
-	 * @see {@link mapTo}
-	 * @see {@link pluck}
-	 *
-	 * @param {function(value: T, index: number): R} project The function to apply
-	 * to each `value` emitted by the source Observable. The `index` parameter is
-	 * the number `i` for the i-th emission that has happened since the
-	 * subscription, starting from the number `0`.
-	 * @param {any} [thisArg] An optional argument to define what `this` is in the
-	 * `project` function.
-	 * @return {Observable<R>} An Observable that emits the values from the source
-	 * Observable transformed by the given `project` function.
-	 * @method map
-	 * @owner Observable
-	 */
-	function map(project, thisArg) {
-	    if (typeof project !== 'function') {
-	        throw new TypeError('argument is not a function. Are you looking for `mapTo()`?');
-	    }
-	    return this.lift(new MapOperator(project, thisArg));
-	}
-	exports.map = map;
-	var MapOperator = (function () {
-	    function MapOperator(project, thisArg) {
-	        this.project = project;
-	        this.thisArg = thisArg;
-	    }
-	    MapOperator.prototype.call = function (subscriber, source) {
-	        return source._subscribe(new MapSubscriber(subscriber, this.project, this.thisArg));
-	    };
-	    return MapOperator;
-	}());
-	/**
-	 * We need this JSDoc comment for affecting ESDoc.
-	 * @ignore
-	 * @extends {Ignored}
-	 */
-	var MapSubscriber = (function (_super) {
-	    __extends(MapSubscriber, _super);
-	    function MapSubscriber(destination, project, thisArg) {
-	        _super.call(this, destination);
-	        this.project = project;
-	        this.count = 0;
-	        this.thisArg = thisArg || this;
-	    }
-	    // NOTE: This looks unoptimized, but it's actually purposefully NOT
-	    // using try/catch optimizations.
-	    MapSubscriber.prototype._next = function (value) {
-	        var result;
-	        try {
-	            result = this.project.call(this.thisArg, value, this.count++);
-	        }
-	        catch (err) {
-	            this.destination.error(err);
-	            return;
-	        }
-	        this.destination.next(result);
-	    };
-	    return MapSubscriber;
-	}(Subscriber_1.Subscriber));
-	//# sourceMappingURL=map.js.map
-
-/***/ },
-/* 340 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(8);
-	var router_1 = __webpack_require__(341);
-	var login_service_1 = __webpack_require__(335);
-	var LoginComponent = (function () {
-	    function LoginComponent(_loginService, _router) {
-	        this._loginService = _loginService;
-	        this._router = _router;
-	    }
-	    LoginComponent.prototype.handleLogin = function (event, username, password) {
-	        var _this = this;
-	        this._loginService.login({ username: username, password: password })
-	            .subscribe(function (response) {
-	            localStorage.setItem("token", response.id_token);
-	            _this._router.navigate(['Home']);
-	        }, function (error) { return _this.errorMessage = error; });
-	    };
-	    LoginComponent = __decorate([
-	        core_1.Component({
-	            selector: 'login',
-	            template: "\n    <h5>Login</h5>\n    <form>\n        {{name}}\n        <div>\n            <input #email type='' />\n        </div>\n        <div>\n            <input #password type='password' />\n        </div>\n        \n        <nav>\n        <button (click)=\"handleLogin(e, email.value, password.value)\">Login</button>\n        \n        </nav>\n    </form>\n  ",
-	            directives: [router_1.ROUTER_DIRECTIVES]
-	        }), 
-	        __metadata('design:paramtypes', [login_service_1.LoginService, router_1.Router])
-	    ], LoginComponent);
-	    return LoginComponent;
-	}());
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = LoginComponent;
-
-
-/***/ },
-/* 341 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
 	/**
 	* @module
 	* @description
 	* Maps application URLs into application states, to support deep-linking and navigation.
 	*/
-	var router_1 = __webpack_require__(342);
+	var router_1 = __webpack_require__(304);
 	exports.Router = router_1.Router;
 	exports.RouterOutletMap = router_1.RouterOutletMap;
-	var segments_1 = __webpack_require__(348);
+	var segments_1 = __webpack_require__(310);
 	exports.RouteSegment = segments_1.RouteSegment;
 	exports.UrlSegment = segments_1.UrlSegment;
 	exports.Tree = segments_1.Tree;
 	exports.UrlTree = segments_1.UrlTree;
 	exports.RouteTree = segments_1.RouteTree;
-	var decorators_1 = __webpack_require__(356);
+	var decorators_1 = __webpack_require__(318);
 	exports.Routes = decorators_1.Routes;
-	var metadata_1 = __webpack_require__(349);
+	var metadata_1 = __webpack_require__(311);
 	exports.Route = metadata_1.Route;
-	var router_url_serializer_1 = __webpack_require__(358);
+	var router_url_serializer_1 = __webpack_require__(320);
 	exports.RouterUrlSerializer = router_url_serializer_1.RouterUrlSerializer;
 	exports.DefaultRouterUrlSerializer = router_url_serializer_1.DefaultRouterUrlSerializer;
-	var router_providers_1 = __webpack_require__(359);
+	var router_providers_1 = __webpack_require__(321);
 	exports.ROUTER_PROVIDERS = router_providers_1.ROUTER_PROVIDERS;
-	var router_outlet_1 = __webpack_require__(361);
-	var router_link_1 = __webpack_require__(362);
+	var router_outlet_1 = __webpack_require__(323);
+	var router_link_1 = __webpack_require__(324);
 	/**
 	 * A list of directives. To use the router directives like {@link RouterOutlet} and
 	 * {@link RouterLink}, add this to your `directives` array in the {@link View} decorator of your
@@ -46879,21 +42105,21 @@
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 342 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var core_1 = __webpack_require__(8);
-	var lang_1 = __webpack_require__(343);
-	var collection_1 = __webpack_require__(344);
-	var async_1 = __webpack_require__(345);
-	var collection_2 = __webpack_require__(344);
+	var lang_1 = __webpack_require__(305);
+	var collection_1 = __webpack_require__(306);
+	var async_1 = __webpack_require__(307);
+	var collection_2 = __webpack_require__(306);
 	var core_2 = __webpack_require__(8);
-	var recognize_1 = __webpack_require__(347);
-	var link_1 = __webpack_require__(351);
-	var segments_1 = __webpack_require__(348);
-	var lifecycle_reflector_1 = __webpack_require__(355);
-	var constants_1 = __webpack_require__(350);
+	var recognize_1 = __webpack_require__(309);
+	var link_1 = __webpack_require__(313);
+	var segments_1 = __webpack_require__(310);
+	var lifecycle_reflector_1 = __webpack_require__(317);
+	var constants_1 = __webpack_require__(312);
 	/**
 	 * @internal
 	 */
@@ -47160,7 +42386,7 @@
 	//# sourceMappingURL=router.js.map
 
 /***/ },
-/* 343 */
+/* 305 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
@@ -47645,11 +42871,11 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 344 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var lang_1 = __webpack_require__(343);
+	var lang_1 = __webpack_require__(305);
 	exports.Map = lang_1.global.Map;
 	exports.Set = lang_1.global.Set;
 	// Safari and Internet Explorer do not support the iterable parameter to the
@@ -48018,7 +43244,7 @@
 	//# sourceMappingURL=collection.js.map
 
 /***/ },
-/* 345 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48027,8 +43253,8 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var lang_1 = __webpack_require__(343);
-	var promise_1 = __webpack_require__(346);
+	var lang_1 = __webpack_require__(305);
+	var promise_1 = __webpack_require__(308);
 	exports.PromiseWrapper = promise_1.PromiseWrapper;
 	exports.PromiseCompleter = promise_1.PromiseCompleter;
 	var Subject_1 = __webpack_require__(41);
@@ -48173,7 +43399,7 @@
 	//# sourceMappingURL=async.js.map
 
 /***/ },
-/* 346 */
+/* 308 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48227,17 +43453,17 @@
 	//# sourceMappingURL=promise.js.map
 
 /***/ },
-/* 347 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var segments_1 = __webpack_require__(348);
-	var metadata_1 = __webpack_require__(349);
-	var lang_1 = __webpack_require__(343);
-	var collection_1 = __webpack_require__(344);
-	var promise_1 = __webpack_require__(346);
+	var segments_1 = __webpack_require__(310);
+	var metadata_1 = __webpack_require__(311);
+	var lang_1 = __webpack_require__(305);
+	var collection_1 = __webpack_require__(306);
+	var promise_1 = __webpack_require__(308);
 	var core_1 = __webpack_require__(8);
-	var constants_1 = __webpack_require__(350);
+	var constants_1 = __webpack_require__(312);
 	var core_2 = __webpack_require__(8);
 	// TODO: vsavkin: recognize should take the old tree and merge it
 	function recognize(componentResolver, type, url) {
@@ -48384,7 +43610,7 @@
 	//# sourceMappingURL=recognize.js.map
 
 /***/ },
-/* 348 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48393,8 +43619,8 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var collection_1 = __webpack_require__(344);
-	var lang_1 = __webpack_require__(343);
+	var collection_1 = __webpack_require__(306);
+	var lang_1 = __webpack_require__(305);
 	var Tree = (function () {
 	    function Tree(root) {
 	        this._root = root;
@@ -48588,11 +43814,11 @@
 	//# sourceMappingURL=segments.js.map
 
 /***/ },
-/* 349 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var lang_1 = __webpack_require__(343);
+	var lang_1 = __webpack_require__(305);
 	/**
 	 * Information about a route.
 	 *
@@ -48659,7 +43885,7 @@
 	//# sourceMappingURL=metadata.js.map
 
 /***/ },
-/* 350 */
+/* 312 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48671,14 +43897,14 @@
 	//# sourceMappingURL=constants.js.map
 
 /***/ },
-/* 351 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var segments_1 = __webpack_require__(348);
-	var lang_1 = __webpack_require__(343);
-	var exceptions_1 = __webpack_require__(352);
-	var collection_1 = __webpack_require__(344);
+	var segments_1 = __webpack_require__(310);
+	var lang_1 = __webpack_require__(305);
+	var exceptions_1 = __webpack_require__(314);
+	var collection_1 = __webpack_require__(306);
 	// TODO: vsavkin: should reuse segments
 	function link(segment, routeTree, urlTree, commands) {
 	    if (commands.length === 0)
@@ -48850,7 +44076,7 @@
 	//# sourceMappingURL=link.js.map
 
 /***/ },
-/* 352 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48859,9 +44085,9 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var base_wrapped_exception_1 = __webpack_require__(353);
-	var exception_handler_1 = __webpack_require__(354);
-	var exception_handler_2 = __webpack_require__(354);
+	var base_wrapped_exception_1 = __webpack_require__(315);
+	var exception_handler_1 = __webpack_require__(316);
+	var exception_handler_2 = __webpack_require__(316);
 	exports.ExceptionHandler = exception_handler_2.ExceptionHandler;
 	var BaseException = (function (_super) {
 	    __extends(BaseException, _super);
@@ -48933,7 +44159,7 @@
 	//# sourceMappingURL=exceptions.js.map
 
 /***/ },
-/* 353 */
+/* 315 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48988,13 +44214,13 @@
 	//# sourceMappingURL=base_wrapped_exception.js.map
 
 /***/ },
-/* 354 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var lang_1 = __webpack_require__(343);
-	var base_wrapped_exception_1 = __webpack_require__(353);
-	var collection_1 = __webpack_require__(344);
+	var lang_1 = __webpack_require__(305);
+	var base_wrapped_exception_1 = __webpack_require__(315);
+	var collection_1 = __webpack_require__(306);
 	var _ArrayLogger = (function () {
 	    function _ArrayLogger() {
 	        this.res = [];
@@ -49125,11 +44351,11 @@
 	//# sourceMappingURL=exception_handler.js.map
 
 /***/ },
-/* 355 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var lang_1 = __webpack_require__(343);
+	var lang_1 = __webpack_require__(305);
 	function hasLifecycleHook(name, obj) {
 	    if (lang_1.isBlank(obj))
 	        return false;
@@ -49142,12 +44368,12 @@
 	//# sourceMappingURL=lifecycle_reflector.js.map
 
 /***/ },
-/* 356 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var metadata_1 = __webpack_require__(349);
-	var core_private_1 = __webpack_require__(357);
+	var metadata_1 = __webpack_require__(311);
+	var core_private_1 = __webpack_require__(319);
 	/**
 	 * Defines routes for a given component.
 	 *
@@ -49157,7 +44383,7 @@
 	//# sourceMappingURL=decorators.js.map
 
 /***/ },
-/* 357 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49166,7 +44392,7 @@
 	//# sourceMappingURL=core_private.js.map
 
 /***/ },
-/* 358 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49175,9 +44401,9 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var segments_1 = __webpack_require__(348);
+	var segments_1 = __webpack_require__(310);
 	var core_1 = __webpack_require__(8);
-	var lang_1 = __webpack_require__(343);
+	var lang_1 = __webpack_require__(305);
 	/**
 	 * Defines a way to serialize/deserialize a url tree.
 	 */
@@ -49355,11 +44581,11 @@
 	//# sourceMappingURL=router_url_serializer.js.map
 
 /***/ },
-/* 359 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var router_providers_common_1 = __webpack_require__(360);
+	var router_providers_common_1 = __webpack_require__(322);
 	var platform_browser_1 = __webpack_require__(177);
 	var common_1 = __webpack_require__(182);
 	/**
@@ -49391,14 +44617,14 @@
 	//# sourceMappingURL=router_providers.js.map
 
 /***/ },
-/* 360 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var core_1 = __webpack_require__(8);
 	var common_1 = __webpack_require__(182);
-	var router_1 = __webpack_require__(342);
-	var router_url_serializer_1 = __webpack_require__(358);
+	var router_1 = __webpack_require__(304);
+	var router_url_serializer_1 = __webpack_require__(320);
 	var core_2 = __webpack_require__(8);
 	var core_3 = __webpack_require__(8);
 	/**
@@ -49426,14 +44652,14 @@
 	//# sourceMappingURL=router_providers_common.js.map
 
 /***/ },
-/* 361 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var core_1 = __webpack_require__(8);
-	var router_1 = __webpack_require__(342);
-	var constants_1 = __webpack_require__(350);
-	var lang_1 = __webpack_require__(343);
+	var router_1 = __webpack_require__(304);
+	var constants_1 = __webpack_require__(312);
+	var lang_1 = __webpack_require__(305);
 	var RouterOutlet = (function () {
 	    function RouterOutlet(parentOutletMap, _location, name) {
 	        this._location = _location;
@@ -49482,15 +44708,15 @@
 	//# sourceMappingURL=router_outlet.js.map
 
 /***/ },
-/* 362 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var core_1 = __webpack_require__(8);
-	var router_1 = __webpack_require__(342);
-	var segments_1 = __webpack_require__(348);
-	var lang_1 = __webpack_require__(343);
-	var async_1 = __webpack_require__(345);
+	var router_1 = __webpack_require__(304);
+	var segments_1 = __webpack_require__(310);
+	var lang_1 = __webpack_require__(305);
+	var async_1 = __webpack_require__(307);
 	var RouterLink = (function () {
 	    function RouterLink(_routeSegment, _router) {
 	        var _this = this;
@@ -49555,75 +44781,7 @@
 	//# sourceMappingURL=router_link.js.map
 
 /***/ },
-/* 363 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(8);
-	var home_service_1 = __webpack_require__(364);
-	var router_1 = __webpack_require__(341);
-	// import { Store } from '@ngrx/store';
-	var HomeComponent = (function () {
-	    function HomeComponent(_homeService) {
-	        var _this = this;
-	        this._homeService = _homeService;
-	        this._homeService.getMovies().subscribe(function (response) {
-	            _this.gridOptions = {
-	                sortable: true,
-	                selectable: true,
-	                columns: [
-	                    { field: "mjId", title: "Id", filterable: true },
-	                    { field: "title", title: "Title", filterable: true, template: function (dataItem) {
-	                            return "<a href=\"/#/admin/edit/" + dataItem._id + "\">" + window.kendo.htmlEncode(dataItem.title) + "</a>";
-	                        } },
-	                    { field: "type", title: "Type", filterable: true },
-	                    { field: "language", title: "Language", filterable: true },
-	                    { field: "year", title: "Type", filterable: true },
-	                    { field: "mjRating", title: "Rating", filterable: true },
-	                    { field: "mjScore", title: "Score", filterable: true },
-	                    { field: "mjVotes", title: "Votes", filterable: true }
-	                ],
-	                dataSource: response.slice(),
-	                pageable: {
-	                    pageSize: 13
-	                },
-	                filterable: {
-	                    messages: {
-	                        and: "and",
-	                        or: "or",
-	                        filter: "Apply",
-	                        clear: "Clear"
-	                    }
-	                }
-	            };
-	        });
-	    }
-	    HomeComponent = __decorate([
-	        core_1.Component({
-	            selector: 'home',
-	            template: "\n    <a [routerLink]=\"['AddNew']\">Add New</a>\n    <kendo-grid [options]='gridOptions' ></kendo-grid>\n    {{counter}}\n  ",
-	            providers: [home_service_1.HomeService],
-	            directives: [router_1.ROUTER_DIRECTIVES]
-	        }), 
-	        __metadata('design:paramtypes', [home_service_1.HomeService])
-	    ], HomeComponent);
-	    return HomeComponent;
-	}());
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = HomeComponent;
-
-
-/***/ },
-/* 364 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49638,29 +44796,170 @@
 	};
 	var core_1 = __webpack_require__(8);
 	var http_1 = __webpack_require__(282);
-	var config_1 = __webpack_require__(336);
-	var http_client_1 = __webpack_require__(337);
-	__webpack_require__(338);
-	var HomeService = (function () {
-	    function HomeService(_http) {
+	var config_1 = __webpack_require__(326);
+	var http_client_1 = __webpack_require__(327);
+	__webpack_require__(328);
+	var LoginService = (function () {
+	    function LoginService(_http) {
 	        this._http = _http;
 	    }
-	    HomeService.prototype.getMovies = function () {
-	        return this._http.get(config_1.Config.baseUrl() + 'movies', {
+	    LoginService.prototype.login = function (body) {
+	        return this._http.post(config_1.Config.baseUrl() + 'session/login', JSON.stringify(body), {
 	            headers: http_client_1.contentHeaders
 	        }).map(function (res) { return res.json(); });
 	    };
-	    HomeService = __decorate([
+	    LoginService = __decorate([
 	        core_1.Injectable(), 
 	        __metadata('design:paramtypes', [http_1.Http])
-	    ], HomeService);
-	    return HomeService;
+	    ], LoginService);
+	    return LoginService;
 	}());
-	exports.HomeService = HomeService;
+	exports.LoginService = LoginService;
 
 
 /***/ },
-/* 365 */
+/* 326 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Config = (function () {
+	    function Config() {
+	    }
+	    Config.baseUrl = function () {
+	        if (Config.isTesting()) {
+	            return 'http://localhost:3100/api/';
+	        }
+	        else {
+	            return 'http://api.mallujunkies.com/api/';
+	        }
+	    };
+	    Config.isTesting = function () {
+	        return false;
+	        // var hostName = window.location.hostname;
+	        // if(hostName == 'localhost')
+	        //     return true;
+	        // else 
+	        //     return false;
+	    };
+	    return Config;
+	}());
+	exports.Config = Config;
+
+
+/***/ },
+/* 327 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var http_1 = __webpack_require__(282);
+	exports.contentHeaders = new http_1.Headers();
+	exports.contentHeaders.append('Accept', 'application/json');
+	exports.contentHeaders.append('Content-Type', 'application/json');
+
+
+/***/ },
+/* 328 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var Observable_1 = __webpack_require__(42);
+	var map_1 = __webpack_require__(329);
+	Observable_1.Observable.prototype.map = map_1.map;
+	//# sourceMappingURL=map.js.map
+
+/***/ },
+/* 329 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(47);
+	/**
+	 * Applies a given `project` function to each value emitted by the source
+	 * Observable, and emits the resulting values as an Observable.
+	 *
+	 * <span class="informal">Like [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map),
+	 * it passes each source value through a transformation function to get
+	 * corresponding output values.</span>
+	 *
+	 * <img src="./img/map.png" width="100%">
+	 *
+	 * Similar to the well known `Array.prototype.map` function, this operator
+	 * applies a projection to each value and emits that projection in the output
+	 * Observable.
+	 *
+	 * @example <caption>Map every every click to the clientX position of that click</caption>
+	 * var clicks = Rx.Observable.fromEvent(document, 'click');
+	 * var positions = clicks.map(ev => ev.clientX);
+	 * positions.subscribe(x => console.log(x));
+	 *
+	 * @see {@link mapTo}
+	 * @see {@link pluck}
+	 *
+	 * @param {function(value: T, index: number): R} project The function to apply
+	 * to each `value` emitted by the source Observable. The `index` parameter is
+	 * the number `i` for the i-th emission that has happened since the
+	 * subscription, starting from the number `0`.
+	 * @param {any} [thisArg] An optional argument to define what `this` is in the
+	 * `project` function.
+	 * @return {Observable<R>} An Observable that emits the values from the source
+	 * Observable transformed by the given `project` function.
+	 * @method map
+	 * @owner Observable
+	 */
+	function map(project, thisArg) {
+	    if (typeof project !== 'function') {
+	        throw new TypeError('argument is not a function. Are you looking for `mapTo()`?');
+	    }
+	    return this.lift(new MapOperator(project, thisArg));
+	}
+	exports.map = map;
+	var MapOperator = (function () {
+	    function MapOperator(project, thisArg) {
+	        this.project = project;
+	        this.thisArg = thisArg;
+	    }
+	    MapOperator.prototype.call = function (subscriber, source) {
+	        return source._subscribe(new MapSubscriber(subscriber, this.project, this.thisArg));
+	    };
+	    return MapOperator;
+	}());
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var MapSubscriber = (function (_super) {
+	    __extends(MapSubscriber, _super);
+	    function MapSubscriber(destination, project, thisArg) {
+	        _super.call(this, destination);
+	        this.project = project;
+	        this.count = 0;
+	        this.thisArg = thisArg || this;
+	    }
+	    // NOTE: This looks unoptimized, but it's actually purposefully NOT
+	    // using try/catch optimizations.
+	    MapSubscriber.prototype._next = function (value) {
+	        var result;
+	        try {
+	            result = this.project.call(this.thisArg, value, this.count++);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        this.destination.next(result);
+	    };
+	    return MapSubscriber;
+	}(Subscriber_1.Subscriber));
+	//# sourceMappingURL=map.js.map
+
+/***/ },
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49674,9 +44973,1219 @@
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(8);
-	var router_1 = __webpack_require__(341);
-	var movie_model_1 = __webpack_require__(366);
-	var add_new_service_1 = __webpack_require__(367);
+	var router_1 = __webpack_require__(303);
+	var login_service_1 = __webpack_require__(325);
+	var LoginComponent = (function () {
+	    function LoginComponent(_loginService, _router) {
+	        this._loginService = _loginService;
+	        this._router = _router;
+	    }
+	    LoginComponent.prototype.handleLogin = function (event, username, password) {
+	        var _this = this;
+	        this._loginService.login({ username: username, password: password })
+	            .subscribe(function (response) {
+	            localStorage.setItem("token", response.id_token);
+	            _this._router.navigate(['/Home']);
+	        }, function (error) { return _this.errorMessage = error; });
+	    };
+	    LoginComponent = __decorate([
+	        core_1.Component({
+	            selector: 'login',
+	            template: "\n    <h5>Login</h5>\n    <form>\n        {{name}}\n        <div>\n            <input #email type='' />\n        </div>\n        <div>\n            <input #password type='password' />\n        </div>\n        \n        <nav>\n        <button (click)=\"handleLogin(e, email.value, password.value)\">Login</button>\n        \n        </nav>\n    </form>\n  ",
+	            directives: [router_1.ROUTER_DIRECTIVES]
+	        }), 
+	        __metadata('design:paramtypes', [login_service_1.LoginService, router_1.Router])
+	    ], LoginComponent);
+	    return LoginComponent;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = LoginComponent;
+
+
+/***/ },
+/* 331 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(8);
+	var home_service_1 = __webpack_require__(332);
+	var store_1 = __webpack_require__(333);
+	var HomeComponent = (function () {
+	    function HomeComponent(_homeService, _store) {
+	        this._homeService = _homeService;
+	        this._store = _store;
+	        this._homeService.getMovies();
+	        this.moviesResponse = this._store.select("movies");
+	        this.gridOptions = {
+	            sortable: true,
+	            selectable: true,
+	            columns: [
+	                { field: "mjId", title: "Id", filterable: true },
+	                { field: "title", title: "Title", filterable: true, template: function (dataItem) {
+	                        return "<a href=\"/#/edit/" + dataItem._id + "\">" + window.kendo.htmlEncode(dataItem.title) + "</a>";
+	                    } },
+	                { field: "type", title: "Type", filterable: true },
+	                { field: "language", title: "Language", filterable: true },
+	                { field: "year", title: "Type", filterable: true },
+	                { field: "mjRating", title: "Rating", filterable: true },
+	                { field: "mjScore", title: "Score", filterable: true },
+	                { field: "mjVotes", title: "Votes", filterable: true }
+	            ],
+	            dataSource: this.moviesResponse,
+	            pageable: {
+	                pageSize: 13
+	            },
+	            filterable: {
+	                messages: {
+	                    and: "and",
+	                    or: "or",
+	                    filter: "Apply",
+	                    clear: "Clear"
+	                }
+	            }
+	        };
+	    }
+	    HomeComponent.prototype.getState = function () {
+	        console.log(this._store.select("movies"));
+	    };
+	    ;
+	    HomeComponent = __decorate([
+	        core_1.Component({
+	            selector: 'home',
+	            template: "\n    <kendo-grid [options]='gridOptions' ></kendo-grid>\n    <button (click)=\"getState()\">Get state</button>\n  ",
+	            providers: [home_service_1.HomeService]
+	        }), 
+	        __metadata('design:paramtypes', [home_service_1.HomeService, store_1.default])
+	    ], HomeComponent);
+	    return HomeComponent;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = HomeComponent;
+
+
+/***/ },
+/* 332 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(8);
+	var http_1 = __webpack_require__(282);
+	var config_1 = __webpack_require__(326);
+	var http_client_1 = __webpack_require__(327);
+	__webpack_require__(328);
+	var store_1 = __webpack_require__(333);
+	var ACTION_TYPES = __webpack_require__(350);
+	var HomeService = (function () {
+	    function HomeService(_http, _store) {
+	        this._http = _http;
+	        this._store = _store;
+	    }
+	    HomeService.prototype.getMovies = function () {
+	        var _this = this;
+	        this._store.dispatch({ type: ACTION_TYPES.REQUEST_MOVIES });
+	        return this._http.get(config_1.Config.baseUrl() + 'movies', {
+	            headers: http_client_1.contentHeaders
+	        }).map(function (res) {
+	            return res.json();
+	        }).subscribe(function (response) {
+	            return _this._store.dispatch({ type: ACTION_TYPES.SUCCESS_MOVIES, response: response });
+	        });
+	    };
+	    HomeService = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [http_1.Http, store_1.default])
+	    ], HomeService);
+	    return HomeService;
+	}());
+	exports.HomeService = HomeService;
+
+
+/***/ },
+/* 333 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(8);
+	var redux_1 = __webpack_require__(334);
+	var reducers_1 = __webpack_require__(348);
+	var StoreService = (function () {
+	    function StoreService() {
+	        this._store = redux_1.createStore(reducers_1.default);
+	    }
+	    StoreService.prototype._getState = function () {
+	        this._state = this._store.getState();
+	        // return this._state; 
+	    };
+	    StoreService.prototype.select = function (value) {
+	        this._getState();
+	        return this._state[value];
+	    };
+	    StoreService.prototype.dispatch = function (action) {
+	        this._store.dispatch(action);
+	    };
+	    StoreService = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], StoreService);
+	    return StoreService;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = StoreService;
+
+
+/***/ },
+/* 334 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	
+	exports.__esModule = true;
+	exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
+	
+	var _createStore = __webpack_require__(336);
+	
+	var _createStore2 = _interopRequireDefault(_createStore);
+	
+	var _combineReducers = __webpack_require__(343);
+	
+	var _combineReducers2 = _interopRequireDefault(_combineReducers);
+	
+	var _bindActionCreators = __webpack_require__(345);
+	
+	var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
+	
+	var _applyMiddleware = __webpack_require__(346);
+	
+	var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
+	
+	var _compose = __webpack_require__(347);
+	
+	var _compose2 = _interopRequireDefault(_compose);
+	
+	var _warning = __webpack_require__(344);
+	
+	var _warning2 = _interopRequireDefault(_warning);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	/*
+	* This is a dummy function to check if the function name has been altered by minification.
+	* If the function has been minified and NODE_ENV !== 'production', warn the user.
+	*/
+	function isCrushed() {}
+	
+	if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+	  (0, _warning2["default"])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+	}
+	
+	exports.createStore = _createStore2["default"];
+	exports.combineReducers = _combineReducers2["default"];
+	exports.bindActionCreators = _bindActionCreators2["default"];
+	exports.applyMiddleware = _applyMiddleware2["default"];
+	exports.compose = _compose2["default"];
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(335)))
+
+/***/ },
+/* 335 */
+/***/ function(module, exports) {
+
+	// shim for using process in browser
+	
+	var process = module.exports = {};
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+	
+	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+	
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = setTimeout(cleanUpNextTick);
+	    draining = true;
+	
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    clearTimeout(timeout);
+	}
+	
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        setTimeout(drainQueue, 0);
+	    }
+	};
+	
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+	
+	function noop() {}
+	
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+	
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+	
+	process.cwd = function () { return '/' };
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function() { return 0; };
+
+
+/***/ },
+/* 336 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	exports.ActionTypes = undefined;
+	exports["default"] = createStore;
+	
+	var _isPlainObject = __webpack_require__(337);
+	
+	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+	
+	var _symbolObservable = __webpack_require__(341);
+	
+	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	/**
+	 * These are private action types reserved by Redux.
+	 * For any unknown actions, you must return the current state.
+	 * If the current state is undefined, you must return the initial state.
+	 * Do not reference these action types directly in your code.
+	 */
+	var ActionTypes = exports.ActionTypes = {
+	  INIT: '@@redux/INIT'
+	};
+	
+	/**
+	 * Creates a Redux store that holds the state tree.
+	 * The only way to change the data in the store is to call `dispatch()` on it.
+	 *
+	 * There should only be a single store in your app. To specify how different
+	 * parts of the state tree respond to actions, you may combine several reducers
+	 * into a single reducer function by using `combineReducers`.
+	 *
+	 * @param {Function} reducer A function that returns the next state tree, given
+	 * the current state tree and the action to handle.
+	 *
+	 * @param {any} [initialState] The initial state. You may optionally specify it
+	 * to hydrate the state from the server in universal apps, or to restore a
+	 * previously serialized user session.
+	 * If you use `combineReducers` to produce the root reducer function, this must be
+	 * an object with the same shape as `combineReducers` keys.
+	 *
+	 * @param {Function} enhancer The store enhancer. You may optionally specify it
+	 * to enhance the store with third-party capabilities such as middleware,
+	 * time travel, persistence, etc. The only store enhancer that ships with Redux
+	 * is `applyMiddleware()`.
+	 *
+	 * @returns {Store} A Redux store that lets you read the state, dispatch actions
+	 * and subscribe to changes.
+	 */
+	function createStore(reducer, initialState, enhancer) {
+	  var _ref2;
+	
+	  if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
+	    enhancer = initialState;
+	    initialState = undefined;
+	  }
+	
+	  if (typeof enhancer !== 'undefined') {
+	    if (typeof enhancer !== 'function') {
+	      throw new Error('Expected the enhancer to be a function.');
+	    }
+	
+	    return enhancer(createStore)(reducer, initialState);
+	  }
+	
+	  if (typeof reducer !== 'function') {
+	    throw new Error('Expected the reducer to be a function.');
+	  }
+	
+	  var currentReducer = reducer;
+	  var currentState = initialState;
+	  var currentListeners = [];
+	  var nextListeners = currentListeners;
+	  var isDispatching = false;
+	
+	  function ensureCanMutateNextListeners() {
+	    if (nextListeners === currentListeners) {
+	      nextListeners = currentListeners.slice();
+	    }
+	  }
+	
+	  /**
+	   * Reads the state tree managed by the store.
+	   *
+	   * @returns {any} The current state tree of your application.
+	   */
+	  function getState() {
+	    return currentState;
+	  }
+	
+	  /**
+	   * Adds a change listener. It will be called any time an action is dispatched,
+	   * and some part of the state tree may potentially have changed. You may then
+	   * call `getState()` to read the current state tree inside the callback.
+	   *
+	   * You may call `dispatch()` from a change listener, with the following
+	   * caveats:
+	   *
+	   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+	   * If you subscribe or unsubscribe while the listeners are being invoked, this
+	   * will not have any effect on the `dispatch()` that is currently in progress.
+	   * However, the next `dispatch()` call, whether nested or not, will use a more
+	   * recent snapshot of the subscription list.
+	   *
+	   * 2. The listener should not expect to see all state changes, as the state
+	   * might have been updated multiple times during a nested `dispatch()` before
+	   * the listener is called. It is, however, guaranteed that all subscribers
+	   * registered before the `dispatch()` started will be called with the latest
+	   * state by the time it exits.
+	   *
+	   * @param {Function} listener A callback to be invoked on every dispatch.
+	   * @returns {Function} A function to remove this change listener.
+	   */
+	  function subscribe(listener) {
+	    if (typeof listener !== 'function') {
+	      throw new Error('Expected listener to be a function.');
+	    }
+	
+	    var isSubscribed = true;
+	
+	    ensureCanMutateNextListeners();
+	    nextListeners.push(listener);
+	
+	    return function unsubscribe() {
+	      if (!isSubscribed) {
+	        return;
+	      }
+	
+	      isSubscribed = false;
+	
+	      ensureCanMutateNextListeners();
+	      var index = nextListeners.indexOf(listener);
+	      nextListeners.splice(index, 1);
+	    };
+	  }
+	
+	  /**
+	   * Dispatches an action. It is the only way to trigger a state change.
+	   *
+	   * The `reducer` function, used to create the store, will be called with the
+	   * current state tree and the given `action`. Its return value will
+	   * be considered the **next** state of the tree, and the change listeners
+	   * will be notified.
+	   *
+	   * The base implementation only supports plain object actions. If you want to
+	   * dispatch a Promise, an Observable, a thunk, or something else, you need to
+	   * wrap your store creating function into the corresponding middleware. For
+	   * example, see the documentation for the `redux-thunk` package. Even the
+	   * middleware will eventually dispatch plain object actions using this method.
+	   *
+	   * @param {Object} action A plain object representing “what changed”. It is
+	   * a good idea to keep actions serializable so you can record and replay user
+	   * sessions, or use the time travelling `redux-devtools`. An action must have
+	   * a `type` property which may not be `undefined`. It is a good idea to use
+	   * string constants for action types.
+	   *
+	   * @returns {Object} For convenience, the same action object you dispatched.
+	   *
+	   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
+	   * return something else (for example, a Promise you can await).
+	   */
+	  function dispatch(action) {
+	    if (!(0, _isPlainObject2["default"])(action)) {
+	      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+	    }
+	
+	    if (typeof action.type === 'undefined') {
+	      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+	    }
+	
+	    if (isDispatching) {
+	      throw new Error('Reducers may not dispatch actions.');
+	    }
+	
+	    try {
+	      isDispatching = true;
+	      currentState = currentReducer(currentState, action);
+	    } finally {
+	      isDispatching = false;
+	    }
+	
+	    var listeners = currentListeners = nextListeners;
+	    for (var i = 0; i < listeners.length; i++) {
+	      listeners[i]();
+	    }
+	
+	    return action;
+	  }
+	
+	  /**
+	   * Replaces the reducer currently used by the store to calculate the state.
+	   *
+	   * You might need this if your app implements code splitting and you want to
+	   * load some of the reducers dynamically. You might also need this if you
+	   * implement a hot reloading mechanism for Redux.
+	   *
+	   * @param {Function} nextReducer The reducer for the store to use instead.
+	   * @returns {void}
+	   */
+	  function replaceReducer(nextReducer) {
+	    if (typeof nextReducer !== 'function') {
+	      throw new Error('Expected the nextReducer to be a function.');
+	    }
+	
+	    currentReducer = nextReducer;
+	    dispatch({ type: ActionTypes.INIT });
+	  }
+	
+	  /**
+	   * Interoperability point for observable/reactive libraries.
+	   * @returns {observable} A minimal observable of state changes.
+	   * For more information, see the observable proposal:
+	   * https://github.com/zenparsing/es-observable
+	   */
+	  function observable() {
+	    var _ref;
+	
+	    var outerSubscribe = subscribe;
+	    return _ref = {
+	      /**
+	       * The minimal observable subscription method.
+	       * @param {Object} observer Any object that can be used as an observer.
+	       * The observer object should have a `next` method.
+	       * @returns {subscription} An object with an `unsubscribe` method that can
+	       * be used to unsubscribe the observable from the store, and prevent further
+	       * emission of values from the observable.
+	       */
+	
+	      subscribe: function subscribe(observer) {
+	        if (typeof observer !== 'object') {
+	          throw new TypeError('Expected the observer to be an object.');
+	        }
+	
+	        function observeState() {
+	          if (observer.next) {
+	            observer.next(getState());
+	          }
+	        }
+	
+	        observeState();
+	        var unsubscribe = outerSubscribe(observeState);
+	        return { unsubscribe: unsubscribe };
+	      }
+	    }, _ref[_symbolObservable2["default"]] = function () {
+	      return this;
+	    }, _ref;
+	  }
+	
+	  // When a store is created, an "INIT" action is dispatched so that every
+	  // reducer returns their initial state. This effectively populates
+	  // the initial state tree.
+	  dispatch({ type: ActionTypes.INIT });
+	
+	  return _ref2 = {
+	    dispatch: dispatch,
+	    subscribe: subscribe,
+	    getState: getState,
+	    replaceReducer: replaceReducer
+	  }, _ref2[_symbolObservable2["default"]] = observable, _ref2;
+	}
+
+/***/ },
+/* 337 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var getPrototype = __webpack_require__(338),
+	    isHostObject = __webpack_require__(339),
+	    isObjectLike = __webpack_require__(340);
+	
+	/** `Object#toString` result references. */
+	var objectTag = '[object Object]';
+	
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+	
+	/** Used to resolve the decompiled source of functions. */
+	var funcToString = Function.prototype.toString;
+	
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+	
+	/** Used to infer the `Object` constructor. */
+	var objectCtorString = funcToString.call(Object);
+	
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objectToString = objectProto.toString;
+	
+	/**
+	 * Checks if `value` is a plain object, that is, an object created by the
+	 * `Object` constructor or one with a `[[Prototype]]` of `null`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.8.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a plain object,
+	 *  else `false`.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 * }
+	 *
+	 * _.isPlainObject(new Foo);
+	 * // => false
+	 *
+	 * _.isPlainObject([1, 2, 3]);
+	 * // => false
+	 *
+	 * _.isPlainObject({ 'x': 0, 'y': 0 });
+	 * // => true
+	 *
+	 * _.isPlainObject(Object.create(null));
+	 * // => true
+	 */
+	function isPlainObject(value) {
+	  if (!isObjectLike(value) ||
+	      objectToString.call(value) != objectTag || isHostObject(value)) {
+	    return false;
+	  }
+	  var proto = getPrototype(value);
+	  if (proto === null) {
+	    return true;
+	  }
+	  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+	  return (typeof Ctor == 'function' &&
+	    Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString);
+	}
+	
+	module.exports = isPlainObject;
+
+
+/***/ },
+/* 338 */
+/***/ function(module, exports) {
+
+	/* Built-in method references for those with the same name as other `lodash` methods. */
+	var nativeGetPrototype = Object.getPrototypeOf;
+	
+	/**
+	 * Gets the `[[Prototype]]` of `value`.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {null|Object} Returns the `[[Prototype]]`.
+	 */
+	function getPrototype(value) {
+	  return nativeGetPrototype(Object(value));
+	}
+	
+	module.exports = getPrototype;
+
+
+/***/ },
+/* 339 */
+/***/ function(module, exports) {
+
+	/**
+	 * Checks if `value` is a host object in IE < 9.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
+	 */
+	function isHostObject(value) {
+	  // Many host objects are `Object` objects that can coerce to strings
+	  // despite having improperly defined `toString` methods.
+	  var result = false;
+	  if (value != null && typeof value.toString != 'function') {
+	    try {
+	      result = !!(value + '');
+	    } catch (e) {}
+	  }
+	  return result;
+	}
+	
+	module.exports = isHostObject;
+
+
+/***/ },
+/* 340 */
+/***/ function(module, exports) {
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
+	}
+	
+	module.exports = isObjectLike;
+
+
+/***/ },
+/* 341 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/* global window */
+	'use strict';
+	
+	module.exports = __webpack_require__(342)(global || window || this);
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 342 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = function symbolObservablePonyfill(root) {
+		var result;
+		var Symbol = root.Symbol;
+	
+		if (typeof Symbol === 'function') {
+			if (Symbol.observable) {
+				result = Symbol.observable;
+			} else {
+				result = Symbol('observable');
+				Symbol.observable = result;
+			}
+		} else {
+			result = '@@observable';
+		}
+	
+		return result;
+	};
+
+
+/***/ },
+/* 343 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	
+	exports.__esModule = true;
+	exports["default"] = combineReducers;
+	
+	var _createStore = __webpack_require__(336);
+	
+	var _isPlainObject = __webpack_require__(337);
+	
+	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+	
+	var _warning = __webpack_require__(344);
+	
+	var _warning2 = _interopRequireDefault(_warning);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	function getUndefinedStateErrorMessage(key, action) {
+	  var actionType = action && action.type;
+	  var actionName = actionType && '"' + actionType.toString() + '"' || 'an action';
+	
+	  return 'Given action ' + actionName + ', reducer "' + key + '" returned undefined. ' + 'To ignore an action, you must explicitly return the previous state.';
+	}
+	
+	function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
+	  var reducerKeys = Object.keys(reducers);
+	  var argumentName = action && action.type === _createStore.ActionTypes.INIT ? 'initialState argument passed to createStore' : 'previous state received by the reducer';
+	
+	  if (reducerKeys.length === 0) {
+	    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
+	  }
+	
+	  if (!(0, _isPlainObject2["default"])(inputState)) {
+	    return 'The ' + argumentName + ' has unexpected type of "' + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
+	  }
+	
+	  var unexpectedKeys = Object.keys(inputState).filter(function (key) {
+	    return !reducers.hasOwnProperty(key);
+	  });
+	
+	  if (unexpectedKeys.length > 0) {
+	    return 'Unexpected ' + (unexpectedKeys.length > 1 ? 'keys' : 'key') + ' ' + ('"' + unexpectedKeys.join('", "') + '" found in ' + argumentName + '. ') + 'Expected to find one of the known reducer keys instead: ' + ('"' + reducerKeys.join('", "') + '". Unexpected keys will be ignored.');
+	  }
+	}
+	
+	function assertReducerSanity(reducers) {
+	  Object.keys(reducers).forEach(function (key) {
+	    var reducer = reducers[key];
+	    var initialState = reducer(undefined, { type: _createStore.ActionTypes.INIT });
+	
+	    if (typeof initialState === 'undefined') {
+	      throw new Error('Reducer "' + key + '" returned undefined during initialization. ' + 'If the state passed to the reducer is undefined, you must ' + 'explicitly return the initial state. The initial state may ' + 'not be undefined.');
+	    }
+	
+	    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.');
+	    if (typeof reducer(undefined, { type: type }) === 'undefined') {
+	      throw new Error('Reducer "' + key + '" returned undefined when probed with a random type. ' + ('Don\'t try to handle ' + _createStore.ActionTypes.INIT + ' or other actions in "redux/*" ') + 'namespace. They are considered private. Instead, you must return the ' + 'current state for any unknown actions, unless it is undefined, ' + 'in which case you must return the initial state, regardless of the ' + 'action type. The initial state may not be undefined.');
+	    }
+	  });
+	}
+	
+	/**
+	 * Turns an object whose values are different reducer functions, into a single
+	 * reducer function. It will call every child reducer, and gather their results
+	 * into a single state object, whose keys correspond to the keys of the passed
+	 * reducer functions.
+	 *
+	 * @param {Object} reducers An object whose values correspond to different
+	 * reducer functions that need to be combined into one. One handy way to obtain
+	 * it is to use ES6 `import * as reducers` syntax. The reducers may never return
+	 * undefined for any action. Instead, they should return their initial state
+	 * if the state passed to them was undefined, and the current state for any
+	 * unrecognized action.
+	 *
+	 * @returns {Function} A reducer function that invokes every reducer inside the
+	 * passed object, and builds a state object with the same shape.
+	 */
+	function combineReducers(reducers) {
+	  var reducerKeys = Object.keys(reducers);
+	  var finalReducers = {};
+	  for (var i = 0; i < reducerKeys.length; i++) {
+	    var key = reducerKeys[i];
+	    if (typeof reducers[key] === 'function') {
+	      finalReducers[key] = reducers[key];
+	    }
+	  }
+	  var finalReducerKeys = Object.keys(finalReducers);
+	
+	  var sanityError;
+	  try {
+	    assertReducerSanity(finalReducers);
+	  } catch (e) {
+	    sanityError = e;
+	  }
+	
+	  return function combination() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments[1];
+	
+	    if (sanityError) {
+	      throw sanityError;
+	    }
+	
+	    if (process.env.NODE_ENV !== 'production') {
+	      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action);
+	      if (warningMessage) {
+	        (0, _warning2["default"])(warningMessage);
+	      }
+	    }
+	
+	    var hasChanged = false;
+	    var nextState = {};
+	    for (var i = 0; i < finalReducerKeys.length; i++) {
+	      var key = finalReducerKeys[i];
+	      var reducer = finalReducers[key];
+	      var previousStateForKey = state[key];
+	      var nextStateForKey = reducer(previousStateForKey, action);
+	      if (typeof nextStateForKey === 'undefined') {
+	        var errorMessage = getUndefinedStateErrorMessage(key, action);
+	        throw new Error(errorMessage);
+	      }
+	      nextState[key] = nextStateForKey;
+	      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+	    }
+	    return hasChanged ? nextState : state;
+	  };
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(335)))
+
+/***/ },
+/* 344 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	exports["default"] = warning;
+	/**
+	 * Prints a warning in the console if it exists.
+	 *
+	 * @param {String} message The warning message.
+	 * @returns {void}
+	 */
+	function warning(message) {
+	  /* eslint-disable no-console */
+	  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+	    console.error(message);
+	  }
+	  /* eslint-enable no-console */
+	  try {
+	    // This error was thrown as a convenience so that if you enable
+	    // "break on all exceptions" in your console,
+	    // it would pause the execution at this line.
+	    throw new Error(message);
+	    /* eslint-disable no-empty */
+	  } catch (e) {}
+	  /* eslint-enable no-empty */
+	}
+
+/***/ },
+/* 345 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	exports["default"] = bindActionCreators;
+	function bindActionCreator(actionCreator, dispatch) {
+	  return function () {
+	    return dispatch(actionCreator.apply(undefined, arguments));
+	  };
+	}
+	
+	/**
+	 * Turns an object whose values are action creators, into an object with the
+	 * same keys, but with every function wrapped into a `dispatch` call so they
+	 * may be invoked directly. This is just a convenience method, as you can call
+	 * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
+	 *
+	 * For convenience, you can also pass a single function as the first argument,
+	 * and get a function in return.
+	 *
+	 * @param {Function|Object} actionCreators An object whose values are action
+	 * creator functions. One handy way to obtain it is to use ES6 `import * as`
+	 * syntax. You may also pass a single function.
+	 *
+	 * @param {Function} dispatch The `dispatch` function available on your Redux
+	 * store.
+	 *
+	 * @returns {Function|Object} The object mimicking the original object, but with
+	 * every action creator wrapped into the `dispatch` call. If you passed a
+	 * function as `actionCreators`, the return value will also be a single
+	 * function.
+	 */
+	function bindActionCreators(actionCreators, dispatch) {
+	  if (typeof actionCreators === 'function') {
+	    return bindActionCreator(actionCreators, dispatch);
+	  }
+	
+	  if (typeof actionCreators !== 'object' || actionCreators === null) {
+	    throw new Error('bindActionCreators expected an object or a function, instead received ' + (actionCreators === null ? 'null' : typeof actionCreators) + '. ' + 'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?');
+	  }
+	
+	  var keys = Object.keys(actionCreators);
+	  var boundActionCreators = {};
+	  for (var i = 0; i < keys.length; i++) {
+	    var key = keys[i];
+	    var actionCreator = actionCreators[key];
+	    if (typeof actionCreator === 'function') {
+	      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
+	    }
+	  }
+	  return boundActionCreators;
+	}
+
+/***/ },
+/* 346 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	exports["default"] = applyMiddleware;
+	
+	var _compose = __webpack_require__(347);
+	
+	var _compose2 = _interopRequireDefault(_compose);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	/**
+	 * Creates a store enhancer that applies middleware to the dispatch method
+	 * of the Redux store. This is handy for a variety of tasks, such as expressing
+	 * asynchronous actions in a concise manner, or logging every action payload.
+	 *
+	 * See `redux-thunk` package as an example of the Redux middleware.
+	 *
+	 * Because middleware is potentially asynchronous, this should be the first
+	 * store enhancer in the composition chain.
+	 *
+	 * Note that each middleware will be given the `dispatch` and `getState` functions
+	 * as named arguments.
+	 *
+	 * @param {...Function} middlewares The middleware chain to be applied.
+	 * @returns {Function} A store enhancer applying the middleware.
+	 */
+	function applyMiddleware() {
+	  for (var _len = arguments.length, middlewares = Array(_len), _key = 0; _key < _len; _key++) {
+	    middlewares[_key] = arguments[_key];
+	  }
+	
+	  return function (createStore) {
+	    return function (reducer, initialState, enhancer) {
+	      var store = createStore(reducer, initialState, enhancer);
+	      var _dispatch = store.dispatch;
+	      var chain = [];
+	
+	      var middlewareAPI = {
+	        getState: store.getState,
+	        dispatch: function dispatch(action) {
+	          return _dispatch(action);
+	        }
+	      };
+	      chain = middlewares.map(function (middleware) {
+	        return middleware(middlewareAPI);
+	      });
+	      _dispatch = _compose2["default"].apply(undefined, chain)(store.dispatch);
+	
+	      return _extends({}, store, {
+	        dispatch: _dispatch
+	      });
+	    };
+	  };
+	}
+
+/***/ },
+/* 347 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	exports["default"] = compose;
+	/**
+	 * Composes single-argument functions from right to left. The rightmost
+	 * function can take multiple arguments as it provides the signature for
+	 * the resulting composite function.
+	 *
+	 * @param {...Function} funcs The functions to compose.
+	 * @returns {Function} A function obtained by composing the argument functions
+	 * from right to left. For example, compose(f, g, h) is identical to doing
+	 * (...args) => f(g(h(...args))).
+	 */
+	
+	function compose() {
+	  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+	    funcs[_key] = arguments[_key];
+	  }
+	
+	  if (funcs.length === 0) {
+	    return function (arg) {
+	      return arg;
+	    };
+	  } else {
+	    var _ret = function () {
+	      var last = funcs[funcs.length - 1];
+	      var rest = funcs.slice(0, -1);
+	      return {
+	        v: function v() {
+	          return rest.reduceRight(function (composed, f) {
+	            return f(composed);
+	          }, last.apply(undefined, arguments));
+	        }
+	      };
+	    }();
+	
+	    if (typeof _ret === "object") return _ret.v;
+	  }
+	}
+
+/***/ },
+/* 348 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var redux_1 = __webpack_require__(334);
+	var counter_reducer_1 = __webpack_require__(349);
+	var movies_reducer_1 = __webpack_require__(350);
+	var rootReducer = redux_1.combineReducers({ counter: counter_reducer_1.counter, movies: movies_reducer_1.movies });
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = rootReducer;
+
+
+/***/ },
+/* 349 */
+/***/ function(module, exports) {
+
+	"use strict";
+	exports.INCREMENT = 'INCREMENT';
+	exports.DECREMENT = 'DECREMENT';
+	exports.RESET = 'RESET';
+	exports.counter = function (state, action) {
+	    if (state === void 0) { state = 0; }
+	    switch (action.type) {
+	        case exports.INCREMENT:
+	            return state + 1;
+	        case exports.DECREMENT:
+	            return state - 1;
+	        case exports.RESET:
+	            return 0;
+	        default:
+	            return state;
+	    }
+	};
+
+
+/***/ },
+/* 350 */
+/***/ function(module, exports) {
+
+	"use strict";
+	exports.REQUEST_MOVIES = 'REQUEST_MOVIES';
+	exports.SUCCESS_MOVIES = 'SUCCESS_MOVIES';
+	exports.FAILURE_MOVIES = 'FAILURE_MOVIES';
+	var initialState = {
+	    isLoading: false,
+	    list: []
+	};
+	exports.movies = function (state, action) {
+	    if (state === void 0) { state = initialState; }
+	    switch (action.type) {
+	        case exports.REQUEST_MOVIES:
+	            return Object.assign({}, state, { isLoading: true });
+	        case exports.SUCCESS_MOVIES:
+	            return {
+	                isLoading: false,
+	                list: state["list"].concat([action["response"]])
+	            };
+	        case exports.FAILURE_MOVIES:
+	            return {
+	                isLoading: false
+	            };
+	        default:
+	            return state;
+	    }
+	};
+
+
+/***/ },
+/* 351 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(8);
+	var router_1 = __webpack_require__(303);
+	var movie_model_1 = __webpack_require__(352);
+	var add_new_service_1 = __webpack_require__(353);
 	var AddNewComponent = (function () {
 	    function AddNewComponent(_router, _addNewService) {
 	        this._router = _router;
@@ -49694,7 +46203,7 @@
 	    AddNewComponent = __decorate([
 	        core_1.Component({
 	            selector: 'login',
-	            template: __webpack_require__(368),
+	            template: __webpack_require__(354),
 	            directives: [router_1.ROUTER_DIRECTIVES],
 	            providers: [add_new_service_1.AddNewService]
 	        }), 
@@ -49707,7 +46216,7 @@
 
 
 /***/ },
-/* 366 */
+/* 352 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49740,7 +46249,7 @@
 
 
 /***/ },
-/* 367 */
+/* 353 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49755,9 +46264,9 @@
 	};
 	var core_1 = __webpack_require__(8);
 	var http_1 = __webpack_require__(282);
-	var config_1 = __webpack_require__(336);
-	var http_client_1 = __webpack_require__(337);
-	__webpack_require__(338);
+	var config_1 = __webpack_require__(326);
+	var http_client_1 = __webpack_require__(327);
+	__webpack_require__(328);
 	var AddNewService = (function () {
 	    function AddNewService(_http) {
 	        this._http = _http;
@@ -49777,67 +46286,10 @@
 
 
 /***/ },
-/* 368 */
+/* 354 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"col-md-12\">\n    <h3>Add New</h3>\n    <form (ngSubmit)=\"addNew()\" #addNewForm=\"ngForm\">\n        <div class=\"clearfix\">\n            <div class=\"col-md-5\" style=\"background: #FFEBBE; border-top: 2px solid #EDCF8C;\">\n                <div class=\"form-group\">\n                    <label for=\"title\">Title</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.title\" ngControl=\"title\" required>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Type\">Type</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.type\" ngControl=\"type\" required>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Year\">Year</label>\n                    <input type=\"number\" class=\"form-control\" [(ngModel)]=\"model.year\" ngControl=\"year\" required max=\"9999\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Year\">Rated</label>\n                    <select name=\"rated\" class=\"form-control\" [(ngModel)]=\"model.rated\" ngControl=\"rated\" required>\n                        <option value=\"U\">U</option>\n                        <option value=\"A\">A</option>\n                        <option value=\"-\">-</option>\n                    </select>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Year\">Release date</label>\n                    <input type=\"date\" class=\"form-control\" [(ngModel)]=\"model.released\" ngControl=\"releaseDate\" required>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Runtime\">Runtime</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.runtime\" ngControl=\"runtime\" required>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Genre\">Genre</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.genre\" ngControl=\"genre\" required>\n                </div>\n            </div>\n\n            <div class=\"col-md-5 pull-right\" style=\"background: #FBFFC1; border-top: 2px solid #EDCF8C;\">\n                <div class=\"form-group\">\n                    <label for=\"Director\">Director</label>\n                    <input type=\"string\" class=\"form-control\" [(ngModel)]=\"model.director\" ngControl=\"director\" required>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Writer\">Writer</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.writer\" ngControl=\"writer\" required>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Actors\">Actors</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.actors\" ngControl=\"actors\" required>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Plot\">Plot</label>\n                    <textarea class=\"form-control\" [(ngModel)]=\"model.plot\" ngControl=\"plot\" required></textarea>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Language\">Language</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.language\" ngControl=\"language\" required>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Awards\">Awards</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.awards\" ngControl=\"awards\" required>\n                </div>\n            </div>\n            <div class=\"col-md-10\" style=\"background: #FFEE7D; border-top: 2px solid #EDCF8C;\">\n                <div class=\"form-group\">\n                    <label for=\"Poster\">Poster</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.poster\" ngControl=\"poster\" required>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"Url\">Url</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.url\" ngControl=\"url\" required>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"mjId\">MJ Id</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.mjId\" ngControl=\"mjId\" required>\n                </div>\n            </div>\n            <div class=\"col-md-10\" style=\"background: #99FFCF; border-top: 2px solid #EDCF8C;\">\n                <div class=\"form-group\">\n                    <label for=\"Score\">Score</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.score\" ngControl=\"score\" [disabled]=\"true\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Rating\">Rating</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.rating\" ngControl=\"rating\" [disabled]=\"true\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"Votes\">Votes</label>\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.votes\" ngControl=\"votes\" [disabled]=\"true\">\n                </div>\n            </div>\n        </div>\n\n        <button type=\"submit\" class=\"btn btn-default\" [disabled]=\"!addNewForm.form.valid\">Submit</button>\n    </form>\n</div>"
-
-/***/ },
-/* 369 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var __param = (this && this.__param) || function (paramIndex, decorator) {
-	    return function (target, key) { decorator(target, key, paramIndex); }
-	};
-	var core_1 = __webpack_require__(8);
-	var router_deprecated_1 = __webpack_require__(303);
-	// import {Login} from '../login/login-deprecated';
-	var LoggedInRouterOutlet = (function (_super) {
-	    __extends(LoggedInRouterOutlet, _super);
-	    function LoggedInRouterOutlet(_elementRef, _loader, _parentRouter, nameAttr) {
-	        _super.call(this, _elementRef, _loader, _parentRouter, nameAttr);
-	        this.parentRouter = _parentRouter;
-	        // The Boolean following each route below denotes whether the route requires authentication to view
-	        this.publicRoutes = {
-	            'login': true,
-	            'signup': true
-	        };
-	    }
-	    LoggedInRouterOutlet.prototype.activate = function (instruction) {
-	        var url = instruction.urlPath;
-	        if (!this.publicRoutes[url] && !localStorage.getItem('token')) {
-	            // todo: redirect to Login, may be there a better way?
-	            this.parentRouter.navigateByUrl('/login');
-	        }
-	        return _super.prototype.activate.call(this, instruction);
-	    };
-	    LoggedInRouterOutlet = __decorate([
-	        core_1.Directive({
-	            selector: 'router-outlet'
-	        }),
-	        __param(3, core_1.Attribute('name')), 
-	        __metadata('design:paramtypes', [core_1.ViewContainerRef, core_1.DynamicComponentLoader, router_deprecated_1.Router, String])
-	    ], LoggedInRouterOutlet);
-	    return LoggedInRouterOutlet;
-	}(router_deprecated_1.RouterOutlet));
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = LoggedInRouterOutlet;
-
 
 /***/ }
 /******/ ]);

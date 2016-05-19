@@ -36,7 +36,7 @@ export default class LoginComponent {
             .subscribe(
                 response => {
                     localStorage.setItem("token", response.id_token);
-                    this._router.navigate( ['Home'] );
+                    this._router.navigate( ['/Home'] );
                 },
                 error => this.errorMessage = <any>error
             );

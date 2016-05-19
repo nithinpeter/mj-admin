@@ -2,14 +2,15 @@ import { bootstrap } from '@angular/platform-browser-dynamic';
 import { AppComponent } from './components/app/app.component';
 import { ROUTER_PROVIDERS } from '@angular/router';
 import { provide }           from '@angular/core';
-// import { LocationStrategy, HashLocationStrategy } from '@angular/platform-common';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
-import { counter } from './redux/reducers'
 
 bootstrap(AppComponent, [
       ROUTER_PROVIDERS, 
-      // provide(LocationStrategy, { useClass: HashLocationStrategy })
+      provide(LocationStrategy, { useClass: HashLocationStrategy })
     ]
   ).then(success => console.log(`Bootstrap success`))
   .catch(error => console.log(error));
+
+
 
